@@ -1,22 +1,27 @@
-import { Button } from "@/components/Button";
+import { Button, ButtonText } from "@/components/ui/button";
 import { SafeAreaView, Text, View } from "react-native";
 
 export default function Index() {
   return (
-    <SafeAreaView className="flex flex-1 m-2 ">
-      <View>
+    <SafeAreaView className="flex flex-1 m-4 ">
+      <View className="gap-5 mt-4">
         <Text className="text-5xl font-bold">
           Deixe sua comunicação mais incrível com
         </Text>
 
-        <Button size={"lg"} label="Message Chat" />
+        <Button className=" w-52 bg-blue-500 h-16 rounded-3xl " variant="solid">
+          <ButtonText className="text-xl ">Message Chat</ButtonText>
+        </Button>
       </View>
 
       <Button
-        className="w-full rounded-3xl h-16 absolute bottom-12  "
-        size={"lg"}
-        label="Criar conta"
-      />
+        className="absolute bottom-12 w-full bg-blue-500 h-16 rounded-3xl "
+        size="md"
+        variant="solid"
+        action="default"
+      >
+        <ButtonText className="text-xl">Criar conta</ButtonText>
+      </Button>
     </SafeAreaView>
   );
 }
