@@ -1,4 +1,5 @@
 import { Button, ButtonText } from "@/components/ui/button";
+import { Link } from "expo-router";
 import { SafeAreaView, Text, View } from "react-native";
 
 export default function Index() {
@@ -14,14 +15,16 @@ export default function Index() {
         </Button>
       </View>
 
-      <Button
-        className="absolute bottom-12 w-full bg-blue-500 h-16 rounded-3xl "
-        size="md"
-        variant="solid"
-        action="default"
-      >
-        <ButtonText className="text-xl">Criar conta</ButtonText>
-      </Button>
+      <Link href="/chat" asChild>
+        <Button
+          className="absolute bottom-12 w-full bg-blue-500 h-16 rounded-3xl "
+          size="md"
+          variant="solid"
+          action="default"
+        >
+          <ButtonText className="text-xl">Criar conta</ButtonText>
+        </Button>
+      </Link>
     </SafeAreaView>
   );
 }
