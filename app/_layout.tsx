@@ -7,6 +7,7 @@ export default function RootLayout() {
     <GluestackUIProvider mode="light">
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" />
+        <Stack.Screen name="chat/[id]" />
       </Stack>
     </GluestackUIProvider>
   );
