@@ -1,4 +1,10 @@
-import { View, Text, SafeAreaView } from "react-native";
+import {
+  View,
+  Text,
+  SafeAreaView,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import React from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { ChevronLeft, Phone, Video } from "lucide-react-native";
@@ -8,13 +14,14 @@ import {
   AvatarFallbackText,
   AvatarImage,
 } from "@/components/ui/avatar";
+import { Input, InputField } from "@/components/ui/input";
 export default function ChatId() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
   const avatar = "https://cdn-icons-png.flaticon.com/512/6858/6858504.png";
   return (
-    <SafeAreaView className="mx-4 my-6 gap-2">
-      <View className="flex-row justify-between ">
+    <View className=" gap-2 flex-1">
+      <View className="flex-row justify-between pt-20 px-4 pb-4 bg-white">
         <View className="flex-row gap-4 ">
           <ChevronLeft size={32} onPress={() => router.back()} />
           <Avatar size="md">
@@ -38,13 +45,33 @@ export default function ChatId() {
         </View>
       </View>
 
-      <View>
-        <Text>chat aqui </Text>
+      <View className="mx-2  ">
+        <Text className=" p-2  rounded-md bg-white w-1/2 font-semibold">
+          ola boa noite tudo bem?
+        </Text>
       </View>
 
-      <View>
-        <Text>barra de mensagens aqui </Text>
+      <View className="mx-2  items-end">
+        <Text className=" p-2  rounded-md bg-blue-500 max-w-[70%] color-white font-semibold">
+          ola boa noite como posso te ajudar
+        </Text>
       </View>
-    </SafeAreaView>
+      <View className="mx-2  items-end">
+        <Text className=" p-2  rounded-md bg-blue-500 max-w-[70%]  color-white font-semibold">
+          ola
+        </Text>
+      </View>
+
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        className="absolute bottom-0 p-2 bg-white w-full "
+      >
+        <View className="pb-10 pt-2 bg-white">
+          <Input className="rounded-full">
+            <InputField placeholder="Digite sua mensagem" />
+          </Input>
+        </View>
+      </KeyboardAvoidingView>
+    </View>
   );
 }

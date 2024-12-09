@@ -1230,6 +1230,14 @@
     "@react-native-aria/focus" "^0.2.9"
     "@react-native-aria/interactions" "0.2.13"
 
+"@gluestack-ui/form-control@^0.1.19":
+  version "0.1.19"
+  resolved "https://registry.yarnpkg.com/@gluestack-ui/form-control/-/form-control-0.1.19.tgz#7a75b65f5ec89da95c30442750d6f7af71db6868"
+  integrity sha512-6YbPbi/RZrXc5DyVPbxPV17FYaBoEl1yAdSwut8iE6n+yQekjluINrh2q5ZPWF2SGmyo7VSNcL85yeU5I97xHg==
+  dependencies:
+    "@gluestack-ui/utils" "^0.1.14"
+    "@react-native-aria/focus" "^0.2.9"
+
 "@gluestack-ui/hooks@0.1.12":
   version "0.1.12"
   resolved "https://registry.yarnpkg.com/@gluestack-ui/hooks/-/hooks-0.1.12.tgz#4a92de73eec7b6ba6fc8e781c23417252993c95c"
@@ -1243,6 +1251,16 @@
     "@gluestack-ui/provider" "^0.1.13"
     "@gluestack-ui/utils" "^0.1.14"
     "@react-native-aria/focus" "^0.2.9"
+
+"@gluestack-ui/input@^0.1.32":
+  version "0.1.32"
+  resolved "https://registry.yarnpkg.com/@gluestack-ui/input/-/input-0.1.32.tgz#d4d64e43938b2cf9ee3f816fa774d08333305d28"
+  integrity sha512-RWtqpo0p37GYjwBTiMf4fpvKYe32OMa6lxFbDqPqEX1m994D9QwP7iWnDWA/9nr/Mf3eET6dMWbH4/eL4oZr8Q==
+  dependencies:
+    "@gluestack-ui/form-control" "^0.1.19"
+    "@gluestack-ui/utils" "^0.1.14"
+    "@react-native-aria/focus" "^0.2.9"
+    "@react-native-aria/interactions" "0.2.13"
 
 "@gluestack-ui/nativewind-utils@^1.0.26":
   version "1.0.26"
