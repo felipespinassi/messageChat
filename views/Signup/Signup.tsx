@@ -13,6 +13,7 @@ import { ChevronLeft } from "lucide-react-native";
 import { router } from "expo-router";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Input, InputField } from "@/components/ui/input";
+import ScreenTitle from "@/components/ScreenTitle/ScreenTitle";
 
 export default function Signup() {
   return (
@@ -31,14 +32,10 @@ export default function Signup() {
 
         <ScrollView showsVerticalScrollIndicator={false}>
           <View className="gap-10 mt-5">
-            <View className="gap-1 p-2">
-              <Text className="text-5xl text-blue-500 font-semibold">
-                Cadastro
-              </Text>
-              <Text className="font-semibold">
-                Finalize o cadastro para criar uma nova conta
-              </Text>
-            </View>
+            <ScreenTitle
+              title="Cadastro"
+              description="Finalize o cadastro para criar uma nova conta"
+            />
 
             <View className="gap-10">
               <View className="gap-1">

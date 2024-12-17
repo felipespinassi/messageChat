@@ -1,41 +1,34 @@
+import ScreenTitle from "@/components/ScreenTitle/ScreenTitle";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Link } from "expo-router";
-import { SafeAreaView, Text, View } from "react-native";
+import { Image, SafeAreaView, Text, View } from "react-native";
 
 export default function Presentation() {
   return (
-    <SafeAreaView className="flex flex-1 m-4 justify-between ">
-      <View className="gap-5 mt-4">
-        <Text className="text-5xl font-bold">
-          Deixe sua comunicação mais incrível com
-        </Text>
+    <SafeAreaView className="flex flex-1 m-4 justify-center gap-64  ">
+      <ScreenTitle title="Bem-vindo" description="Vamos começar" />
 
-        <Button className=" w-52 bg-blue-500 h-16 rounded-3xl " variant="solid">
-          <ButtonText className="text-xl ">Message Chat</ButtonText>
-        </Button>
-      </View>
+      <View className="gap-5">
+        <View className="gap-2">
+          <Text className="font-semibold text-xl">Entrar/Criar conta</Text>
+          <Link href="/chat" asChild>
+            <Button
+              className=" w-full bg-blue-500 h-14 rounded-xl "
+              size="md"
+              variant="solid"
+              action="default"
+            >
+              <ButtonText className="text-xl">Entrar</ButtonText>
+            </Button>
+          </Link>
+        </View>
 
-      <View className="gap-2">
-        <Link href="/chat" asChild>
-          <Button
-            className=" w-full bg-blue-500 h-16 rounded-3xl "
-            size="md"
-            variant="solid"
-            action="default"
-          >
-            <ButtonText className="text-xl">Entrar</ButtonText>
-          </Button>
-        </Link>
-        <Link href="/signup" asChild>
-          <Button
-            className=" w-full bg-blue-500 h-16 rounded-3xl "
-            size="md"
-            variant="solid"
-            action="default"
-          >
-            <ButtonText className="text-xl">Criar conta</ButtonText>
-          </Button>
-        </Link>
+        <View className="flex-row gap-1 items-center">
+          <Text className=" font-semibold text-xl">Novo usuario?</Text>
+          <Link href="/signup" className="text-blue-500 text-xl">
+            Criar conta
+          </Link>
+        </View>
       </View>
     </SafeAreaView>
   );
