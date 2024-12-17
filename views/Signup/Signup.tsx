@@ -16,7 +16,7 @@ import { Input, InputField } from "@/components/ui/input";
 
 export default function Signup() {
   return (
-    <SafeAreaView className="flex-1 m-2 ">
+    <SafeAreaView className="flex-1 mx-4 ">
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         className="flex-1"
@@ -30,9 +30,9 @@ export default function Signup() {
         </TouchableOpacity>
 
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View className="gap-10">
+          <View className="gap-10 mt-5">
             <View className="gap-1 p-2">
-              <Text className="text-4xl text-blue-500 font-semibold">
+              <Text className="text-5xl text-blue-500 font-semibold">
                 Cadastro
               </Text>
               <Text className="font-semibold">
