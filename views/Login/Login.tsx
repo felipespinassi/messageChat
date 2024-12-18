@@ -28,6 +28,9 @@ export default function Login() {
           <Input className="h-14 rounded-lg">
             <InputField type="password" />
           </Input>
+          <Text className="text-orange-400 font-semibold ">
+            Esqueceu a senha?
+          </Text>
         </View>
       </View>
 
