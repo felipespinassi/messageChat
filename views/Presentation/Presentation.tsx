@@ -11,7 +11,7 @@ export default function Presentation() {
       <View className="gap-5">
         <View className="gap-2">
           <Text className="font-semibold text-xl">Entrar/Criar conta</Text>
-          <Link href="/chat" asChild>
+          <Link href="/login" asChild>
             <Button
               className=" w-full bg-blue-500 h-14 rounded-xl "
               size="md"

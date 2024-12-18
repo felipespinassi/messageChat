@@ -9,6 +9,7 @@ export default function RootLayout() {
         <Stack.Screen name="index" />
         <Stack.Screen name="chat/[id]" />
         <Stack.Screen name="signup/index" />
+        <Stack.Screen name="login/index" />
       </Stack>
     </GluestackUIProvider>
   );

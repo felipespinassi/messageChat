@@ -14,6 +14,7 @@ import { router } from "expo-router";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Input, InputField } from "@/components/ui/input";
 import ScreenTitle from "@/components/ScreenTitle/ScreenTitle";
+import ArrowBack from "@/components/ArrowBack/ArrowBack";
 
 export default function Signup() {
   return (
@@ -23,12 +24,7 @@ export default function Signup() {
         className="flex-1"
         keyboardVerticalOffset={Platform.OS === "ios" ? 10 : 0} // Ajuste conforme necessário
       >
-        <TouchableOpacity onPress={() => router.back()} className="m-2">
-          <View className="flex-row gap-1 items-center">
-            <ChevronLeft />
-            <Text className="font-semibold">Voltar</Text>
-          </View>
-        </TouchableOpacity>
+        <ArrowBack />
 
         <ScrollView showsVerticalScrollIndicator={false}>
           <View className="gap-10 mt-5">
