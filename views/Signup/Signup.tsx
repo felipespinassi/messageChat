@@ -125,7 +125,7 @@ export default function Signup() {
                     )}
                     name="email"
                   />
-                  {errors.name && (
+                  {errors.email && (
                     <Text className="text-red-500">{errorMessage}</Text>
                   )}
                 </View>
@@ -149,7 +149,7 @@ export default function Signup() {
                   )}
                   name="password"
                 />
-                {errors.name && (
+                {errors.password && (
                   <Text className="text-red-500">{errorMessage}</Text>
                 )}
               </View>
