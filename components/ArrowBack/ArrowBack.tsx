@@ -7,7 +7,7 @@ export default function ArrowBack() {
   return (
     <TouchableOpacity onPress={() => router.back()} className="m-2">
       <View className="flex-row gap-1 items-center">
-        <ChevronLeft />
+        <ChevronLeft color={"blue"} />
         <Text className="font-semibold">Voltar</Text>
       </View>
     </TouchableOpacity>

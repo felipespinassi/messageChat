@@ -20,8 +20,8 @@ export default function ChatId() {
   const router = useRouter();
   const avatar = "https://cdn-icons-png.flaticon.com/512/6858/6858504.png";
   return (
-    <View className=" gap-2 flex-1">
-      <View className="flex-row justify-between pt-20 px-4 pb-4 bg-white">
+    <SafeAreaView className=" gap-2 flex-1">
+      <View className="flex-row justify-between  px-4 pb-4 bg-white">
         <View className="flex-row gap-4 ">
           <ChevronLeft size={32} onPress={() => router.back()} />
           <Avatar size="md">
@@ -72,6 +72,6 @@ export default function ChatId() {
           </Input>
         </View>
       </KeyboardAvoidingView>
-    </View>
+    </SafeAreaView>
   );
 }

@@ -4,9 +4,12 @@ import {
   SafeAreaView,
   TouchableOpacity,
   FlatList,
+  Modal,
+  Pressable,
+  Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { PenLine, Search } from "lucide-react-native";
+import { PenLine, Plus, Search, X } from "lucide-react-native";
 import {
   Avatar,
   AvatarBadge,
@@ -67,7 +70,9 @@ const messages = [
 ];
 export default function ChatList() {
   const [contacts, setContacts] = useState<Contacts.Contact[]>([]);
+  const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
+
   useEffect(() => {
     (async () => {
       const { status } = await Contacts.requestPermissionsAsync();
@@ -79,6 +84,13 @@ export default function ChatList() {
         if (data.length > 0) {
           setContacts(data);
         }
+      }
+
+      if (status === "denied") {
+        Alert.alert(
+          "Permissão negada",
+          "Você precisa permitir o acesso aos contatos"
+        );
       }
     })();
   }, []);
@@ -98,9 +110,9 @@ export default function ChatList() {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity>
-            <View className="bg-white p-2 rounded-full">
-              <PenLine color={"gray"} />
+          <TouchableOpacity onPress={() => setModalVisible(true)}>
+            <View className="bg-blue-500 p-2 rounded-full">
+              <Plus color={"white"} />
             </View>
           </TouchableOpacity>
         </View>
@@ -134,7 +146,59 @@ export default function ChatList() {
             </View>
           </TouchableOpacity>
         )}
+        ListEmptyComponent={<Text>Nenhum contato encontrado</Text>}
       />
+      <Modal
+        animationType="slide"
+        presentationStyle="pageSheet"
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View className="flex-row justify-between p-4">
+          <Text className="text-2xl">Nova conversa</Text>
+          <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+            <X size={30} color={"gray"} />
+          </TouchableOpacity>
+        </View>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          className="bg-gray-100 mx-4 rounded-md p-2"
+          keyExtractor={(item, index) => index.toString()}
+          data={contacts}
+          renderItem={({ item }) => {
+            return (
+              <View className="flex-1 ">
+                <TouchableOpacity
+                  onPress={() => {
+                    setModalVisible(!modalVisible),
+                      router.push({
+                        pathname: "/chat/[id]",
+                        params: { id: item.id ? item.id.toString() : "" },
+                      });
+                  }}
+                >
+                  <View className="flex flex-row gap-4 items-center p-2 ">
+                    <Avatar size="md">
+                      <AvatarFallbackText>{item.name}</AvatarFallbackText>
+                      <AvatarImage
+                        source={{
+                          uri: item.imageAvailable
+                            ? item.image?.uri
+                            : "https://cdn-icons-png.flaticon.com/512/6858/6858504.png",
+                        }}
+                      />
+                      <AvatarBadge />
+                    </Avatar>
+                    <Text>{item.name}</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            );
+          }}
+        />
+      </Modal>
     </SafeAreaView>
   );
 }
