@@ -32,9 +32,17 @@
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#ffffff",
+          "contactsPermission" :"Allow $(PRODUCT_NAME) to access your contacts."
+        }
+      ],
+      [
+        "expo-contacts",
+        {
+          "contactsPermission": "Allow $(PRODUCT_NAME) to access your contacts."
         }
       ]
+      
     ],
     "experiments": {
       "typedRoutes": true

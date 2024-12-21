@@ -4,9 +4,8 @@ import {
   SafeAreaView,
   TouchableOpacity,
   FlatList,
-  Image,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { PenLine, Search } from "lucide-react-native";
 import {
   Avatar,
@@ -15,6 +14,8 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar";
 import { useRouter } from "expo-router";
+import * as Contacts from "expo-contacts";
+
 const messages = [
   {
     id: 1,
@@ -65,7 +66,22 @@ const messages = [
   },
 ];
 export default function ChatList() {
+  const [contacts, setContacts] = useState<Contacts.Contact[]>([]);
   const router = useRouter();
+  useEffect(() => {
+    (async () => {
+      const { status } = await Contacts.requestPermissionsAsync();
+      if (status === "granted") {
+        const { data } = await Contacts.getContactsAsync({
+          fields: [Contacts.Fields.Emails],
+        });
+
+        if (data.length > 0) {
+          setContacts(data);
+        }
+      }
+    })();
+  }, []);
 
   return (
     <SafeAreaView
