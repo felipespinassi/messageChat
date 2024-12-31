@@ -5,7 +5,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { ChevronLeft, Phone, Video } from "lucide-react-native";
 import {
@@ -22,29 +22,36 @@ export default function ChatId() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
   const avatar = "https://cdn-icons-png.flaticon.com/512/6858/6858504.png";
-  const [value, setValue] = React.useState("");
-  const [messages, setMessages] = React.useState<any>([]);
-
+  const [value, setValue] = useState("");
+  const [response, setResponse] = useState<any>([]);
+  const [room, setRoom] = useState("room1");
   const socket = useContext(WebSocketContext);
 
   useEffect(() => {
-    socket.on("connect", () => {
-      console.log("connected");
+    socket.emit("joinRoom", room);
+
+    socket.on("joinedRoom", (room) => {
+      console.log(`Joined room: ${room}`);
     });
+
+    socket.on("leftRoom", (room) => {
+      console.log(`Left room: ${room}`);
+    });
+
     socket.on("onMessage", (data) => {
-      console.log(data);
-      setMessages((prev: any) => [...prev, data]);
+      setResponse((prev: any) => [...prev, data]);
     });
 
     return () => {
-      socket.off("unregistering component");
-      socket.off("connect");
+      socket.emit("leaveRoom", room);
+      socket.off("joinedRoom");
+      socket.off("leftRoom");
       socket.off("onMessage");
     };
-  }, []);
+  }, [room]);
 
   function onSubmit() {
-    socket.emit("newMessage", { message: value });
+    socket.emit("newMessage", { room, message: value, sender: "2" });
     setValue("");
   }
 
@@ -74,22 +81,26 @@ export default function ChatId() {
         </View>
       </View>
 
-      <View className="mx-2  ">
-        <Text className=" p-2  rounded-md bg-white w-1/2 font-semibold">
-          ola boa noite tudo bem?
-        </Text>
-      </View>
-
-      {messages.map((message: any, index: any) => {
+      {response?.map((content: any, index: any) => {
+        console.log(content);
+        if (content.msg.sender === "1") {
+          return (
+            <View key={index} className="mx-2  ">
+              <Text className=" p-2  rounded-md bg-white w-1/2 font-semibold">
+                {content.msg.message}
+              </Text>
+            </View>
+          );
+        }
         return (
-          <View className="mx-2  items-end">
+          <View key={index} className="mx-2  items-end">
             <Text className=" p-2  rounded-md bg-blue-500 max-w-[70%] color-white font-semibold">
-              {message.msg.message}
+              {content.msg.message}
             </Text>
           </View>
         );
       })}
-
+      {/* {response ? <Text>Response: {response}</Text> : null} */}
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         className="absolute bottom-0 p-2 bg-white w-full "
