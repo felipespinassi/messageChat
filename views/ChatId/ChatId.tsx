@@ -51,7 +51,7 @@ export default function ChatId() {
   }, [room]);
 
   function onSubmit() {
-    socket.emit("newMessage", { room, message: value, sender: "2" });
+    socket.emit("newMessage", { room, message: value, sender: "Felipe" });
     setValue("");
   }
 
@@ -83,9 +83,10 @@ export default function ChatId() {
 
       {response?.map((content: any, index: any) => {
         console.log(content);
-        if (content.msg.sender === "1") {
+        if (content.msg.sender === "Pessoa 2") {
           return (
             <View key={index} className="mx-2  ">
+              <Text>{content.msg.sender}</Text>
               <Text className=" p-2  rounded-md bg-white w-1/2 font-semibold">
                 {content.msg.message}
               </Text>
@@ -94,6 +95,7 @@ export default function ChatId() {
         }
         return (
           <View key={index} className="mx-2  items-end">
+            <Text>Você</Text>
             <Text className=" p-2  rounded-md bg-blue-500 max-w-[70%] color-white font-semibold">
               {content.msg.message}
             </Text>

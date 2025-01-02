@@ -5,6 +5,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import ArrowBack from "@/components/ArrowBack/ArrowBack";
@@ -13,6 +14,7 @@ import { Input, InputField } from "@/components/ui/input";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Link, router } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
+import useSWRMutation from "swr/mutation";
 
 export default function Login() {
   const {
@@ -29,10 +31,39 @@ export default function Login() {
 
   const [scrollEnable, setScrollEnable] = useState(false);
 
+  const { trigger, isMutating } = useSWRMutation(
+    "http://192.168.100.11:3000/auth",
+    createUser
+  );
+
+  async function createUser(url: string, { arg }: { arg: any }) {
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(arg),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Erro na requisição");
+      }
+
+      router.push("/chat");
+
+      return await response.json();
+    } catch (error) {
+      Alert.alert("Erro", "Usuário ou senha inválidos");
+      throw error;
+    }
+  }
+
   function onSubmit(data: any) {
     console.log(data);
 
-    router.push("/chat");
+    trigger(data);
   }
 
   return (
@@ -110,6 +141,7 @@ export default function Login() {
 
             <View className="mt-5">
               <Button
+                disabled={isMutating}
                 size="xl"
                 variant="solid"
                 className="bg-blue-500 rounded-lg"
