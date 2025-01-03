@@ -29,7 +29,7 @@ export default function Signup() {
 
   const errorMessage = "Campo obrigatório";
   const { trigger } = useSWRMutation(
-    "http://192.168.100.11:3000/users",
+    `${process.env.EXPO_PUBLIC_BASE_URL}users`,
     createUser,
     {
       onSuccess: () => alert("Usuário criado com sucesso"),

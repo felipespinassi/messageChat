@@ -20,64 +20,24 @@ import * as Contacts from "expo-contacts";
 import fetcher from "@/services/fetcher";
 import useSWR from "swr";
 
-const messages = [
-  {
-    id: 1,
-    name: "John Doe",
-    message: "Hey, how are you?",
-    time: "2:30 PM",
-    avatar: "https://cdn-icons-png.flaticon.com/512/6858/6858504.png",
-  },
-  {
-    id: 2,
-    name: "Jane Doe",
-    message: "I'm good, thanks for asking!",
-    time: "2:31 PM",
-    avatar:
-      "https://img.freepik.com/premium-vector/avatar-icon002_750950-52.jpg",
-  },
-  {
-    id: 3,
-    name: "John Doe",
-    message: "Want to go out for lunch?",
-    time: "2:32 PM",
-    avatar:
-      "https://png.pngtree.com/png-vector/20191101/ourmid/pngtree-cartoon-color-simple-male-avatar-png-image_1934459.jpg",
-  },
-  {
-    id: 4,
-    name: "Jane Doe",
-    message: "Sure, where do you want to go?",
-    time: "2:33 PM",
-    avatar:
-      "https://static.vecteezy.com/system/resources/thumbnails/002/002/257/small/beautiful-woman-avatar-character-icon-free-vector.jpg",
-  },
-  {
-    id: 5,
-    name: "John Doe",
-    message: "How about the new restaurant downtown?",
-    time: "2:34 PM",
-    avatar:
-      "https://static.vecteezy.com/system/resources/thumbnails/002/002/297/small/beautiful-woman-avatar-character-icon-free-vector.jpg",
-  },
-  {
-    id: 6,
-    name: "Jane Doe",
-    message: "Sounds good, see you there!",
-    time: "2:35 PM",
-    avatar:
-      "https://static.vecteezy.com/system/resources/previews/002/002/300/original/beautiful-woman-avatar-character-icon-free-vector.jpg",
-  },
+const messages: any = [
+  // {
+  //   id: 1,
+  //   name: "John Doe",
+  //   message: "Hey, how are you?",
+  //   time: "2:30 PM",
+  //   avatar: "https://cdn-icons-png.flaticon.com/512/6858/6858504.png",
+  // },
 ];
 export default function ChatList() {
   const [contacts, setContacts] = useState<Contacts.Contact[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
 
-  // const { data, error, isLoading }: any = useSWR(
-  //   "http://192.168.100.11:3000/users",
-  //   fetcher
-  // );
+  const { data, error, isLoading }: any = useSWR(
+    `${process.env.EXPO_PUBLIC_BASE_URL}users`,
+    fetcher
+  );
 
   useEffect(() => {
     (async () => {
@@ -104,7 +64,7 @@ export default function ChatList() {
   // if (isLoading) {
   //   return <Text>Carregando...</Text>;
   // }
-
+  console.log(data);
   return (
     <SafeAreaView
       className="m-2
@@ -156,7 +116,11 @@ export default function ChatList() {
             </View>
           </TouchableOpacity>
         )}
-        ListEmptyComponent={<Text>Nenhum contato encontrado</Text>}
+        ListEmptyComponent={
+          <View className="flex-1 justify-center items-center">
+            <Text className="text-gray-500">Nenhuma conversa </Text>
+          </View>
+        }
       />
       <Modal
         animationType="slide"
@@ -176,7 +140,7 @@ export default function ChatList() {
           showsVerticalScrollIndicator={false}
           className="bg-gray-100 mx-4 rounded-md p-2"
           keyExtractor={(item, index) => index.toString()}
-          data={contacts}
+          data={data}
           renderItem={({ item }) => {
             return (
               <View className="flex-1 ">

@@ -17,6 +17,8 @@ import {
 import { Input, InputField } from "@/components/ui/input";
 import { WebSocketContext } from "@/context/webSocketContext";
 import { Button, ButtonText } from "@/components/ui/button";
+import useSWR from "swr";
+import fetcher from "@/services/fetcher";
 
 export default function ChatId() {
   const { id } = useLocalSearchParams();
@@ -26,6 +28,13 @@ export default function ChatId() {
   const [response, setResponse] = useState<any>([]);
   const [room, setRoom] = useState("room1");
   const socket = useContext(WebSocketContext);
+
+  const { data, error, isLoading }: any = useSWR(
+    `${process.env.EXPO_PUBLIC_BASE_URL}users/${id}`,
+    fetcher
+  );
+
+  console.log(data);
 
   useEffect(() => {
     socket.emit("joinRoom", room);
@@ -70,7 +79,7 @@ export default function ChatId() {
             <AvatarBadge />
           </Avatar>
           <View>
-            <Text className="text-xl font-semibold">Felipe Augusto</Text>
+            <Text className="text-xl font-semibold">{data?.name}</Text>
             <Text>Online</Text>
           </View>
         </View>
