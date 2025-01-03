@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/avatar";
 import { useRouter } from "expo-router";
 import * as Contacts from "expo-contacts";
+import fetcher from "@/services/fetcher";
+import useSWR from "swr";
 
 const messages = [
   {
@@ -71,6 +73,9 @@ export default function ChatList() {
   const [contacts, setContacts] = useState<Contacts.Contact[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
+
+  const { data, error } = useSWR("http://192.168.100.11:3000/users", fetcher);
+  console.log(data);
 
   useEffect(() => {
     (async () => {
