@@ -74,8 +74,10 @@ export default function ChatList() {
   const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
 
-  const { data, error } = useSWR("http://192.168.100.11:3000/users", fetcher);
-  console.log(data);
+  // const { data, error, isLoading }: any = useSWR(
+  //   "http://192.168.100.11:3000/users",
+  //   fetcher
+  // );
 
   useEffect(() => {
     (async () => {
@@ -98,6 +100,10 @@ export default function ChatList() {
       }
     })();
   }, []);
+
+  // if (isLoading) {
+  //   return <Text>Carregando...</Text>;
+  // }
 
   return (
     <SafeAreaView

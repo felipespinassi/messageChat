@@ -34,7 +34,7 @@ export default function Login() {
   const [scrollEnable, setScrollEnable] = useState(false);
 
   const { trigger, isMutating } = useSWRMutation(
-    "http://192.168.100.11:3000/auth",
+    `${process.env.EXPO_PUBLIC_BASE_URL}auth`,
     auth
   );
 
@@ -63,6 +63,8 @@ export default function Login() {
       return data;
     } catch (error) {
       Alert.alert("Erro", "Usuário ou senha inválidos");
+      console.log(error);
+
       throw error;
     }
   }
