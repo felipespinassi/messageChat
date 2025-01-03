@@ -11,7 +11,7 @@ import React, { useState } from "react";
 import ArrowBack from "@/components/ArrowBack/ArrowBack";
 import ScreenTitle from "@/components/ScreenTitle/ScreenTitle";
 import { Input, InputField } from "@/components/ui/input";
-import { Button, ButtonText } from "@/components/ui/button";
+import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import { Link, router } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import useSWRMutation from "swr/mutation";
@@ -146,13 +146,14 @@ export default function Login() {
 
             <View className="mt-5">
               <Button
+                action="primary"
                 disabled={isMutating}
                 size="xl"
                 variant="solid"
-                className="bg-blue-500 rounded-lg"
                 onPress={handleSubmit(onSubmit)}
               >
                 <ButtonText>Entrar</ButtonText>
+                {isMutating && <ButtonSpinner />}
               </Button>
             </View>
           </View>
