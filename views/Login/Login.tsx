@@ -15,6 +15,8 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { Link, router } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import useSWRMutation from "swr/mutation";
+import { createAccess_token } from "@/storage/createAccess_Token";
+import { createUser } from "@/storage/createUser";
 
 export default function Login() {
   const {
@@ -33,10 +35,10 @@ export default function Login() {
 
   const { trigger, isMutating } = useSWRMutation(
     "http://192.168.100.11:3000/auth",
-    createUser
+    auth
   );
 
-  async function createUser(url: string, { arg }: { arg: any }) {
+  async function auth(url: string, { arg }: { arg: LoginDto }) {
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -51,18 +53,21 @@ export default function Login() {
         throw new Error(errorData.message || "Erro na requisição");
       }
 
+      const data = await response.json();
+      Promise.all([
+        createUser(data.user),
+        createAccess_token(data.access_token),
+      ]);
       router.push("/chat");
 
-      return await response.json();
+      return data;
     } catch (error) {
       Alert.alert("Erro", "Usuário ou senha inválidos");
       throw error;
     }
   }
 
-  function onSubmit(data: any) {
-    console.log(data);
-
+  function onSubmit(data: LoginDto) {
     trigger(data);
   }
 

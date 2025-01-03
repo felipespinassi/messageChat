@@ -5,11 +5,10 @@ import {
   TouchableOpacity,
   FlatList,
   Modal,
-  Pressable,
   Alert,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { PenLine, Plus, Search, X } from "lucide-react-native";
+import { Plus, Search, X } from "lucide-react-native";
 import {
   Avatar,
   AvatarBadge,
