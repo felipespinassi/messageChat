@@ -10,7 +10,7 @@ export default function ScreenTitle({
 }) {
   return (
     <View className="gap-1 p-2">
-      <Text className="text-5xl text-blue-500 font-semibold">{title}</Text>
+      <Text className="text-5xl text-primary-500 font-semibold">{title}</Text>
       <Text className="font-semibold text-xl">{description}</Text>
     </View>
   );

@@ -110,7 +110,7 @@ export default function ChatList() {
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => setModalVisible(true)}>
-            <View className="bg-blue-500 p-2 rounded-full">
+            <View className="bg-primary-500 p-2 rounded-full">
               <Plus color={"white"} />
             </View>
           </TouchableOpacity>

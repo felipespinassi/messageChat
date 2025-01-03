@@ -96,7 +96,7 @@ export default function ChatId() {
         return (
           <View key={index} className="mx-2  items-end">
             <Text>Você</Text>
-            <Text className=" p-2  rounded-md bg-blue-500 max-w-[70%] color-white font-semibold">
+            <Text className=" p-2  rounded-md bg-primary-500 max-w-[70%] color-white font-semibold">
               {content.msg.message}
             </Text>
           </View>

@@ -13,7 +13,7 @@ export default function Presentation() {
           <Text className="font-semibold text-xl">Entrar/Criar conta</Text>
           <Link href="/login" asChild>
             <Button
-              className=" w-full bg-blue-500 h-14 rounded-xl "
+              className=" w-full bg-primary-500 h-14 rounded-xl "
               size="md"
               variant="solid"
               action="default"
@@ -25,7 +25,7 @@ export default function Presentation() {
 
         <View className="flex-row gap-1 items-center">
           <Text className=" font-semibold text-xl">Novo usuario?</Text>
-          <Link href="/signup" className="text-blue-500 text-xl">
+          <Link href="/signup" className="text-primary-500 text-xl">
             Criar conta
           </Link>
         </View>

@@ -179,7 +179,7 @@ export default function Signup() {
               <Button
                 size="xl"
                 variant="solid"
-                className="bg-blue-500 rounded-lg"
+                className="bg-primary-500 rounded-lg"
                 onPress={handleSubmit(onSubmit)}
               >
                 <ButtonText>Finalizar cadastro</ButtonText>
