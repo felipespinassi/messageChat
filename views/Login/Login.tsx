@@ -54,6 +54,7 @@ export default function Login() {
       }
 
       const data = await response.json();
+
       Promise.all([
         createUser(data.user),
         createAccess_token(data.access_token),
