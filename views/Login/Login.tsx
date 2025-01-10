@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Alert,
+  Image,
 } from "react-native";
 import React, { useState } from "react";
 import ArrowBack from "@/components/ArrowBack/ArrowBack";
@@ -88,10 +89,16 @@ export default function Login() {
           scrollEnabled={scrollEnable}
         >
           <View className="gap-10 mt-28 ">
-            <ScreenTitle
+            <Image
+              className=" w-full h-28"
+              resizeMode="contain"
+              source={require("assets/logos/pingPrimary.png")}
+            />
+            {/* <ScreenTitle
               title="Entrar"
               description="Por favor, entre com Email e senha"
-            />
+            /> */}
+
             <View className="gap-10">
               <View className="gap-1 ">
                 <Text>Email</Text>
