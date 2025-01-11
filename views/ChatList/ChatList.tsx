@@ -20,19 +20,19 @@ import * as Contacts from "expo-contacts";
 import fetcher from "@/services/fetcher";
 import useSWR from "swr";
 
-const messages: any = [
-  // {
-  //   id: 1,
-  //   name: "John Doe",
-  //   message: "Hey, how are you?",
-  //   time: "2:30 PM",
-  //   avatar: "https://cdn-icons-png.flaticon.com/512/6858/6858504.png",
-  // },
-];
 export default function ChatList() {
   const [contacts, setContacts] = useState<Contacts.Contact[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
+
+  const {
+    data: messages,
+    error: errorMessage,
+    isLoading: isLoadingMessage,
+  }: any = useSWR(
+    `${process.env.EXPO_PUBLIC_BASE_URL}conversation?user=5`,
+    fetcher
+  );
 
   const { data, error, isLoading }: any = useSWR(
     `${process.env.EXPO_PUBLIC_BASE_URL}users`,
@@ -64,7 +64,6 @@ export default function ChatList() {
   // if (isLoading) {
   //   return <Text>Carregando...</Text>;
   // }
-  console.log(data);
   return (
     <SafeAreaView
       className="m-2
@@ -110,7 +109,9 @@ export default function ChatList() {
               </Avatar>
               <View className="flex flex-1">
                 <Text className="font-bold">{item.name}</Text>
-                <Text className="text-gray-500">{item.message}</Text>
+                <Text className="text-gray-500">
+                  {item.messages[0]?.content || "Sem mensagens"}
+                </Text>
               </View>
               <Text className="text-gray-500">{item.time}</Text>
             </View>

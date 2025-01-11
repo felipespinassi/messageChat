@@ -25,7 +25,6 @@ import {
 } from "@/components/ui/avatar";
 import { Input, InputField } from "@/components/ui/input";
 import { WebSocketContext } from "@/context/webSocketContext";
-import { Button, ButtonText } from "@/components/ui/button";
 import useSWR from "swr";
 import fetcher from "@/services/fetcher";
 import { getUser } from "@/storage/getUser";
@@ -35,17 +34,31 @@ export default function ChatId() {
   const router = useRouter();
   const avatar = "https://cdn-icons-png.flaticon.com/512/6858/6858504.png";
   const [value, setValue] = useState("");
-  const [response, setResponse] = useState<any>([]);
+  const { data, error, isLoading }: any = useSWR(
+    `${process.env.EXPO_PUBLIC_BASE_URL}conversation/${id}`,
+    fetcher
+  );
+  const [messages, setMessages] = useState<any>([]);
 
   const roomRef = useRef("room1");
   const userRef = useRef("");
 
   const socket = useContext(WebSocketContext);
 
-  const { data, error, isLoading }: any = useSWR(
-    `${process.env.EXPO_PUBLIC_BASE_URL}users/${id}`,
-    fetcher
-  );
+  async function getMessages() {
+    const user = await getUser();
+
+    userRef.current = user.id;
+    const response = await fetcher(
+      `${process.env.EXPO_PUBLIC_BASE_URL}conversation/${id}`
+    );
+
+    setMessages(response.messages);
+  }
+
+  useEffect(() => {
+    getMessages();
+  }, []);
 
   useEffect(() => {
     socket.emit("joinRoom", roomRef.current);
@@ -59,7 +72,7 @@ export default function ChatId() {
     });
 
     socket.on("onMessage", (data) => {
-      setResponse((prev: any) => [...prev, data]);
+      setMessages((prev: any) => [...prev, data]);
     });
 
     return () => {
@@ -73,18 +86,16 @@ export default function ChatId() {
   async function onSubmit() {
     const user = await getUser();
 
-    userRef.current = user.name;
+    userRef.current = user.id;
 
     socket.emit("newMessage", {
       room: roomRef.current,
-      message: value,
-      sender: userRef.current,
+      content: value,
+      conversation_id: id,
+      user_id: userRef.current,
+      type: "text",
     });
     setValue("");
-  }
-
-  if (isLoading) {
-    return <Text>Carregando...</Text>;
   }
 
   return (
@@ -102,7 +113,7 @@ export default function ChatId() {
             <AvatarBadge />
           </Avatar>
           <View>
-            <Text className="text-xl font-semibold">{data?.name}</Text>
+            <Text className="text-xl font-semibold">oi</Text>
             <Text>Online</Text>
           </View>
         </View>
@@ -114,22 +125,22 @@ export default function ChatId() {
       </View>
 
       <ScrollView className="bg-zinc-100">
-        {response?.map((content: any, index: any) => {
-          if (content.msg.sender === userRef.current) {
+        {messages?.map((message: any, index: any) => {
+          if (message.user_id === userRef.current) {
             return (
               <View key={index} className="mx-2  items-end">
                 <Text>Você</Text>
                 <Text className=" p-2  rounded-md bg-primary-500 max-w-[70%] color-white font-semibold">
-                  {content.msg.message}
+                  {message.content}
                 </Text>
               </View>
             );
           }
           return (
             <View key={index} className="mx-2  ">
-              <Text>{content.msg.sender}</Text>
+              <Text>{message?.sender}</Text>
               <Text className=" p-2  rounded-md bg-white w-1/2 font-semibold">
-                {content.msg.message}
+                {message.content}
               </Text>
             </View>
           );
