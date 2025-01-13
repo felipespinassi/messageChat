@@ -16,9 +16,8 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar";
 import { useRouter } from "expo-router";
-import * as Contacts from "expo-contacts";
 import fetcher from "@/services/fetcher";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import { getUser } from "@/storage/getUser";
 import ModalUsers from "./components/ModalUsers";
 
@@ -40,8 +39,13 @@ export default function ChatList() {
     data: messages,
     error: errorMessage,
     isLoading: isLoadingMessage,
+    mutate: mutateMessage,
   }: any = useSWR(`${process.env.EXPO_PUBLIC_BASE_URL}conversation`, fetcher);
+  useEffect(() => {
+    mutateMessage();
+  }, []);
 
+  console.log(messages);
   //pegar contatos
   // useEffect(() => {
   //   (async () => {
@@ -95,7 +99,9 @@ export default function ChatList() {
         className="py-4 h-full"
         data={messages}
         renderItem={({ item }) => {
-          const user = item.users.find((user: any) => user.id !== 5);
+          const user = item.users.find(
+            (user: any) => user.id !== userRef.current.id
+          );
 
           return (
             <TouchableOpacity
@@ -106,7 +112,7 @@ export default function ChatList() {
             >
               <View className="flex flex-row py-4 gap-4  items-center">
                 <Avatar size="lg">
-                  <AvatarFallbackText>{user.name}</AvatarFallbackText>
+                  <AvatarFallbackText>{user?.name}</AvatarFallbackText>
                   <AvatarImage
                     source={{
                       uri: item.avatar,
@@ -115,7 +121,7 @@ export default function ChatList() {
                   <AvatarBadge />
                 </Avatar>
                 <View className="flex flex-1">
-                  <Text className="font-bold">{user.name}</Text>
+                  <Text className="font-bold">{user?.name}</Text>
                   <Text className="text-gray-500">
                     {item.messages[0]?.content || "Sem mensagens"}
                   </Text>

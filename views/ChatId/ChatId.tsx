@@ -4,19 +4,12 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
   Platform,
-  Touchable,
   TouchableOpacity,
   ScrollView,
 } from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import {
-  ChevronLeft,
-  Phone,
-  Send,
-  SendHorizontal,
-  Video,
-} from "lucide-react-native";
+import { ChevronLeft, Phone, SendHorizontal, Video } from "lucide-react-native";
 import {
   Avatar,
   AvatarBadge,
@@ -25,7 +18,6 @@ import {
 } from "@/components/ui/avatar";
 import { Input, InputField } from "@/components/ui/input";
 import { WebSocketContext } from "@/context/webSocketContext";
-import useSWR from "swr";
 import fetcher from "@/services/fetcher";
 import { getUser } from "@/storage/getUser";
 
@@ -38,8 +30,10 @@ export default function ChatId() {
   const [messages, setMessages] = useState<any>([]);
 
   const roomRef = useRef("room1");
+  const userChatRef: any = useRef("");
   const userRef = useRef("");
-
+  const conversationIdRef = useRef("");
+  const responseRef: any = useRef("");
   const socket = useContext(WebSocketContext);
 
   async function getMessages() {
@@ -50,9 +44,19 @@ export default function ChatId() {
       `${process.env.EXPO_PUBLIC_BASE_URL}conversation?user=${id}`
     );
 
-    console.log(response);
+    const responseMessages = {
+      conversation_id: response[0].id,
+      user_id: response[0].users.find((users: any) => users.id !== user.id),
+      messages: response[0].messages,
+    };
 
-    setMessages(response[0].messages);
+    conversationIdRef.current = responseMessages.conversation_id;
+
+    setMessages(responseMessages.messages);
+
+    userChatRef.current = responseMessages.user_id;
+
+    responseRef.current.newConversation.id = response[0].id;
   }
 
   useEffect(() => {
@@ -87,14 +91,37 @@ export default function ChatId() {
 
     userRef.current = user.id;
 
-    socket.emit("newMessage", {
-      room: roomRef.current,
-      content: value,
-      conversation_id: "cm5uh14320000inl0qh9gko8i",
-      user_id: userRef.current,
-      type: "text",
-    });
-    setValue("");
+    if (messages.length === 0) {
+      const response = await fetcher(
+        `${process.env.EXPO_PUBLIC_BASE_URL}conversation`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            is_group: false,
+            user_id: [user.id, Number(id)],
+          }),
+        }
+      );
+
+      responseRef.current = response;
+      socket.emit("newMessage", {
+        room: roomRef.current,
+        content: value,
+        conversation_id: responseRef.current.newConversation.id,
+        user_id: userRef.current,
+        type: "text",
+      });
+      setValue("");
+    } else {
+      socket.emit("newMessage", {
+        room: roomRef.current,
+        content: value,
+        conversation_id: conversationIdRef.current,
+        user_id: userRef.current,
+        type: "text",
+      });
+      setValue("");
+    }
   }
 
   return (
@@ -103,7 +130,7 @@ export default function ChatId() {
         <View className="flex-row gap-4 ">
           <ChevronLeft size={32} onPress={() => router.back()} />
           <Avatar size="md">
-            <AvatarFallbackText>Jane Doe</AvatarFallbackText>
+            <AvatarFallbackText>{userChatRef.current.name}</AvatarFallbackText>
             <AvatarImage
               source={{
                 uri: avatar,
@@ -112,7 +139,9 @@ export default function ChatId() {
             <AvatarBadge />
           </Avatar>
           <View>
-            <Text className="text-xl font-semibold">oi</Text>
+            <Text className="text-xl font-semibold">
+              {userChatRef.current.name}
+            </Text>
             <Text>Online</Text>
           </View>
         </View>
@@ -123,7 +152,7 @@ export default function ChatId() {
         </View>
       </View>
 
-      <ScrollView className="bg-zinc-100">
+      <ScrollView className="bg-zinc-100 ">
         {messages?.map((message: any, index: any) => {
           if (message.user_id === userRef.current) {
             return (
@@ -148,9 +177,9 @@ export default function ChatId() {
 
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        className="absolute bottom-0 p-2 bg-white w-full "
+        className=" bg-white w-full "
       >
-        <View className="pb-10 bg-white flex-row justify-around items-center">
+        <View className="pb-2 bg-white flex-row justify-around items-center">
           <Input className="rounded-full w-[85%]">
             <InputField
               defaultValue={value}
