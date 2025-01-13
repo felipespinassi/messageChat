@@ -34,10 +34,7 @@ export default function ChatId() {
   const router = useRouter();
   const avatar = "https://cdn-icons-png.flaticon.com/512/6858/6858504.png";
   const [value, setValue] = useState("");
-  const { data, error, isLoading }: any = useSWR(
-    `${process.env.EXPO_PUBLIC_BASE_URL}conversation/${id}`,
-    fetcher
-  );
+
   const [messages, setMessages] = useState<any>([]);
 
   const roomRef = useRef("room1");
@@ -50,10 +47,12 @@ export default function ChatId() {
 
     userRef.current = user.id;
     const response = await fetcher(
-      `${process.env.EXPO_PUBLIC_BASE_URL}conversation/${id}`
+      `${process.env.EXPO_PUBLIC_BASE_URL}conversation?user=${id}`
     );
 
-    setMessages(response.messages);
+    console.log(response);
+
+    setMessages(response[0].messages);
   }
 
   useEffect(() => {
@@ -91,7 +90,7 @@ export default function ChatId() {
     socket.emit("newMessage", {
       room: roomRef.current,
       content: value,
-      conversation_id: id,
+      conversation_id: "cm5uh14320000inl0qh9gko8i",
       user_id: userRef.current,
       type: "text",
     });
