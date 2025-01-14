@@ -6,8 +6,9 @@ import {
   FlatList,
   Modal,
   Alert,
+  ActivityIndicator,
 } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Plus, Search, X } from "lucide-react-native";
 import {
   Avatar,
@@ -15,7 +16,7 @@ import {
   AvatarFallbackText,
   AvatarImage,
 } from "@/components/ui/avatar";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import fetcher from "@/services/fetcher";
 import useSWR, { mutate } from "swr";
 import { getUser } from "@/storage/getUser";
@@ -41,11 +42,12 @@ export default function ChatList() {
     isLoading: isLoadingMessage,
     mutate: mutateMessage,
   }: any = useSWR(`${process.env.EXPO_PUBLIC_BASE_URL}conversation`, fetcher);
-  useEffect(() => {
-    mutateMessage();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      mutateMessage();
+    }, [mutateMessage])
+  );
 
-  console.log(messages);
   //pegar contatos
   // useEffect(() => {
   //   (async () => {
@@ -70,7 +72,11 @@ export default function ChatList() {
   // }, []);
 
   if (isLoadingMessage) {
-    return <Text>Carregando...</Text>;
+    return (
+      <View className="flex-1 items-center justify-center">
+        <ActivityIndicator size="large" />
+      </View>
+    );
   }
   return (
     <SafeAreaView
@@ -107,7 +113,10 @@ export default function ChatList() {
             <TouchableOpacity
               className="mb-2 px-2"
               onPress={() =>
-                router.push({ pathname: "/chat/[id]", params: { id: user.id } })
+                router.push({
+                  pathname: "/chat/[id]",
+                  params: { id: user.id, name: user.name },
+                })
               }
             >
               <View className="flex flex-row py-4 gap-4  items-center">

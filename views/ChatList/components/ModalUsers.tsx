@@ -46,7 +46,10 @@ export default function ModalUsers({ modalVisible, setModalVisible }: any) {
                     setModalVisible(!modalVisible),
                       router.push({
                         pathname: "/chat/[id]",
-                        params: { id: item.id ? item.id.toString() : "" },
+                        params: {
+                          id: item.id ? item.id.toString() : "",
+                          name: item.name,
+                        },
                       });
                   }}
                 >

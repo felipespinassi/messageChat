@@ -6,6 +6,7 @@ import {
   Platform,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -20,48 +21,45 @@ import { Input, InputField } from "@/components/ui/input";
 import { WebSocketContext } from "@/context/webSocketContext";
 import fetcher from "@/services/fetcher";
 import { getUser } from "@/storage/getUser";
+import useSWR from "swr";
 
 export default function ChatId() {
-  const { id } = useLocalSearchParams();
+  const { id, name } = useLocalSearchParams();
   const router = useRouter();
   const avatar = "https://cdn-icons-png.flaticon.com/512/6858/6858504.png";
   const [value, setValue] = useState("");
-
   const [messages, setMessages] = useState<any>([]);
 
   const roomRef = useRef("room1");
-  const userChatRef: any = useRef("");
-  const userRef = useRef("");
+  const userRef = useRef(""); // remover e pegar do token no backend
   const conversationIdRef = useRef("");
   const responseRef: any = useRef("");
   const socket = useContext(WebSocketContext);
+
+  const { data, error, mutate, isLoading }: any = useSWR(
+    `${process.env.EXPO_PUBLIC_BASE_URL}conversation?user=${id}`,
+    fetcher
+  );
 
   async function getMessages() {
     const user = await getUser();
 
     userRef.current = user.id;
-    const response = await fetcher(
-      `${process.env.EXPO_PUBLIC_BASE_URL}conversation?user=${id}`
-    );
 
     const responseMessages = {
-      conversation_id: response[0].id,
-      user_id: response[0].users.find((users: any) => users.id !== user.id),
-      messages: response[0].messages,
+      conversation_id: data[0].id,
+      messages: data[0].messages,
     };
 
     conversationIdRef.current = responseMessages.conversation_id;
+    setMessages(data[0]?.messages);
 
-    setMessages(responseMessages.messages);
-
-    userChatRef.current = responseMessages.user_id;
-
-    responseRef.current.newConversation.id = response[0].id;
+    responseRef.current.newConversation.id = data[0].id;
   }
 
   useEffect(() => {
     getMessages();
-  }, []);
+  }, [data]);
 
   useEffect(() => {
     socket.emit("joinRoom", roomRef.current);
@@ -130,7 +128,7 @@ export default function ChatId() {
         <View className="flex-row gap-4 ">
           <ChevronLeft size={32} onPress={() => router.back()} />
           <Avatar size="md">
-            <AvatarFallbackText>{userChatRef.current.name}</AvatarFallbackText>
+            <AvatarFallbackText>{name}</AvatarFallbackText>
             <AvatarImage
               source={{
                 uri: avatar,
@@ -139,9 +137,7 @@ export default function ChatId() {
             <AvatarBadge />
           </Avatar>
           <View>
-            <Text className="text-xl font-semibold">
-              {userChatRef.current.name}
-            </Text>
+            <Text className="text-xl font-semibold">{name}</Text>
             <Text>Online</Text>
           </View>
         </View>
@@ -152,28 +148,34 @@ export default function ChatId() {
         </View>
       </View>
 
-      <ScrollView className="bg-zinc-100 ">
-        {messages?.map((message: any, index: any) => {
-          if (message.user_id === userRef.current) {
+      {isLoading ? (
+        <View className="flex-1 items-center justify-center">
+          <ActivityIndicator size="large" />
+        </View>
+      ) : (
+        <ScrollView className="bg-zinc-100 ">
+          {messages?.map((message: any, index: any) => {
+            if (message.user_id === userRef.current) {
+              return (
+                <View key={index} className="mx-2  items-end">
+                  <Text>Você</Text>
+                  <Text className=" p-2  rounded-md bg-primary-500 max-w-[70%] color-white font-semibold">
+                    {message.content}
+                  </Text>
+                </View>
+              );
+            }
             return (
-              <View key={index} className="mx-2  items-end">
-                <Text>Você</Text>
-                <Text className=" p-2  rounded-md bg-primary-500 max-w-[70%] color-white font-semibold">
+              <View key={index} className="mx-2  ">
+                <Text>{message?.sender}</Text>
+                <Text className=" p-2  rounded-md bg-white w-1/2 font-semibold">
                   {message.content}
                 </Text>
               </View>
             );
-          }
-          return (
-            <View key={index} className="mx-2  ">
-              <Text>{message?.sender}</Text>
-              <Text className=" p-2  rounded-md bg-white w-1/2 font-semibold">
-                {message.content}
-              </Text>
-            </View>
-          );
-        })}
-      </ScrollView>
+          })}
+        </ScrollView>
+      )}
 
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
