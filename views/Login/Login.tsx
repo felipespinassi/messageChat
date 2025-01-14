@@ -88,16 +88,16 @@ export default function Login() {
           showsVerticalScrollIndicator={false}
           scrollEnabled={scrollEnable}
         >
-          <View className="gap-10 mt-28 ">
-            <Image
+          <View className="gap-16 mt-28 ">
+            {/* <Image
               className=" w-full h-28"
               resizeMode="contain"
               source={require("assets/logos/pingPrimary.png")}
-            />
-            {/* <ScreenTitle
+            /> */}
+            <ScreenTitle
               title="Entrar"
               description="Por favor, entre com Email e senha"
-            /> */}
+            />
 
             <View className="gap-10">
               <View className="gap-1 ">
