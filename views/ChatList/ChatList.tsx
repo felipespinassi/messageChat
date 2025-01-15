@@ -26,15 +26,6 @@ export default function ChatList() {
   // const [contacts, setContacts] = useState<Contacts.Contact[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
-  const userRef: any = useRef("");
-
-  (async function getUserFromStorage() {
-    try {
-      userRef.current = await getUser();
-    } catch (error) {
-      console.log(error);
-    }
-  })();
 
   const {
     data: messages,
@@ -42,6 +33,7 @@ export default function ChatList() {
     isLoading: isLoadingMessage,
     mutate: mutateMessage,
   }: any = useSWR(`${process.env.EXPO_PUBLIC_BASE_URL}conversation`, fetcher);
+
   useFocusEffect(
     useCallback(() => {
       mutateMessage();
@@ -70,7 +62,6 @@ export default function ChatList() {
   //     }
   //   })();
   // }, []);
-
   if (isLoadingMessage) {
     return (
       <View className="flex-1 items-center justify-center">
@@ -105,34 +96,30 @@ export default function ChatList() {
         className="py-4 h-full"
         data={messages}
         renderItem={({ item }) => {
-          const user = item.users.find(
-            (user: any) => user.id !== userRef.current.id
-          );
-
           return (
             <TouchableOpacity
               className="mb-2 px-2"
               onPress={() =>
                 router.push({
                   pathname: "/chat/[id]",
-                  params: { id: user.id, name: user.name },
+                  params: { id: item.user.id, name: item.user.name },
                 })
               }
             >
               <View className="flex flex-row py-4 gap-4  items-center">
                 <Avatar size="lg">
-                  <AvatarFallbackText>{user?.name}</AvatarFallbackText>
+                  <AvatarFallbackText>{item?.user?.name}</AvatarFallbackText>
                   <AvatarImage
                     source={{
-                      uri: item.avatar,
+                      uri: item?.avatar,
                     }}
                   />
                   <AvatarBadge />
                 </Avatar>
                 <View className="flex flex-1">
-                  <Text className="font-bold">{user?.name}</Text>
+                  <Text className="font-bold">{item?.user?.name}</Text>
                   <Text className="text-gray-500">
-                    {item.messages[0]?.content || "Sem mensagens"}
+                    {item?.message?.content || "Sem mensagens"}
                   </Text>
                 </View>
                 <Text className="text-gray-500">{item.time}</Text>

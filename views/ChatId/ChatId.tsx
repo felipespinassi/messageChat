@@ -47,18 +47,22 @@ export default function ChatId() {
     userRef.current = user.id;
 
     const responseMessages = {
-      conversation_id: data[0].id,
-      messages: data[0].messages,
+      conversation_id: data.id,
+      messages: data.messages,
     };
 
     conversationIdRef.current = responseMessages.conversation_id;
-    setMessages(data[0]?.messages);
+    setMessages(data?.messages);
 
-    responseRef.current.newConversation.id = data[0].id;
+    responseRef.current.newConversation.id = data.id;
   }
 
   useEffect(() => {
     getMessages();
+
+    return () => {
+      setMessages([]);
+    };
   }, [data]);
 
   useEffect(() => {
