@@ -37,7 +37,7 @@ export default function ChatId() {
   const socket = useContext(WebSocketContext);
 
   const { data, error, mutate, isLoading }: any = useSWR(
-    `${process.env.EXPO_PUBLIC_BASE_URL}conversation?user=${id}`,
+    `${process.env.EXPO_PUBLIC_BASE_URL}conversation/user/${id}`,
     fetcher
   );
 
@@ -99,8 +99,8 @@ export default function ChatId() {
         {
           method: "POST",
           body: JSON.stringify({
-            is_group: false,
-            user_id: [user.id, Number(id)],
+            isGroup: false,
+            users: [user.id, Number(id)],
           }),
         }
       );
@@ -159,7 +159,7 @@ export default function ChatId() {
       ) : (
         <ScrollView className="bg-zinc-100 ">
           {messages?.map((message: any, index: any) => {
-            if (message.user_id === userRef.current) {
+            if (message.userId === userRef.current) {
               return (
                 <View key={index} className="mx-2  items-end">
                   <Text>Você</Text>
