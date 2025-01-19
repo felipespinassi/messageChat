@@ -54,7 +54,7 @@ export default function ChatId() {
     conversationIdRef.current = responseMessages.conversation_id;
     setMessages(data?.messages);
 
-    responseRef.current.newConversation.id = data.id;
+    responseRef.current.id = data.id;
   }
 
   useEffect(() => {
@@ -77,6 +77,7 @@ export default function ChatId() {
     });
 
     socket.on("onMessage", (data) => {
+      console.log(data);
       setMessages((prev: any) => [...prev, data]);
     });
 
@@ -109,8 +110,8 @@ export default function ChatId() {
       socket.emit("newMessage", {
         room: roomRef.current,
         content: value,
-        conversation_id: responseRef.current.newConversation.id,
-        user_id: userRef.current,
+        conversationId: responseRef.current.id,
+        userId: userRef.current,
         type: "text",
       });
       setValue("");
@@ -118,8 +119,8 @@ export default function ChatId() {
       socket.emit("newMessage", {
         room: roomRef.current,
         content: value,
-        conversation_id: conversationIdRef.current,
-        user_id: userRef.current,
+        conversationId: conversationIdRef.current,
+        userId: userRef.current,
         type: "text",
       });
       setValue("");
