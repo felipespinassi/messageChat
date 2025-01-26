@@ -77,7 +77,6 @@ export default function ChatId() {
     });
 
     socket.on("onMessage", (data) => {
-      console.log(data);
       setMessages((prev: any) => [...prev, data]);
     });
 
@@ -171,9 +170,9 @@ export default function ChatId() {
               );
             }
             return (
-              <View key={index} className="mx-2  ">
+              <View key={index} className="mx-2 items-start  ">
                 <Text>{message?.sender}</Text>
-                <Text className=" p-2  rounded-md bg-white w-1/2 font-semibold">
+                <Text className=" p-2  rounded-md bg-white max-w-[70%]  font-semibold">
                   {message.content}
                 </Text>
               </View>
