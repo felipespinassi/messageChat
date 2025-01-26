@@ -60,7 +60,7 @@ export default function Login() {
         createUser(data.user),
         createAccess_token(data.access_token),
       ]);
-      router.push("/chat");
+      router.replace("/chat");
 
       return data;
     } catch (error) {

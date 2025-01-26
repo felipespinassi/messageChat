@@ -80,11 +80,11 @@ export default function ChatList() {
         <Text className="text-3xl font-semibold">Conversas</Text>
 
         <View className="flex-row gap-6">
-          <TouchableOpacity>
+          {/* <TouchableOpacity>
             <View className="bg-white p-2 rounded-full">
               <Search color={"gray"} />
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           <TouchableOpacity onPress={() => setModalVisible(true)}>
             <View className="bg-primary-500 p-2 rounded-full">
@@ -93,11 +93,11 @@ export default function ChatList() {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              AsyncStorage.removeItem(ACCESS_TOKEN), router.push("/login");
+              AsyncStorage.removeItem(ACCESS_TOKEN), router.replace("/login");
             }}
           >
-            <View className="bg-primary-500 p-2 rounded-full">
-              <LogOut color={"white"} />
+            <View className="bg-white p-2 rounded-full">
+              <LogOut color={"#0273FD"} />
             </View>
           </TouchableOpacity>
         </View>
@@ -117,7 +117,7 @@ export default function ChatList() {
                 })
               }
             >
-              <View className="flex flex-row py-4 gap-4  items-center">
+              <View className="flex flex-row h-20 gap-4   items-center">
                 <Avatar size="lg">
                   <AvatarFallbackText>{item?.user?.name}</AvatarFallbackText>
                   <AvatarImage
@@ -127,11 +127,15 @@ export default function ChatList() {
                   />
                   <AvatarBadge />
                 </Avatar>
-                <View className="flex flex-1">
-                  <Text className="font-bold">{item?.user?.name}</Text>
-                  <Text className="text-gray-500">
-                    {item?.message?.content || "Sem mensagens"}
-                  </Text>
+                <View className="flex flex-1 h-full justify-between ">
+                  <View>
+                    <Text className="font-bold">{item?.user?.name}</Text>
+                    <Text className="text-gray-500">
+                      {item?.message?.content || "Sem mensagens"}
+                    </Text>
+                  </View>
+
+                  <View className="border-b  border-slate-300" />
                 </View>
                 <Text className="text-gray-500">{item.time}</Text>
               </View>
