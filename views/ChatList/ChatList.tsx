@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Plus, Search, X } from "lucide-react-native";
+import { LogOut, Plus, Search, X } from "lucide-react-native";
 import {
   Avatar,
   AvatarBadge,
@@ -21,6 +21,8 @@ import fetcher from "@/services/fetcher";
 import useSWR, { mutate } from "swr";
 import { getUser } from "@/storage/getUser";
 import ModalUsers from "./components/ModalUsers";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ACCESS_TOKEN } from "@/storage/storageConfig";
 
 export default function ChatList() {
   // const [contacts, setContacts] = useState<Contacts.Contact[]>([]);
@@ -87,6 +89,15 @@ export default function ChatList() {
           <TouchableOpacity onPress={() => setModalVisible(true)}>
             <View className="bg-primary-500 p-2 rounded-full">
               <Plus color={"white"} />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              AsyncStorage.removeItem(ACCESS_TOKEN), router.push("/login");
+            }}
+          >
+            <View className="bg-primary-500 p-2 rounded-full">
+              <LogOut color={"white"} />
             </View>
           </TouchableOpacity>
         </View>
