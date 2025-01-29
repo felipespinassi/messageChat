@@ -128,7 +128,7 @@ export default function ChatId() {
 
   return (
     <SafeAreaView className=" gap-2 flex-1 bg-white">
-      <View className="flex-row justify-between  px-4 pb-4  ">
+      <View className="flex-row justify-between  px-4 pb-4   ">
         <View className="flex-row gap-4 ">
           <ChevronLeft size={32} onPress={() => router.back()} />
           <Avatar size="md">
@@ -140,10 +140,10 @@ export default function ChatId() {
             />
             <AvatarBadge />
           </Avatar>
-          <View>
+          <TouchableOpacity onPress={() => router.push("/chat/details")}>
             <Text className="text-xl font-semibold">{name}</Text>
             <Text>Online</Text>
-          </View>
+          </TouchableOpacity>
         </View>
 
         <View className="flex-row gap-6">

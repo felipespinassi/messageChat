@@ -93,7 +93,7 @@ export default function ChatList() {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              AsyncStorage.removeItem(ACCESS_TOKEN), router.replace("/login");
+              AsyncStorage.removeItem(ACCESS_TOKEN), router.replace("/");
             }}
           >
             <View className="bg-white p-2 rounded-full">

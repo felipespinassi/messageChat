@@ -1,6 +1,6 @@
 import React from "react";
-import Login from "@/views/Login/Login";
+import LoginView from "@/views/Login/Login";
 
-export default function index() {
-  return <Login />;
+export default function Login() {
+  return <LoginView />;
 }

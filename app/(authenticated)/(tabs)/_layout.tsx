@@ -6,7 +6,7 @@ export default function TabLayout() {
   return (
     <Tabs screenOptions={{ headerShown: false }}>
       <Tabs.Screen
-        name="chat/index"
+        name="chatList/index"
         options={{
           tabBarIcon: ({ color }) => (
             <MessageCircleMore color={color} size={28} />

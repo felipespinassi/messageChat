@@ -1,5 +1,5 @@
-import Presentation from "@/views/Presentation/Presentation";
+import PresentationView from "@/views/Presentation/Presentation";
 
-export default function Index() {
-  return <Presentation />;
+export default function Presentation() {
+  return <PresentationView />;
 }

@@ -60,7 +60,7 @@ export default function Login() {
         createUser(data.user),
         createAccess_token(data.access_token),
       ]);
-      router.replace("/chat");
+      router.replace("/chatList");
 
       return data;
     } catch (error) {
@@ -82,8 +82,6 @@ export default function Login() {
         className="flex-1 "
         keyboardVerticalOffset={Platform.OS === "ios" ? 20 : 0}
       >
-        <ArrowBack />
-
         <ScrollView
           showsVerticalScrollIndicator={false}
           scrollEnabled={scrollEnable}

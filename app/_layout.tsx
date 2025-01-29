@@ -19,9 +19,9 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      router.replace("/login");
+      router.replace("/");
     } else {
-      router.replace("/chat");
+      router.replace("/chatList");
     }
   }, [isAuthenticated]);
 

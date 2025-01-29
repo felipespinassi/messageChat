@@ -1,7 +1,7 @@
 import React from "react";
 
-import Signup from "@/views/Signup/Signup";
+import SignupView from "@/views/Signup/Signup";
 
-export default function index() {
-  return <Signup />;
+export default function Signup() {
+  return <SignupView />;
 }
