@@ -64,13 +64,7 @@ export default function ChatList() {
   //     }
   //   })();
   // }, []);
-  if (isLoadingMessage) {
-    return (
-      <View className="flex-1 items-center justify-center">
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
+
   return (
     <SafeAreaView
       className="m-2
@@ -103,51 +97,57 @@ export default function ChatList() {
         </View>
       </View>
 
-      <FlatList
-        className="py-4 h-full"
-        data={messages}
-        renderItem={({ item }) => {
-          return (
-            <TouchableOpacity
-              className="mb-2 px-2"
-              onPress={() =>
-                router.push({
-                  pathname: "/chat/[id]",
-                  params: { id: item.user.id, name: item.user.name },
-                })
-              }
-            >
-              <View className="flex flex-row h-20 gap-4   items-center">
-                <Avatar size="lg">
-                  <AvatarFallbackText>{item?.user?.name}</AvatarFallbackText>
-                  <AvatarImage
-                    source={{
-                      uri: item?.avatar,
-                    }}
-                  />
-                  <AvatarBadge />
-                </Avatar>
-                <View className="flex flex-1 h-full justify-between ">
-                  <View>
-                    <Text className="font-bold">{item?.user?.name}</Text>
-                    <Text className="text-gray-500">
-                      {item?.message?.content || "Sem mensagens"}
-                    </Text>
-                  </View>
+      {isLoadingMessage ? (
+        <View className=" mt-8 items-center justify-center">
+          <ActivityIndicator size="large" />
+        </View>
+      ) : (
+        <FlatList
+          className="py-4 h-full"
+          data={messages}
+          renderItem={({ item }) => {
+            const lastMessage =
+              item?.message?.content.slice(0, 60) || "Sem mensagens";
+            return (
+              <TouchableOpacity
+                className="mb-2 px-2"
+                onPress={() =>
+                  router.push({
+                    pathname: "/chat/[id]",
+                    params: { id: item.user.id, name: item.user.name },
+                  })
+                }
+              >
+                <View className="flex flex-row h-20 gap-4   items-center">
+                  <Avatar size="lg">
+                    <AvatarFallbackText>{item?.user?.name}</AvatarFallbackText>
+                    <AvatarImage
+                      source={{
+                        uri: item?.avatar,
+                      }}
+                    />
+                    <AvatarBadge />
+                  </Avatar>
+                  <View className="flex flex-1 h-full justify-between ">
+                    <View className="">
+                      <Text className="font-bold">{item?.user?.name}</Text>
+                      <Text className="text-gray-500   ">{lastMessage}</Text>
+                    </View>
 
-                  <View className="border-b  border-slate-300" />
+                    <View className="border-b  border-slate-300" />
+                  </View>
+                  <Text className="text-gray-500">{item.time}</Text>
                 </View>
-                <Text className="text-gray-500">{item.time}</Text>
-              </View>
-            </TouchableOpacity>
-          );
-        }}
-        ListEmptyComponent={
-          <View className="flex-1 justify-center items-center">
-            <Text className="text-gray-500">Nenhuma conversa </Text>
-          </View>
-        }
-      />
+              </TouchableOpacity>
+            );
+          }}
+          ListEmptyComponent={
+            <View className="flex-1 justify-center items-center">
+              <Text className="text-gray-500">Nenhuma conversa </Text>
+            </View>
+          }
+        />
+      )}
 
       {modalVisible && (
         <ModalUsers
