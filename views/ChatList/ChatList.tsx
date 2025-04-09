@@ -114,7 +114,11 @@ export default function ChatList() {
                 onPress={() =>
                   router.push({
                     pathname: "/chat/[id]",
-                    params: { id: item.user.id, name: item.user.name },
+                    params: {
+                      id: item.user.id,
+                      name: item.user.name,
+                      conversation: JSON.stringify(item),
+                    },
                   })
                 }
               >

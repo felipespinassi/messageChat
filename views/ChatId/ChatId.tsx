@@ -25,12 +25,17 @@ import useSWR from "swr";
 
 export default function ChatId() {
   const { id, name } = useLocalSearchParams();
+
+  const conversation =
+    useLocalSearchParams().conversation &&
+    JSON?.parse(useLocalSearchParams()?.conversation as string);
+
   const router = useRouter();
   const avatar = "https://cdn-icons-png.flaticon.com/512/6858/6858504.png";
   const [value, setValue] = useState("");
   const [messages, setMessages] = useState<any>([]);
 
-  const roomRef = useRef("room1");
+  const roomRef = useRef(`room-${conversation?.id}`);
   const userRef = useRef(""); // remover e pegar do token no backend
   const conversationIdRef = useRef("");
   const responseRef: any = useRef("");
@@ -113,6 +118,8 @@ export default function ChatId() {
         userId: userRef.current,
         type: "text",
       });
+
+      roomRef.current = `room-${responseRef.current.id}`;
       setValue("");
     } else {
       socket.emit("newMessage", {
@@ -130,7 +137,11 @@ export default function ChatId() {
     <SafeAreaView className=" gap-2 flex-1 bg-white">
       <View className="flex-row justify-between  px-4 pb-4   ">
         <View className="flex-row gap-4 ">
-          <ChevronLeft size={32} onPress={() => router.back()} />
+          <ChevronLeft
+            size={32}
+            onPress={() => router.back()}
+            color={"#0273FD"}
+          />
           <Avatar size="md">
             <AvatarFallbackText>{name}</AvatarFallbackText>
             <AvatarImage
