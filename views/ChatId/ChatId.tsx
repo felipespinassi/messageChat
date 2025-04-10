@@ -36,7 +36,7 @@ export default function ChatId() {
   const [messages, setMessages] = useState<any>([]);
 
   const roomRef = useRef(`room-${conversation?.id}`);
-  const userRef = useRef(""); // remover e pegar do token no backend
+  const userRef = useRef(0); // remover e pegar do token no backend
   const conversationIdRef = useRef("");
   const responseRef: any = useRef("");
   const socket = useContext(WebSocketContext);
@@ -132,7 +132,6 @@ export default function ChatId() {
       setValue("");
     }
   }
-
   return (
     <SafeAreaView className=" gap-2 flex-1 bg-white">
       <View className="flex-row justify-between  px-4 pb-4   ">
@@ -170,7 +169,7 @@ export default function ChatId() {
       ) : (
         <ScrollView className="bg-zinc-100 ">
           {messages?.map((message: any, index: any) => {
-            if (message.userId === userRef.current) {
+            if (Number(message.userId) === userRef.current) {
               return (
                 <View key={index} className="mx-2  items-end">
                   <Text>Você</Text>

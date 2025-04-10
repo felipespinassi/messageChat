@@ -107,7 +107,7 @@ export default function ChatList() {
           data={messages}
           renderItem={({ item }) => {
             const lastMessage =
-              item?.message?.content.slice(0, 60) || "Sem mensagens";
+              item?.message?.content?.slice(0, 60) || "Sem mensagens";
             return (
               <TouchableOpacity
                 className="mb-2 px-2"
