@@ -22,6 +22,10 @@ import { WebSocketContext } from "@/context/webSocketContext";
 import fetcher from "@/services/fetcher";
 import { getUser } from "@/storage/getUser";
 import useSWR from "swr";
+import {
+  ConversationUserTypes,
+  Messages,
+} from "@/@types/ConversationUserTypes";
 
 export default function ChatId() {
   const { id, name } = useLocalSearchParams();
@@ -33,15 +37,14 @@ export default function ChatId() {
   const router = useRouter();
   const avatar = "https://cdn-icons-png.flaticon.com/512/6858/6858504.png";
   const [value, setValue] = useState("");
-  const [messages, setMessages] = useState<any>([]);
+  const [messages, setMessages] = useState<Messages[]>([]);
 
   const roomRef = useRef(`room-${conversation?.id}`);
-  const userRef = useRef(0); // remover e pegar do token no backend
-  const conversationIdRef = useRef("");
-  const responseRef: any = useRef("");
+  const userRef = useRef(0);
+  const responseRef = useRef({} as ConversationUserTypes);
   const socket = useContext(WebSocketContext);
 
-  const { data, error, mutate, isLoading }: any = useSWR(
+  const { data, error, mutate, isLoading } = useSWR<ConversationUserTypes>(
     `${process.env.EXPO_PUBLIC_BASE_URL}conversation/user/${id}`,
     fetcher
   );
@@ -51,15 +54,10 @@ export default function ChatId() {
 
     userRef.current = user.id;
 
-    const responseMessages = {
-      conversation_id: data.id,
-      messages: data.messages,
-    };
-
-    conversationIdRef.current = responseMessages.conversation_id;
-    setMessages(data?.messages);
-
-    responseRef.current.id = data.id;
+    setMessages(data?.messages || []);
+    if (data) {
+      responseRef.current = data;
+    }
   }
 
   useEffect(() => {
@@ -94,18 +92,14 @@ export default function ChatId() {
   }, [roomRef.current]);
 
   async function onSubmit() {
-    const user = await getUser();
-
-    userRef.current = user.id;
-
-    if (messages.length === 0) {
+    if (!responseRef.current.id) {
       const response = await fetcher(
         `${process.env.EXPO_PUBLIC_BASE_URL}conversation`,
         {
           method: "POST",
           body: JSON.stringify({
             isGroup: false,
-            users: [user.id, Number(id)],
+            users: [userRef.current, Number(id)],
           }),
         }
       );
@@ -125,13 +119,14 @@ export default function ChatId() {
       socket.emit("newMessage", {
         room: roomRef.current,
         content: value,
-        conversationId: conversationIdRef.current,
+        conversationId: responseRef.current.id,
         userId: userRef.current,
         type: "text",
       });
       setValue("");
     }
   }
+
   return (
     <SafeAreaView className=" gap-2 flex-1 bg-white">
       <View className="flex-row justify-between  px-4 pb-4   ">
@@ -195,8 +190,8 @@ export default function ChatId() {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         className=" bg-white w-full "
       >
-        <View className="pb-2 bg-white flex-row justify-around items-center">
-          <Input className="rounded-full w-[85%]">
+        <View className="pb-6 bg-white flex-row justify-around items-center">
+          <Input className="rounded-full h-12 w-[85%]">
             <InputField
               defaultValue={value}
               onChangeText={(e) => setValue(e)}
