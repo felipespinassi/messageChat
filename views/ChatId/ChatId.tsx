@@ -26,6 +26,7 @@ import {
   ConversationUserTypes,
   Messages,
 } from "@/@types/ConversationUserTypes";
+import ErrorGeneric from "@/components/ErrorGeneric/ErrorGeneric";
 
 export default function ChatId() {
   const { id, name } = useLocalSearchParams();
@@ -127,6 +128,10 @@ export default function ChatId() {
     }
   }
 
+  if (error) {
+    return <ErrorGeneric />;
+  }
+
   return (
     <SafeAreaView className=" gap-2 flex-1 bg-white">
       <View className="flex-row justify-between  px-4 pb-4   ">
@@ -162,21 +167,20 @@ export default function ChatId() {
           <ActivityIndicator size="large" />
         </View>
       ) : (
-        <ScrollView className="bg-zinc-100 ">
-          {messages?.map((message: any, index: any) => {
+        <ScrollView className="bg-zinc-100 pt-2 ">
+          {messages?.map((message, index) => {
             if (Number(message.userId) === userRef.current) {
               return (
-                <View key={index} className="mx-2  items-end">
-                  <Text>Você</Text>
+                <View key={index} className="mx-2 mb-1  items-end">
                   <Text className=" p-2  rounded-md bg-primary-500 max-w-[70%] color-white font-semibold">
                     {message.content}
                   </Text>
                 </View>
               );
             }
+
             return (
-              <View key={index} className="mx-2 items-start  ">
-                <Text>{message?.sender}</Text>
+              <View key={index} className="mx-2 items-start mb-1  ">
                 <Text className=" p-2  rounded-md bg-white max-w-[70%]  font-semibold">
                   {message.content}
                 </Text>

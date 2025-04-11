@@ -3,6 +3,11 @@ export interface ConversationUserTypes {
   id: string;
   isGroup: boolean;
   messages: Messages[];
+  user: {
+    id: number;
+    email: string;
+    name: string;
+  };
 }
 
 interface Messages {
