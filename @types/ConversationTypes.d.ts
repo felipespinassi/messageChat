@@ -11,9 +11,12 @@ interface ConversationTypes {
     type: string;
     userId: string;
   };
-  user: {
-    id: string;
-    name: string;
-    name: string;
-  };
+  users: [
+    {
+      id: string;
+      name: string;
+      name: string;
+    }
+  ];
+  name: string | null;
 }

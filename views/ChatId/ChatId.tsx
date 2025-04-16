@@ -29,7 +29,7 @@ import {
 import ErrorGeneric from "@/components/ErrorGeneric/ErrorGeneric";
 
 export default function ChatId() {
-  const { id, name } = useLocalSearchParams();
+  const { id, name, isGroup } = useLocalSearchParams();
 
   const conversation =
     useLocalSearchParams().conversation &&
@@ -41,19 +41,21 @@ export default function ChatId() {
   const [messages, setMessages] = useState<Messages[]>([]);
 
   const roomRef = useRef(`room-${conversation?.id}`);
-  const userRef = useRef(0);
+  const userRef = useRef({} as any);
   const responseRef = useRef({} as ConversationUserTypes);
   const socket = useContext(WebSocketContext);
 
-  const { data, error, mutate, isLoading } = useSWR<ConversationUserTypes>(
-    `${process.env.EXPO_PUBLIC_BASE_URL}conversation/user/${id}`,
-    fetcher
-  );
+  const url =
+    isGroup === "true"
+      ? `${process.env.EXPO_PUBLIC_BASE_URL}conversation/${conversation?.id}`
+      : `${process.env.EXPO_PUBLIC_BASE_URL}conversation/user/${id}`;
+
+  const { data, error, mutate, isLoading } = useSWR<any>(url, fetcher);
 
   async function getMessages() {
     const user = await getUser();
 
-    userRef.current = user.id;
+    userRef.current = user;
 
     setMessages(data?.messages || []);
     if (data) {
@@ -100,7 +102,7 @@ export default function ChatId() {
           method: "POST",
           body: JSON.stringify({
             isGroup: false,
-            users: [userRef.current, Number(id)],
+            users: [userRef.current.id, Number(id)],
           }),
         }
       );
@@ -110,7 +112,7 @@ export default function ChatId() {
         room: roomRef.current,
         content: value,
         conversationId: responseRef.current.id,
-        userId: userRef.current,
+        userId: userRef.current.id,
         type: "text",
       });
 
@@ -121,16 +123,16 @@ export default function ChatId() {
         room: roomRef.current,
         content: value,
         conversationId: responseRef.current.id,
-        userId: userRef.current,
+        userId: userRef.current.id,
         type: "text",
       });
       setValue("");
     }
   }
 
-  if (error) {
-    return <ErrorGeneric />;
-  }
+  // if (error) {
+  //   return <ErrorGeneric />;
+  // }
 
   return (
     <SafeAreaView className=" gap-2 flex-1 bg-white">
@@ -142,7 +144,9 @@ export default function ChatId() {
             color={"#0273FD"}
           />
           <Avatar size="md">
-            <AvatarFallbackText>{name}</AvatarFallbackText>
+            <AvatarFallbackText>
+              {isGroup === "true" ? data?.name : name}
+            </AvatarFallbackText>
             <AvatarImage
               source={{
                 uri: avatar,
@@ -151,7 +155,9 @@ export default function ChatId() {
             <AvatarBadge />
           </Avatar>
           <TouchableOpacity onPress={() => router.push("/chat/details")}>
-            <Text className="text-xl font-semibold">{name}</Text>
+            <Text className="text-xl font-semibold">
+              {isGroup === "true" ? data?.name : name}
+            </Text>
             <Text>Online</Text>
           </TouchableOpacity>
         </View>
@@ -169,9 +175,12 @@ export default function ChatId() {
       ) : (
         <ScrollView className="bg-zinc-100 pt-2 ">
           {messages?.map((message, index) => {
-            if (Number(message.userId) === userRef.current) {
+            if (Number(message.userId) === userRef.current.id) {
               return (
                 <View key={index} className="mx-2 mb-1  items-end">
+                  {/* {isGroup === "true" && (
+                    <Text className="text-xs">{message.user?.name}</Text>
+                  )} */}
                   <Text className=" p-2  rounded-md bg-primary-500 max-w-[70%] color-white font-semibold">
                     {message.content}
                   </Text>

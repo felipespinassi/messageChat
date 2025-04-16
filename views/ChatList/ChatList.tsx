@@ -6,7 +6,7 @@ import {
   FlatList,
   ActivityIndicator,
 } from "react-native";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { LogOut, Plus, Search, X } from "lucide-react-native";
 
 import { useFocusEffect, useRouter } from "expo-router";
@@ -19,11 +19,13 @@ import { ConversationTypes } from "@/@types/ConversationTypes";
 import ChatListItem from "./components/ChatListItem";
 import { Button, ButtonText } from "@/components/ui/button";
 import ErrorGeneric from "@/components/ErrorGeneric/ErrorGeneric";
+import { getUser } from "@/storage/getUser";
 
 export default function ChatList() {
   // const [contacts, setContacts] = useState<Contacts.Contact[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
+  const userRef = useRef({});
 
   const {
     data: messages,
@@ -40,6 +42,14 @@ export default function ChatList() {
       mutateMessage();
     }, [mutateMessage])
   );
+
+  async function getUserFomStorage() {
+    userRef.current = await getUser();
+  }
+
+  useEffect(() => {
+    getUserFomStorage();
+  }, []);
 
   //pegar contatos
   // useEffect(() => {
@@ -70,10 +80,10 @@ export default function ChatList() {
 
   return (
     <SafeAreaView
-      className="m-2
+      className="mx-2 mt-2 flex-1
       "
     >
-      <View className="flex-row justify-between">
+      <View className="flex-row justify-between ">
         <Text className="text-3xl font-semibold">Conversas</Text>
         <View className="flex-row gap-6">
           <TouchableOpacity>
@@ -105,10 +115,11 @@ export default function ChatList() {
         </View>
       ) : (
         <FlatList
+          showsVerticalScrollIndicator={false}
           className="py-4 h-full"
           data={messages}
           renderItem={({ item }) => {
-            return <ChatListItem item={item} />;
+            return <ChatListItem item={item} userRef={userRef} />;
           }}
           ListEmptyComponent={
             <View className="flex-1 justify-center items-center">
