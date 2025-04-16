@@ -134,6 +134,8 @@ export default function ChatId() {
   //   return <ErrorGeneric />;
   // }
 
+  console.log("messages", messages);
+
   return (
     <SafeAreaView className=" gap-2 flex-1 bg-white">
       <View className="flex-row justify-between  px-4 pb-4   ">
