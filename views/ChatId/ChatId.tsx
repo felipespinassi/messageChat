@@ -113,6 +113,7 @@ export default function ChatId() {
         content: value,
         conversationId: responseRef.current.id,
         userId: userRef.current.id,
+        userName: userRef.current.name,
         type: "text",
       });
 
@@ -124,6 +125,7 @@ export default function ChatId() {
         content: value,
         conversationId: responseRef.current.id,
         userId: userRef.current.id,
+        userName: userRef.current.name,
         type: "text",
       });
       setValue("");
@@ -133,8 +135,6 @@ export default function ChatId() {
   // if (error) {
   //   return <ErrorGeneric />;
   // }
-
-  console.log("messages", messages);
 
   return (
     <SafeAreaView className=" gap-2 flex-1 bg-white">
@@ -180,9 +180,9 @@ export default function ChatId() {
             if (Number(message.userId) === userRef.current.id) {
               return (
                 <View key={index} className="mx-2 mb-1  items-end">
-                  {/* {isGroup === "true" && (
-                    <Text className="text-xs">{message.user?.name}</Text>
-                  )} */}
+                  {isGroup === "true" && (
+                    <Text className="text-xs">{message.userName}</Text>
+                  )}
                   <Text className=" p-2  rounded-md bg-primary-500 max-w-[70%] color-white font-semibold">
                     {message.content}
                   </Text>
@@ -192,6 +192,9 @@ export default function ChatId() {
 
             return (
               <View key={index} className="mx-2 items-start mb-1  ">
+                {isGroup === "true" && (
+                  <Text className="text-xs">{message.userName}</Text>
+                )}
                 <Text className=" p-2  rounded-md bg-white max-w-[70%]  font-semibold">
                   {message.content}
                 </Text>

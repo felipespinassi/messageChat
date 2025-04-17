@@ -15,4 +15,5 @@ interface Messages {
   id: string;
   type: string;
   userId: string;
+  userName: string;
 }
