@@ -38,7 +38,9 @@ export default function ChatListItem({
     >
       <View className="flex flex-row h-20 gap-4   items-center">
         <Avatar size="lg">
-          <AvatarFallbackText>{user?.name}</AvatarFallbackText>
+          <AvatarFallbackText>
+            {item.isGroup ? item.name : user?.name}
+          </AvatarFallbackText>
           <AvatarImage />
           <AvatarBadge />
         </Avatar>

@@ -10,6 +10,7 @@ interface ConversationTypes {
     id: string;
     type: string;
     userId: string;
+    createdAt: string;
   };
   users: [
     {

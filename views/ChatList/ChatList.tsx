@@ -78,6 +78,16 @@ export default function ChatList() {
     return <ErrorGeneric />;
   }
 
+  function compare(a: ConversationTypes, b: ConversationTypes) {
+    if (a.message.createdAt < b.message.createdAt) {
+      return 1;
+    }
+    if (a.message.createdAt > b.message.createdAt) {
+      return -1;
+    }
+    return 0;
+  }
+
   return (
     <SafeAreaView
       className="mx-2 mt-2 flex-1
@@ -117,7 +127,7 @@ export default function ChatList() {
         <FlatList
           showsVerticalScrollIndicator={false}
           className="py-4 h-full"
-          data={messages}
+          data={messages?.sort(compare)}
           renderItem={({ item }) => {
             return <ChatListItem item={item} userRef={userRef} />;
           }}
