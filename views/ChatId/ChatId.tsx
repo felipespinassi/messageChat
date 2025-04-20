@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
+  FlatList,
 } from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -40,6 +41,7 @@ export default function ChatId() {
   const [value, setValue] = useState("");
   const [messages, setMessages] = useState<Messages[]>([]);
 
+  const chatRef = useRef(null as any);
   const roomRef = useRef(`room-${conversation?.id}`);
   const userRef = useRef({} as any);
   const responseRef = useRef({} as ConversationUserTypes);
@@ -136,6 +138,14 @@ export default function ChatId() {
   //   return <ErrorGeneric />;
   // }
 
+  const scrollToBottom = () => {
+    chatRef.current?.scrollToOffset({ animated: true, offset: 0 });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   return (
     <SafeAreaView className=" gap-2 flex-1 bg-white">
       <View className="flex-row justify-between  px-4 pb-4   ">
@@ -175,33 +185,35 @@ export default function ChatId() {
           <ActivityIndicator size="large" />
         </View>
       ) : (
-        <ScrollView className="bg-zinc-100 pt-2 ">
-          {messages?.map((message, index) => {
-            if (Number(message.userId) === userRef.current.id) {
-              return (
-                <View key={index} className="mx-2 mb-1  items-end">
-                  {isGroup === "true" && (
-                    <Text className="text-xs">{message.userName}</Text>
-                  )}
-                  <Text className=" p-2  rounded-md bg-primary-500 max-w-[70%] color-white font-semibold">
-                    {message.content}
-                  </Text>
-                </View>
-              );
-            }
+        <FlatList
+          ref={chatRef}
+          className="bg-zinc-100 pt-2"
+          data={[...messages].slice().reverse()} // ← inverte os dados
+          keyExtractor={(item, index) => index.toString()}
+          inverted
+          renderItem={({ item }) => {
+            const isOwnMessage = Number(item.userId) === userRef.current.id;
 
             return (
-              <View key={index} className="mx-2 items-start mb-1  ">
+              <View
+                className={`mx-2 mb-1 ${
+                  isOwnMessage ? "items-end" : "items-start"
+                }`}
+              >
                 {isGroup === "true" && (
-                  <Text className="text-xs">{message.userName}</Text>
+                  <Text className="text-xs">{item.userName}</Text>
                 )}
-                <Text className=" p-2  rounded-md bg-white max-w-[70%]  font-semibold">
-                  {message.content}
+                <Text
+                  className={`p-2 rounded-md max-w-[70%] font-semibold ${
+                    isOwnMessage ? "bg-primary-500 color-white" : "bg-white"
+                  }`}
+                >
+                  {item.content}
                 </Text>
               </View>
             );
-          })}
-        </ScrollView>
+          }}
+        />
       )}
 
       <KeyboardAvoidingView
