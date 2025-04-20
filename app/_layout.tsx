@@ -32,6 +32,7 @@ export default function RootLayout() {
           <Stack.Screen name="index" />
           <Stack.Screen name="signup/index" />
           <Stack.Screen name="login/index" />
+          <Stack.Screen name="modal" options={{ presentation: "modal" }} />
         </Stack>
       </WebSocketContext.Provider>
     </GluestackUIProvider>

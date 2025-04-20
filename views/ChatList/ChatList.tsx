@@ -12,7 +12,6 @@ import { LogOut, Plus, Search, X } from "lucide-react-native";
 import { useFocusEffect, useRouter } from "expo-router";
 import fetcher from "@/services/fetcher";
 import useSWR from "swr";
-import ModalUsers from "./components/ModalUsers";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ACCESS_TOKEN } from "@/storage/storageConfig";
 import { ConversationTypes } from "@/@types/ConversationTypes";
@@ -23,7 +22,6 @@ import { getUser } from "@/storage/getUser";
 
 export default function ChatList() {
   // const [contacts, setContacts] = useState<Contacts.Contact[]>([]);
-  const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
   const userRef = useRef({});
 
@@ -102,7 +100,9 @@ export default function ChatList() {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => setModalVisible(true)}>
+          <TouchableOpacity
+            onPress={() => router.push("/modal/newConversation")}
+          >
             <View className="bg-primary-500 p-2 rounded-full">
               <Plus color={"white"} />
             </View>
@@ -136,13 +136,6 @@ export default function ChatList() {
               <Text className="text-gray-500">Nenhuma conversa </Text>
             </View>
           }
-        />
-      )}
-
-      {modalVisible && (
-        <ModalUsers
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
         />
       )}
     </SafeAreaView>
