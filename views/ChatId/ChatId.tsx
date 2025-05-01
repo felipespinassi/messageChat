@@ -41,8 +41,8 @@ export default function ChatId() {
   const [value, setValue] = useState("");
   const [messages, setMessages] = useState<Messages[]>([]);
 
+  const roomRef = useRef(`room-${conversation?.id || id}` as string);
   const chatRef = useRef(null as any);
-  const roomRef = useRef(`room-${conversation?.id}`);
   const userRef = useRef({} as any);
   const responseRef = useRef({} as ConversationUserTypes);
   const socket = useContext(WebSocketContext);
@@ -96,47 +96,45 @@ export default function ChatId() {
     };
   }, [roomRef.current]);
 
+  async function CreateConversation() {
+    const response = await fetcher(
+      `${process.env.EXPO_PUBLIC_BASE_URL}conversation`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          isGroup: false,
+          users: [userRef.current.id, Number(id)],
+        }),
+      }
+    );
+
+    responseRef.current = response;
+  }
+
+  function sendMessageToWebSocket() {
+    socket.emit("newMessage", {
+      room: roomRef.current,
+      content: value,
+      conversationId: responseRef.current.id,
+      userId: userRef.current.id,
+      userName: userRef.current.name,
+      type: "text",
+    });
+
+    roomRef.current = `room-${responseRef.current.id}`;
+  }
+
   async function onSubmit() {
     if (!responseRef.current.id) {
-      const response = await fetcher(
-        `${process.env.EXPO_PUBLIC_BASE_URL}conversation`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            isGroup: false,
-            users: [userRef.current.id, Number(id)],
-          }),
-        }
-      );
+      await CreateConversation();
+      sendMessageToWebSocket();
 
-      responseRef.current = response;
-      socket.emit("newMessage", {
-        room: roomRef.current,
-        content: value,
-        conversationId: responseRef.current.id,
-        userId: userRef.current.id,
-        userName: userRef.current.name,
-        type: "text",
-      });
-
-      roomRef.current = `room-${responseRef.current.id}`;
       setValue("");
     } else {
-      socket.emit("newMessage", {
-        room: roomRef.current,
-        content: value,
-        conversationId: responseRef.current.id,
-        userId: userRef.current.id,
-        userName: userRef.current.name,
-        type: "text",
-      });
+      sendMessageToWebSocket();
       setValue("");
     }
   }
-
-  // if (error) {
-  //   return <ErrorGeneric />;
-  // }
 
   const scrollToBottom = () => {
     chatRef.current?.scrollToOffset({ animated: true, offset: 0 });
