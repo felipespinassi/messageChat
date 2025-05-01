@@ -191,6 +191,7 @@ export default function ChatId() {
           data={[...messages].slice().reverse()} // ← inverte os dados
           keyExtractor={(item, index) => index.toString()}
           inverted
+          contentContainerStyle={{ flexGrow: 1, justifyContent: "flex-end" }}
           renderItem={({ item }) => {
             const isOwnMessage = Number(item.userId) === userRef.current.id;
 

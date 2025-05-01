@@ -3,6 +3,7 @@ import { Tabs } from "expo-router";
 import {
   MessageCircleMore,
   MessagesSquare,
+  Settings,
   Tickets,
 } from "lucide-react-native";
 
@@ -32,6 +33,14 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <MessagesSquare color={color} size={28} />,
 
           tabBarLabel: "Fórum",
+        }}
+      />
+      <Tabs.Screen
+        name="settings/index"
+        options={{
+          tabBarIcon: ({ color }) => <Settings color={color} size={28} />,
+
+          tabBarLabel: "Configurações",
         }}
       />
     </Tabs>
