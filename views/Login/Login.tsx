@@ -38,7 +38,7 @@ export default function Login() {
     auth
   );
 
-  async function auth(url: string, { arg }: { arg: LoginDto }) {
+  async function auth(url: string, { arg }: { arg: any }) {
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -70,7 +70,7 @@ export default function Login() {
     }
   }
 
-  function onSubmit(data: LoginDto) {
+  function onSubmit(data: any) {
     trigger(data);
   }
 

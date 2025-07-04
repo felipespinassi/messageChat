@@ -1,6 +1,0 @@
-{
-  "app": {
-    "entry": "app/_layout.tsx",
-    "components": "components/ui"
-  }
-}

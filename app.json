@@ -33,7 +33,7 @@
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",
-          "contactsPermission" :"Allow $(PRODUCT_NAME) to access your contacts."
+          "contactsPermission": "Allow $(PRODUCT_NAME) to access your contacts."
         }
       ],
       [
@@ -41,8 +41,9 @@
         {
           "contactsPermission": "Allow $(PRODUCT_NAME) to access your contacts."
         }
-      ]
-      
+      ],
+      "expo-font",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true
