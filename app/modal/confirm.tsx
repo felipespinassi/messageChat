@@ -1,20 +1,20 @@
-import { View, Text } from "react-native";
 import React from "react";
-import { Input, InputField } from "@/components/ui/input";
+import { Box } from "@/components/RestyleComponents/RestyleComponents";
 import { Button, ButtonText } from "@/components/ui/button";
+import { Input, InputField } from "@/components/ui/input";
 
 export default function confirm() {
   return (
-    <View className="m-3 gap-4">
-      <View className="bg-white p-5 rounded-lg">
-        <Input className="border-0">
+    <Box margin="s" gap="m">
+      <Box backgroundColor="white" padding="m" borderRadius={8}>
+        <Input style={{ borderWidth: 0 }}>
           <InputField placeholder="Nome do grupo" />
         </Input>
-      </View>
+      </Box>
 
       <Button>
         <ButtonText>Criar grupo</ButtonText>
       </Button>
-    </View>
+    </Box>
   );
 }

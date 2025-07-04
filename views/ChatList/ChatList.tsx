@@ -1,6 +1,4 @@
 import {
-  View,
-  Text,
   SafeAreaView,
   TouchableOpacity,
   FlatList,
@@ -19,6 +17,7 @@ import ChatListItem from "./components/ChatListItem";
 import { Button, ButtonText } from "@/components/ui/button";
 import ErrorGeneric from "@/components/ErrorGeneric/ErrorGeneric";
 import { getUser } from "@/storage/getUser";
+import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
 
 export default function ChatList() {
   // const [contacts, setContacts] = useState<Contacts.Contact[]>([]);
@@ -87,54 +86,53 @@ export default function ChatList() {
   }
 
   return (
-    <SafeAreaView
-      className="mx-2 mt-2 flex-1
-      "
-    >
-      <View className="flex-row justify-between ">
-        <Text className="text-3xl font-semibold">Conversas</Text>
-        <View className="flex-row gap-6">
+    <SafeAreaView style={{ marginHorizontal: 8, marginTop: 8, flex: 1 }}>
+      <Box flexDirection="row" justifyContent="space-between">
+        <Text variant="header" fontSize={24} fontWeight="600">
+          Conversas
+        </Text>
+        <Box flexDirection="row" gap="m">
           <TouchableOpacity>
-            <View className="bg-white p-2 rounded-full">
+            <Box backgroundColor="white" padding="s" borderRadius={20}>
               <Search color={"gray"} />
-            </View>
+            </Box>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => router.push("/modal/newConversation")}
           >
-            <View className="bg-primary-500 p-2 rounded-full">
+            <Box backgroundColor="primary" padding="s" borderRadius={20}>
               <Plus color={"white"} />
-            </View>
+            </Box>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               AsyncStorage.removeItem(ACCESS_TOKEN), router.replace("/");
             }}
           >
-            <View className="bg-white p-2 rounded-full">
+            <Box backgroundColor="white" padding="s" borderRadius={20}>
               <LogOut color={"#0273FD"} />
-            </View>
+            </Box>
           </TouchableOpacity>
-        </View>
-      </View>
+        </Box>
+      </Box>
 
       {isLoadingMessage ? (
-        <View className=" mt-8 items-center justify-center">
+        <Box marginTop="l" alignItems="center" justifyContent="center">
           <ActivityIndicator size="large" />
-        </View>
+        </Box>
       ) : (
         <FlatList
           showsVerticalScrollIndicator={false}
-          className="py-4 h-full"
+          style={{ paddingVertical: 16, height: "100%" }}
           data={messages?.sort(compare)}
           renderItem={({ item }) => {
             return <ChatListItem item={item} userRef={userRef} />;
           }}
           ListEmptyComponent={
-            <View className="flex-1 justify-center items-center">
-              <Text className="text-gray-500">Nenhuma conversa </Text>
-            </View>
+            <Box flex={1} justifyContent="center" alignItems="center">
+              <Text color="gray">Nenhuma conversa </Text>
+            </Box>
           }
         />
       )}

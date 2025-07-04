@@ -2318,6 +2318,11 @@
     component-type "^1.2.1"
     join-component "^1.1.0"
 
+"@shopify/restyle@^2.4.5":
+  version "2.4.5"
+  resolved "https://registry.yarnpkg.com/@shopify/restyle/-/restyle-2.4.5.tgz#c010b686218109f5cf699688d5722859db19264e"
+  integrity sha512-xV970ytoX0oLac9+fMOMxcXcV9nv5BtwdNk50ZoyhqSLyiGamLJMpL/lMZIQHsmfDT8sksbUx94zQnZBztMgww==
+
 "@sinclair/typebox@^0.27.8":
   version "0.27.8"
   resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.27.8.tgz#6667fac16c436b5434a387a34dedb013198f6e6e"

@@ -1,186 +1,133 @@
-'use client';
-import React from 'react';
-import { createAvatar } from '@gluestack-ui/avatar';
+"use client";
+import React from "react";
+import { Image, ImageProps } from "react-native";
+import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
+import { Theme } from "@/theme/theme";
 
-import { View, Text, Image, Platform } from 'react-native';
+interface AvatarProps {
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+  children?: React.ReactNode;
+}
 
-import { tva } from '@gluestack-ui/nativewind-utils/tva';
-import {
-  withStyleContext,
-  useStyleContext,
-} from '@gluestack-ui/nativewind-utils/withStyleContext';
-const SCOPE = 'AVATAR';
-import type { VariantProps } from '@gluestack-ui/nativewind-utils';
+// Configurações otimizadas usando objetos
+const AVATAR_SIZES = {
+  xs: { width: 24, height: 24 },
+  sm: { width: 32, height: 32 },
+  md: { width: 48, height: 48 },
+  lg: { width: 64, height: 64 },
+  xl: { width: 96, height: 96 },
+  "2xl": { width: 128, height: 128 },
+} as const;
 
-const UIAvatar = createAvatar({
-  Root: withStyleContext(View, SCOPE),
-  Badge: View,
-  Group: View,
-  Image: Image,
-  FallbackText: Text,
-});
+const FONT_SIZES = {
+  xs: 10,
+  sm: 12,
+  md: 16,
+  lg: 20,
+  xl: 24,
+  "2xl": 32,
+} as const;
 
-const avatarStyle = tva({
-  base: 'rounded-full justify-center items-center relative bg-primary-600 group-[.avatar-group]/avatar-group:-ml-2.5',
-  variants: {
-    size: {
-      'xs': 'w-6 h-6',
-      'sm': 'w-8 h-8',
-      'md': 'w-12 h-12',
-      'lg': 'w-16 h-16',
-      'xl': 'w-24 h-24',
-      '2xl': 'w-32 h-32',
-    },
-  },
-});
+const Avatar: React.FC<AvatarProps> = ({ size = "md", children }) => {
+  const sizeStyles = AVATAR_SIZES[size] || AVATAR_SIZES.md;
 
-const avatarFallbackTextStyle = tva({
-  base: 'text-typography-0 font-semibold overflow-hidden text-transform:uppercase web:cursor-default',
-
-  parentVariants: {
-    size: {
-      'xs': 'text-2xs',
-      'sm': 'text-xs',
-      'md': 'text-base',
-      'lg': 'text-xl',
-      'xl': 'text-3xl',
-      '2xl': 'text-5xl',
-    },
-  },
-});
-
-const avatarGroupStyle = tva({
-  base: 'group/avatar-group flex-row-reverse relative avatar-group',
-});
-
-const avatarBadgeStyle = tva({
-  base: 'w-5 h-5 bg-success-500 rounded-full absolute right-0 bottom-0 border-background-0 border-2',
-  parentVariants: {
-    size: {
-      'xs': 'w-2 h-2',
-      'sm': 'w-2 h-2',
-      'md': 'w-3 h-3',
-      'lg': 'w-4 h-4',
-      'xl': 'w-6 h-6',
-      '2xl': 'w-8 h-8',
-    },
-  },
-});
-
-const avatarImageStyle = tva({
-  base: 'h-full w-full rounded-full absolute',
-});
-
-type IAvatarProps = Omit<
-  React.ComponentPropsWithoutRef<typeof UIAvatar>,
-  'context'
-> &
-  VariantProps<typeof avatarStyle>;
-
-const Avatar = React.forwardRef<
-  React.ElementRef<typeof UIAvatar>,
-  IAvatarProps
->(({ className, size = 'md', ...props }, ref) => {
   return (
-    <UIAvatar
-      ref={ref}
-      {...props}
-      className={avatarStyle({ size, class: className })}
-      context={{ size }}
-    />
+    <Box
+      borderRadius={sizeStyles.width / 2}
+      justifyContent="center"
+      alignItems="center"
+      backgroundColor="primary"
+      position="relative"
+      overflow="hidden"
+      {...sizeStyles}
+    >
+      {children}
+    </Box>
   );
-});
+};
 
-type IAvatarBadgeProps = React.ComponentPropsWithoutRef<typeof UIAvatar.Badge> &
-  VariantProps<typeof avatarBadgeStyle>;
+interface AvatarImageProps extends ImageProps {
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+}
 
-const AvatarBadge = React.forwardRef<
-  React.ElementRef<typeof UIAvatar.Badge>,
-  IAvatarBadgeProps
->(({ className, size, ...props }, ref) => {
-  const { size: parentSize } = useStyleContext(SCOPE);
+const AvatarImage: React.FC<AvatarImageProps> = ({
+  size = "md",
+  style,
+  ...props
+}) => {
+  const sizeStyles = AVATAR_SIZES[size] || AVATAR_SIZES.md;
 
   return (
-    <UIAvatar.Badge
-      ref={ref}
-      {...props}
-      className={avatarBadgeStyle({
-        parentVariants: {
-          size: parentSize,
+    <Image
+      style={[
+        {
+          ...sizeStyles,
+          position: "absolute",
+          top: 0,
+          left: 0,
         },
-        size,
-        class: className,
-      })}
+        style,
+      ]}
+      {...props}
     />
   );
-});
+};
 
-type IAvatarFallbackTextProps = React.ComponentPropsWithoutRef<
-  typeof UIAvatar.FallbackText
-> &
-  VariantProps<typeof avatarFallbackTextStyle>;
-const AvatarFallbackText = React.forwardRef<
-  React.ElementRef<typeof UIAvatar.FallbackText>,
-  IAvatarFallbackTextProps
->(({ className, size, ...props }, ref) => {
-  const { size: parentSize } = useStyleContext(SCOPE);
+interface AvatarFallbackTextProps {
+  children: React.ReactNode;
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+}
+
+const AvatarFallbackText: React.FC<AvatarFallbackTextProps> = ({
+  children,
+  size = "md",
+}) => {
+  const fontSize = FONT_SIZES[size] || FONT_SIZES.md;
+
+  // Extrair apenas a primeira letra
+  const getInitials = (text: string) => {
+    if (!text) return "";
+    return text.charAt(0).toUpperCase();
+  };
+
+  const displayText =
+    typeof children === "string" ? getInitials(children) : children;
 
   return (
-    <UIAvatar.FallbackText
-      ref={ref}
-      {...props}
-      className={avatarFallbackTextStyle({
-        parentVariants: {
-          size: parentSize,
-        },
-        size,
-        class: className,
-      })}
-    />
+    <Text color="white" fontWeight="600" fontSize={fontSize} textAlign="center">
+      {displayText}
+    </Text>
   );
-});
+};
 
-type IAvatarImageProps = React.ComponentPropsWithoutRef<typeof UIAvatar.Image> &
-  VariantProps<typeof avatarImageStyle>;
+interface AvatarBadgeProps {
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+}
 
-const AvatarImage = React.forwardRef<
-  React.ElementRef<typeof UIAvatar.Image>,
-  IAvatarImageProps
->(({ className, ...props }, ref) => {
+const BADGE_SIZES = {
+  xs: { width: 8, height: 8 },
+  sm: { width: 10, height: 10 },
+  md: { width: 12, height: 12 },
+  lg: { width: 16, height: 16 },
+  xl: { width: 20, height: 20 },
+  "2xl": { width: 24, height: 24 },
+} as const;
+
+const AvatarBadge: React.FC<AvatarBadgeProps> = ({ size = "md" }) => {
+  const badgeSize = BADGE_SIZES[size] || BADGE_SIZES.md;
+
   return (
-    <UIAvatar.Image
-      ref={ref}
-      {...props}
-      className={avatarImageStyle({
-        class: className,
-      })}
-      // @ts-expect-error
-      style={
-        Platform.OS === 'web'
-          ? // eslint-disable-next-line react-native/no-inline-styles
-            { height: 'revert-layer', width: 'revert-layer' }
-          : undefined
-      }
+    <Box
+      position="absolute"
+      bottom={0}
+      right={0}
+      backgroundColor="success"
+      borderRadius={badgeSize.width / 2}
+      borderWidth={2}
+      borderColor="white"
+      {...badgeSize}
     />
   );
-});
+};
 
-type IAvatarGroupProps = React.ComponentPropsWithoutRef<typeof UIAvatar.Group> &
-  VariantProps<typeof avatarGroupStyle>;
-
-const AvatarGroup = React.forwardRef<
-  React.ElementRef<typeof UIAvatar.Group>,
-  IAvatarGroupProps
->(({ className, ...props }, ref) => {
-  return (
-    <UIAvatar.Group
-      ref={ref}
-      {...props}
-      className={avatarGroupStyle({
-        class: className,
-      })}
-    />
-  );
-});
-
-export { Avatar, AvatarBadge, AvatarFallbackText, AvatarImage, AvatarGroup };
+export { Avatar, AvatarImage, AvatarFallbackText, AvatarBadge };

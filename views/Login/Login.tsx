@@ -1,6 +1,4 @@
 import {
-  View,
-  Text,
   SafeAreaView,
   ScrollView,
   KeyboardAvoidingView,
@@ -11,13 +9,14 @@ import {
 import React, { useState } from "react";
 import ArrowBack from "@/components/ArrowBack/ArrowBack";
 import ScreenTitle from "@/components/ScreenTitle/ScreenTitle";
-import { Input, InputField } from "@/components/ui/input";
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import { Link, router } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import useSWRMutation from "swr/mutation";
 import { createAccess_token } from "@/storage/createAccess_Token";
 import { createUser } from "@/storage/createUser";
+import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
+import { Input, InputField } from "@/components/ui/input";
 
 export default function Login() {
   const {
@@ -76,19 +75,19 @@ export default function Login() {
   }
 
   return (
-    <SafeAreaView className="m-4 gap-10 flex-1">
+    <SafeAreaView style={{ margin: 16, gap: 40, flex: 1 }}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        className="flex-1 "
+        style={{ flex: 1 }}
         keyboardVerticalOffset={Platform.OS === "ios" ? 20 : 0}
       >
         <ScrollView
           showsVerticalScrollIndicator={false}
           scrollEnabled={scrollEnable}
         >
-          <View className="gap-16 mt-28 ">
+          <Box gap="xl" marginTop="xl">
             {/* <Image
-              className=" w-full h-28"
+              style={{ width: '100%', height: 112 }}
               resizeMode="contain"
               source={require("assets/logos/pingPrimary.png")}
             /> */}
@@ -97,8 +96,8 @@ export default function Login() {
               description="Por favor, entre com Email e senha"
             />
 
-            <View className="gap-10">
-              <View className="gap-1 ">
+            <Box gap="l">
+              <Box gap="xs">
                 <Text>Email</Text>
                 <Controller
                   control={control}
@@ -106,7 +105,7 @@ export default function Login() {
                     required: true,
                   }}
                   render={({ field: { onChange, onBlur, value } }) => (
-                    <Input className="h-14 rounded-lg ">
+                    <Input style={{ height: 56, borderRadius: 8 }}>
                       <InputField
                         onBlur={onBlur}
                         onChangeText={onChange}
@@ -119,11 +118,11 @@ export default function Login() {
                   name="email"
                 />
                 {errors.email && (
-                  <Text className="text-red-500">{errorMessage}</Text>
+                  <Text color="destructive">{errorMessage}</Text>
                 )}
-              </View>
+              </Box>
 
-              <View className="gap-1">
+              <Box gap="xs">
                 <Text>Senha</Text>
                 <Controller
                   control={control}
@@ -131,7 +130,7 @@ export default function Login() {
                     required: true,
                   }}
                   render={({ field: { onChange, onBlur, value } }) => (
-                    <Input className="h-14 rounded-lg ">
+                    <Input style={{ height: 56, borderRadius: 8 }}>
                       <InputField
                         onBlur={onBlur}
                         onChangeText={onChange}
@@ -144,15 +143,19 @@ export default function Login() {
                   name="password"
                 />
                 {errors.password && (
-                  <Text className="text-red-500">{errorMessage}</Text>
+                  <Text color="destructive">{errorMessage}</Text>
                 )}
-                <View className="justify-end  flex-row pt-2">
-                  <Text className="text-orange-400">Esqueceu a senha?</Text>
-                </View>
-              </View>
-            </View>
+                <Box
+                  justifyContent="flex-end"
+                  flexDirection="row"
+                  paddingTop="xs"
+                >
+                  <Text color="secondary">Esqueceu a senha?</Text>
+                </Box>
+              </Box>
+            </Box>
 
-            <View className="mt-5">
+            <Box marginTop="m">
               <Button
                 action="primary"
                 disabled={isMutating}
@@ -163,8 +166,8 @@ export default function Login() {
                 <ButtonText>Entrar</ButtonText>
                 {isMutating && <ButtonSpinner />}
               </Button>
-            </View>
-          </View>
+            </Box>
+          </Box>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

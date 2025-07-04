@@ -1,11 +1,8 @@
 import {
-  View,
-  Text,
   SafeAreaView,
   KeyboardAvoidingView,
   Platform,
   TouchableOpacity,
-  ScrollView,
   ActivityIndicator,
   FlatList,
 } from "react-native";
@@ -28,6 +25,7 @@ import {
   Messages,
 } from "@/@types/ConversationUserTypes";
 import ErrorGeneric from "@/components/ErrorGeneric/ErrorGeneric";
+import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
 
 export default function ChatId() {
   const { id, name, isGroup } = useLocalSearchParams();
@@ -128,7 +126,6 @@ export default function ChatId() {
     if (!responseRef.current.id) {
       await CreateConversation();
       sendMessageToWebSocket();
-
       setValue("");
     } else {
       sendMessageToWebSocket();
@@ -145,48 +142,49 @@ export default function ChatId() {
   }, [messages]);
 
   return (
-    <SafeAreaView className=" gap-2 flex-1 bg-white">
-      <View className="flex-row justify-between  px-4 pb-4   ">
-        <View className="flex-row gap-4 ">
+    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+      <Box
+        flexDirection="row"
+        justifyContent="space-between"
+        paddingHorizontal="xs"
+        paddingBottom="xs"
+      >
+        <Box flexDirection="row" alignItems="center" gap="s">
           <ChevronLeft
             size={32}
             onPress={() => router.back()}
-            color={"#0273FD"}
+            color="#0273FD"
           />
           <Avatar size="md">
             <AvatarFallbackText>
               {isGroup === "true" ? data?.name : name}
             </AvatarFallbackText>
-            <AvatarImage
-              source={{
-                uri: avatar,
-              }}
-            />
+            <AvatarImage source={{ uri: avatar }} />
             <AvatarBadge />
           </Avatar>
           <TouchableOpacity onPress={() => router.push("/chat/details")}>
-            <Text className="text-xl font-semibold">
+            <Text variant="header">
               {isGroup === "true" ? data?.name : name}
             </Text>
             <Text>Online</Text>
           </TouchableOpacity>
-        </View>
+        </Box>
 
-        <View className="flex-row gap-6">
+        <Box flexDirection="row" gap="m">
           <Video />
           <Phone />
-        </View>
-      </View>
+        </Box>
+      </Box>
 
       {isLoading ? (
-        <View className="flex-1 items-center justify-center">
+        <Box flex={1} alignItems="center" justifyContent="center">
           <ActivityIndicator size="large" />
-        </View>
+        </Box>
       ) : (
         <FlatList
           ref={chatRef}
-          className="bg-zinc-100 pt-2"
-          data={[...messages].slice().reverse()} // ← inverte os dados
+          style={{ backgroundColor: "#f4f4f5", paddingTop: 8 }}
+          data={[...messages].slice().reverse()}
           keyExtractor={(item, index) => index.toString()}
           inverted
           contentContainerStyle={{ flexGrow: 1, justifyContent: "flex-end" }}
@@ -194,22 +192,26 @@ export default function ChatId() {
             const isOwnMessage = Number(item.userId) === userRef.current.id;
 
             return (
-              <View
-                className={`mx-2 mb-1 ${
-                  isOwnMessage ? "items-end" : "items-start"
-                }`}
+              <Box
+                marginHorizontal="s"
+                marginBottom="xs"
+                alignItems={isOwnMessage ? "flex-end" : "flex-start"}
               >
-                {isGroup === "true" && (
-                  <Text className="text-xs">{item.userName}</Text>
-                )}
-                <Text
-                  className={`p-2 rounded-md max-w-[70%] font-semibold ${
-                    isOwnMessage ? "bg-primary-500 color-white" : "bg-white"
-                  }`}
+                {isGroup === "true" && <Text>{item.userName}</Text>}
+                <Box
+                  padding="s"
+                  borderRadius={8}
+                  maxWidth="70%"
+                  backgroundColor={isOwnMessage ? "primary" : "white"}
                 >
-                  {item.content}
-                </Text>
-              </View>
+                  <Text
+                    color={isOwnMessage ? "white" : "black"}
+                    fontWeight="bold"
+                  >
+                    {item.content}
+                  </Text>
+                </Box>
+              </Box>
             );
           }}
         />
@@ -217,23 +219,37 @@ export default function ChatId() {
 
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        className=" bg-white w-full "
+        style={{ backgroundColor: "white", width: "100%" }}
       >
-        <View className="pb-6 bg-white flex-row justify-around items-center">
-          <Input className="rounded-full h-12 w-[85%]">
-            <InputField
-              defaultValue={value}
-              onChangeText={(e) => setValue(e)}
-              placeholder="Digite sua mensagem"
-            />
-          </Input>
-          <TouchableOpacity
-            onPress={onSubmit}
-            className="bg-primary-500 h-10 w-10 rounded-full justify-center items-center"
-          >
-            <SendHorizontal size={22} color={"white"} />
+        <Box
+          flexDirection="row"
+          justifyContent="space-around"
+          alignItems="center"
+          paddingBottom="m"
+          backgroundColor="white"
+        >
+          <Box width="85%">
+            <Input>
+              <InputField
+                defaultValue={value}
+                onChangeText={(e) => setValue(e)}
+                placeholder="Digite sua mensagem"
+              />
+            </Input>
+          </Box>
+          <TouchableOpacity onPress={onSubmit}>
+            <Box
+              backgroundColor="primary"
+              height={40}
+              width={40}
+              borderRadius={20}
+              justifyContent="center"
+              alignItems="center"
+            >
+              <SendHorizontal size={22} color="white" />
+            </Box>
           </TouchableOpacity>
-        </View>
+        </Box>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

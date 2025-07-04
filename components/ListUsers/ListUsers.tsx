@@ -1,8 +1,9 @@
 import fetcher from "@/services/fetcher";
 import { router } from "expo-router";
 import { Users } from "lucide-react-native";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, TouchableOpacity } from "react-native";
 import useSWR from "swr";
+import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
 import {
   Avatar,
   AvatarBadge,
@@ -23,23 +24,22 @@ export default function ListUsers({
   return (
     <FlatList
       ListHeaderComponent={
-        <View className=" pt-2 pb-2 ">
-          <TouchableOpacity
-            onPress={() => router.push("/modal/users")}
-            className="flex-row gap-3"
-          >
-            <Users color={"blue"} />
-            <Text>Criar novo grupo</Text>
+        <Box paddingVertical="s">
+          <TouchableOpacity onPress={() => router.push("/modal/users")}>
+            <Box flexDirection="row" gap="s" alignItems="center">
+              <Users color={"blue"} />
+              <Text>Criar novo grupo</Text>
+            </Box>
           </TouchableOpacity>
-        </View>
+        </Box>
       }
       showsVerticalScrollIndicator={false}
-      className=" mx-4 rounded-md p-2"
+      style={{ marginHorizontal: 16, padding: 8, borderRadius: 8 }}
       keyExtractor={(item, index) => index.toString()}
       data={data}
       renderItem={({ item }) => {
         return (
-          <View className="flex-1 ">
+          <Box flex={1}>
             <TouchableOpacity
               onPress={() => {
                 router.replace({
@@ -51,7 +51,7 @@ export default function ListUsers({
                 });
               }}
             >
-              <View className="flex flex-row gap-4 items-center p-2 ">
+              <Box flexDirection="row" gap="m" alignItems="center" padding="s">
                 <Avatar size="md">
                   <AvatarFallbackText>{item.name}</AvatarFallbackText>
                   <AvatarImage
@@ -64,9 +64,9 @@ export default function ListUsers({
                   <AvatarBadge />
                 </Avatar>
                 <Text>{item.name}</Text>
-              </View>
+              </Box>
             </TouchableOpacity>
-          </View>
+          </Box>
         );
       }}
     />

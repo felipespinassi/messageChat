@@ -1,5 +1,6 @@
-import { View, Text, SafeAreaView } from "react-native";
+import { SafeAreaView } from "react-native";
 import React from "react";
+import { Box } from "@/components/RestyleComponents/RestyleComponents";
 import {
   Avatar,
   AvatarBadge,
@@ -12,7 +13,7 @@ export default function ChatDetails() {
 
   return (
     <SafeAreaView>
-      <View className=" justify-center items-center">
+      <Box justifyContent="center" alignItems="center">
         <Avatar size="2xl">
           <AvatarFallbackText>Usuario</AvatarFallbackText>
           <AvatarImage
@@ -22,7 +23,7 @@ export default function ChatDetails() {
           />
           <AvatarBadge />
         </Avatar>
-      </View>
+      </Box>
     </SafeAreaView>
   );
 }

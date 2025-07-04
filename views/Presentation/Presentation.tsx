@@ -1,34 +1,46 @@
 import ScreenTitle from "@/components/ScreenTitle/ScreenTitle";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Link, router } from "expo-router";
-import { Image, SafeAreaView, Text, View } from "react-native";
+import { Image, SafeAreaView } from "react-native";
+import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
 
 export default function Presentation() {
   return (
-    <SafeAreaView className="flex flex-1 m-4 justify-center gap-64  ">
+    <SafeAreaView
+      style={{ flex: 1, margin: 16, justifyContent: "center", gap: 256 }}
+    >
       <ScreenTitle title="Bem-vindo" description="Vamos começar" />
 
-      <View className="gap-5">
-        <View className="gap-2">
-          <Text className="font-semibold text-xl">Entrar/Criar conta</Text>
+      <Box gap="m">
+        <Box gap="xs">
+          <Text fontWeight="600" fontSize={20}>
+            Entrar/Criar conta
+          </Text>
           <Button
             onPress={() => router.replace("/login")}
-            className=" w-full bg-primary-500 h-14 rounded-xl "
+            style={{
+              width: "100%",
+              backgroundColor: "#0273FD",
+              height: 56,
+              borderRadius: 12,
+            }}
             size="md"
             variant="solid"
             action="default"
           >
-            <ButtonText className="text-xl">Entrar</ButtonText>
+            <ButtonText style={{ fontSize: 20 }}>Entrar</ButtonText>
           </Button>
-        </View>
+        </Box>
 
-        <View className="flex-row gap-1 items-center">
-          <Text className=" font-semibold text-xl">Novo usuario?</Text>
-          <Link href="/signup" className="text-primary-500 text-xl">
+        <Box flexDirection="row" gap="xs" alignItems="center">
+          <Text fontWeight="600" fontSize={20}>
+            Novo usuario?
+          </Text>
+          <Link href="/signup" style={{ color: "#0273FD", fontSize: 20 }}>
             Criar conta
           </Link>
-        </View>
-      </View>
+        </Box>
+      </Box>
     </SafeAreaView>
   );
 }

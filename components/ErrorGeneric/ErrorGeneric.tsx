@@ -1,21 +1,27 @@
-import { View, Text } from "react-native";
 import React from "react";
+import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
 import { Button, ButtonText } from "../ui/button";
 import { router } from "expo-router";
 
 export default function ErrorGeneric() {
   return (
-    <View className="flex-1 justify-center items-center gap-10 bg-white">
-      <View className="items-center gap-10">
-        <Text className="text-3xl">Oops !</Text>
-        <Text className="text-gray-500 text-xl">
+    <Box
+      flex={1}
+      justifyContent="center"
+      alignItems="center"
+      gap="l"
+      backgroundColor="white"
+    >
+      <Box alignItems="center" gap="l">
+        <Text fontSize={24}>Oops !</Text>
+        <Text color="gray" fontSize={20}>
           Página temporariamente indisponível
         </Text>
-      </View>
+      </Box>
 
       <Button onPress={() => router.replace("/")}>
         <ButtonText>Voltar para a página inicial</ButtonText>
       </Button>
-    </View>
+    </Box>
   );
 }

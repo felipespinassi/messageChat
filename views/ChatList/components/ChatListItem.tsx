@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import React from "react";
 import { router } from "expo-router";
 import {
@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/avatar";
 import { ConversationTypes } from "@/@types/ConversationTypes";
 import { getUser } from "@/storage/getUser";
+import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
 
 export default function ChatListItem({
   item,
@@ -23,7 +24,7 @@ export default function ChatListItem({
 
   return (
     <TouchableOpacity
-      className="mb-4 px-2"
+      style={{ marginBottom: 16, paddingHorizontal: 8 }}
       onPress={() =>
         router.push({
           pathname: "/chat/[id]",
@@ -36,7 +37,7 @@ export default function ChatListItem({
         })
       }
     >
-      <View className="flex flex-row h-20 gap-4   items-center">
+      <Box flexDirection="row" height={80} gap="s" alignItems="center">
         <Avatar size="lg">
           <AvatarFallbackText>
             {item.isGroup ? item.name : user?.name}
@@ -44,18 +45,18 @@ export default function ChatListItem({
           <AvatarImage />
           <AvatarBadge />
         </Avatar>
-        <View className="flex flex-1 h-full justify-between ">
-          <View className="">
+        <Box flex={1} height="100%" justifyContent="space-between">
+          <Box>
             {item.isGroup ? (
-              <Text className="font-bold">{item?.name}</Text>
+              <Text fontWeight="bold">{item?.name}</Text>
             ) : (
-              <Text className="font-bold">{user?.name}</Text>
+              <Text fontWeight="bold">{user?.name}</Text>
             )}
-            <Text className="text-gray-500   ">{lastMessage}</Text>
-          </View>
-          <View className="border-b  border-slate-300" />
-        </View>
-      </View>
+            <Text color="gray">{lastMessage}</Text>
+          </Box>
+          <Box borderBottomWidth={1} borderColor="border" />
+        </Box>
+      </Box>
     </TouchableOpacity>
   );
 }
