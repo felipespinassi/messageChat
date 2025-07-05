@@ -16,13 +16,6 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^14.1.0",
-    "@gluestack-ui/avatar": "^0.1.18",
-    "@gluestack-ui/button": "^1.0.8",
-    "@gluestack-ui/checkbox": "^0.1.39",
-    "@gluestack-ui/icon": "^0.1.25",
-    "@gluestack-ui/input": "^0.1.32",
-    "@gluestack-ui/overlay": "^0.1.16",
-    "@gluestack-ui/toast": "^1.0.8",
     "@react-native-async-storage/async-storage": "2.1.2",
     "@shopify/restyle": "^2.4.5",
     "babel-plugin-module-resolver": "^5.0.2",
