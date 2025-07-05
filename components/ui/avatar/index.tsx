@@ -14,7 +14,7 @@ const AVATAR_SIZES = {
   xs: { width: 24, height: 24 },
   sm: { width: 32, height: 32 },
   md: { width: 48, height: 48 },
-  lg: { width: 64, height: 64 },
+  lg: { width: 60, height: 60 },
   xl: { width: 96, height: 96 },
   "2xl": { width: 128, height: 128 },
 } as const;

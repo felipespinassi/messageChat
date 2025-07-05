@@ -54,7 +54,7 @@ export default function ChatListItem({
             )}
             <Text color="gray">{lastMessage}</Text>
           </Box>
-          <Box borderBottomWidth={1} borderColor="border" />
+          <Box borderBottomWidth={0.5} borderColor="gray" />
         </Box>
       </Box>
     </TouchableOpacity>
