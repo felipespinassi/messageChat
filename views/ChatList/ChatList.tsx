@@ -1,9 +1,4 @@
-import {
-  SafeAreaView,
-  TouchableOpacity,
-  FlatList,
-  ActivityIndicator,
-} from "react-native";
+import { TouchableOpacity, FlatList, ActivityIndicator } from "react-native";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { LogOut, Plus, Search, X } from "lucide-react-native";
 
@@ -86,7 +81,7 @@ export default function ChatList() {
   }
 
   return (
-    <SafeAreaView style={{ marginHorizontal: 8, marginTop: 8, flex: 1 }}>
+    <Box flex={1} marginHorizontal="s" marginTop="s">
       <Box flexDirection="row" justifyContent="space-between">
         <Text variant="header" fontSize={24} fontWeight="600">
           Conversas
@@ -136,6 +131,6 @@ export default function ChatList() {
           }
         />
       )}
-    </SafeAreaView>
+    </Box>
   );
 }

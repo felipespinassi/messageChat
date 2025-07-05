@@ -1,14 +1,12 @@
 import ScreenTitle from "@/components/ScreenTitle/ScreenTitle";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Link, router } from "expo-router";
-import { Image, SafeAreaView } from "react-native";
+import { Image } from "react-native";
 import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
 
 export default function Presentation() {
   return (
-    <SafeAreaView
-      style={{ flex: 1, margin: 16, justifyContent: "center", gap: 256 }}
-    >
+    <Box flex={1} marginHorizontal="l" justifyContent="center" gap="xl">
       <ScreenTitle title="Bem-vindo" description="Vamos começar" />
 
       <Box gap="m">
@@ -41,6 +39,6 @@ export default function Presentation() {
           </Link>
         </Box>
       </Box>
-    </SafeAreaView>
+    </Box>
   );
 }

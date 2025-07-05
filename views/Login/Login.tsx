@@ -1,5 +1,4 @@
 import {
-  SafeAreaView,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
@@ -75,7 +74,7 @@ export default function Login() {
   }
 
   return (
-    <SafeAreaView style={{ margin: 16, gap: 40, flex: 1 }}>
+    <Box flex={1} margin="m" gap="xl">
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1 }}
@@ -170,6 +169,6 @@ export default function Login() {
           </Box>
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </Box>
   );
 }

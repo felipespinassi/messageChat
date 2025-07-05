@@ -2,7 +2,7 @@ import React from "react";
 import { TouchableOpacity, TouchableOpacityProps } from "react-native";
 import { createBox } from "@shopify/restyle";
 import { PropsWithChildren } from "react";
-import { Theme } from "@/src/theme/theme";
+import { Theme } from "@/theme/theme";
 
 const TouchableOpacityBoxBase = createBox<Theme, TouchableOpacityProps>(
   TouchableOpacity

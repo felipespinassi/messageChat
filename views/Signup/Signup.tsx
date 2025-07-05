@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  SafeAreaView,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-} from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { Button, ButtonText } from "@/components/ui/button";
 import ScreenTitle from "@/components/ScreenTitle/ScreenTitle";
 import ArrowBack from "@/components/ArrowBack/ArrowBack";
@@ -66,7 +61,7 @@ export default function Signup() {
     }
   }
   return (
-    <SafeAreaView style={{ flex: 1, marginHorizontal: 16 }}>
+    <Box flex={1} marginHorizontal="m">
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1 }}
@@ -185,6 +180,6 @@ export default function Signup() {
           </Box>
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </Box>
   );
 }

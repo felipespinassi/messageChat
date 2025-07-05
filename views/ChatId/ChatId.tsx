@@ -1,5 +1,4 @@
 import {
-  SafeAreaView,
   KeyboardAvoidingView,
   Platform,
   TouchableOpacity,
@@ -142,7 +141,7 @@ export default function ChatId() {
   }, [messages]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+    <Box flex={1} backgroundColor="white">
       <Box
         flexDirection="row"
         justifyContent="space-between"
@@ -251,6 +250,6 @@ export default function ChatId() {
           </TouchableOpacity>
         </Box>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </Box>
   );
 }
