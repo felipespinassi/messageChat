@@ -1,12 +1,12 @@
 import React from "react";
 import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
-import { Button, ButtonText } from "@/components/ui/button";
 import ScreenTitle from "@/components/ScreenTitle/ScreenTitle";
 import ArrowBack from "@/components/ArrowBack/ArrowBack";
 import { useForm, Controller } from "react-hook-form";
 import useSWRMutation from "swr/mutation";
 import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
-import { Input, InputField } from "@/components/ui/input";
+import Button from "@/components/ui/button";
+import Input from "@/components/ui/input";
 
 export default function Signup() {
   const {
@@ -85,13 +85,11 @@ export default function Signup() {
                     required: true,
                   }}
                   render={({ field: { onChange, onBlur, value } }) => (
-                    <Input style={{ height: 56, borderRadius: 8 }}>
-                      <InputField
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                      />
-                    </Input>
+                    <Input
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                    />
                   )}
                   name="name"
                 />
@@ -107,13 +105,11 @@ export default function Signup() {
                       required: true,
                     }}
                     render={({ field: { onChange, onBlur, value } }) => (
-                      <Input style={{ height: 56, borderRadius: 8 }}>
-                        <InputField
-                          onBlur={onBlur}
-                          onChangeText={onChange}
-                          value={value}
-                        />
-                      </Input>
+                      <Input
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                      />
                     )}
                     name="email"
                   />
@@ -131,13 +127,11 @@ export default function Signup() {
                     required: true,
                   }}
                   render={({ field: { onChange, onBlur, value } }) => (
-                    <Input style={{ height: 56, borderRadius: 8 }}>
-                      <InputField
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                      />
-                    </Input>
+                    <Input
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                    />
                   )}
                   name="password"
                 />
@@ -168,13 +162,8 @@ export default function Signup() {
             </Box>
 
             <Box marginTop="m">
-              <Button
-                size="xl"
-                variant="solid"
-                style={{ backgroundColor: "#0273FD", borderRadius: 8 }}
-                onPress={handleSubmit(onSubmit)}
-              >
-                <ButtonText>Finalizar cadastro</ButtonText>
+              <Button variant="solid" onPress={handleSubmit(onSubmit)}>
+                Finalizar cadastro
               </Button>
             </Box>
           </Box>

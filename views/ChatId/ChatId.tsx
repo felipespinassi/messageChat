@@ -9,7 +9,6 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { ChevronLeft, Phone, SendHorizontal, Video } from "lucide-react-native";
 
-import { Input, InputField } from "@/components/ui/input";
 import { WebSocketContext } from "@/context/webSocketContext";
 import fetcher from "@/services/fetcher";
 import { getUser } from "@/storage/getUser";
@@ -21,6 +20,7 @@ import {
 import ErrorGeneric from "@/components/ErrorGeneric/ErrorGeneric";
 import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
 import Avatar from "@/components/ui/avatar";
+import Input from "@/components/ui/input";
 
 export default function ChatId() {
   const { id, name, isGroup } = useLocalSearchParams();
@@ -223,13 +223,13 @@ export default function ChatId() {
           backgroundColor="white"
         >
           <Box width="85%">
-            <Input>
-              <InputField
-                defaultValue={value}
-                onChangeText={(e) => setValue(e)}
-                placeholder="Digite sua mensagem"
-              />
-            </Input>
+            <Input
+              variant="underlined"
+              size={40}
+              placeholder="Digite sua mensagem"
+              defaultValue={value}
+              onChangeText={(e) => setValue(e)}
+            />
           </Box>
           <TouchableOpacity onPress={onSubmit}>
             <Box

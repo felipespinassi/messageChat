@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
-import { Button, ButtonText } from "../ui/button";
 import { router } from "expo-router";
+import Button from "../ui/button";
 
 export default function ErrorGeneric() {
   return (
@@ -20,7 +20,7 @@ export default function ErrorGeneric() {
       </Box>
 
       <Button onPress={() => router.replace("/")}>
-        <ButtonText>Voltar para a página inicial</ButtonText>
+        Voltar para a página inicial
       </Button>
     </Box>
   );

@@ -8,14 +8,14 @@ import {
 import React, { useState } from "react";
 import ArrowBack from "@/components/ArrowBack/ArrowBack";
 import ScreenTitle from "@/components/ScreenTitle/ScreenTitle";
-import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import { Link, router } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import useSWRMutation from "swr/mutation";
 import { createAccess_token } from "@/storage/createAccess_Token";
 import { createUser } from "@/storage/createUser";
 import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
-import { Input, InputField } from "@/components/ui/input";
+import Button from "@/components/ui/button";
+import Input from "@/components/ui/input";
 
 export default function Login() {
   const {
@@ -104,15 +104,13 @@ export default function Login() {
                     required: true,
                   }}
                   render={({ field: { onChange, onBlur, value } }) => (
-                    <Input style={{ height: 56, borderRadius: 8 }}>
-                      <InputField
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                        onEndEditing={() => setScrollEnable(false)}
-                        onFocus={() => setScrollEnable(true)}
-                      />
-                    </Input>
+                    <Input
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      onEndEditing={() => setScrollEnable(false)}
+                      onFocus={() => setScrollEnable(true)}
+                    />
                   )}
                   name="email"
                 />
@@ -129,15 +127,13 @@ export default function Login() {
                     required: true,
                   }}
                   render={({ field: { onChange, onBlur, value } }) => (
-                    <Input style={{ height: 56, borderRadius: 8 }}>
-                      <InputField
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                        onEndEditing={() => setScrollEnable(false)}
-                        onFocus={() => setScrollEnable(true)}
-                      />
-                    </Input>
+                    <Input
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      onEndEditing={() => setScrollEnable(false)}
+                      onFocus={() => setScrollEnable(true)}
+                    />
                   )}
                   name="password"
                 />
@@ -156,14 +152,14 @@ export default function Login() {
 
             <Box marginTop="m">
               <Button
+                loading={isMutating}
                 action="primary"
                 disabled={isMutating}
-                size="xl"
+                size={40}
                 variant="solid"
                 onPress={handleSubmit(onSubmit)}
               >
-                <ButtonText>Entrar</ButtonText>
-                {isMutating && <ButtonSpinner />}
+                Entrar
               </Button>
             </Box>
           </Box>

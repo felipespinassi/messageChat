@@ -1,8 +1,8 @@
 import ScreenTitle from "@/components/ScreenTitle/ScreenTitle";
-import { Button, ButtonText } from "@/components/ui/button";
 import { Link, router } from "expo-router";
 import { Image } from "react-native";
 import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
+import Button from "@/components/ui/button";
 
 export default function Presentation() {
   return (
@@ -16,17 +16,11 @@ export default function Presentation() {
           </Text>
           <Button
             onPress={() => router.replace("/login")}
-            style={{
-              width: "100%",
-              backgroundColor: "#0273FD",
-              height: 56,
-              borderRadius: 12,
-            }}
-            size="md"
+            size={40}
             variant="solid"
-            action="default"
+            action="primary"
           >
-            <ButtonText style={{ fontSize: 20 }}>Entrar</ButtonText>
+            Entrar
           </Button>
         </Box>
 

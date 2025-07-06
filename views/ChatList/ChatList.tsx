@@ -9,7 +9,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ACCESS_TOKEN } from "@/storage/storageConfig";
 import { ConversationTypes } from "@/@types/ConversationTypes";
 import ChatListItem from "./components/ChatListItem";
-import { Button, ButtonText } from "@/components/ui/button";
 import ErrorGeneric from "@/components/ErrorGeneric/ErrorGeneric";
 import { getUser } from "@/storage/getUser";
 import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";

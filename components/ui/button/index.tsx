@@ -1,112 +1,71 @@
-"use client";
 import React from "react";
-import { ActivityIndicator, Pressable, PressableProps } from "react-native";
-import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
+import {
+  ActivityIndicator,
+  Pressable,
+  PressableProps,
+  ViewStyle,
+} from "react-native";
 import { Theme } from "@/theme/theme";
-
-// Configurações otimizadas com objetos
-const BUTTON_SIZES = {
-  xs: { paddingHorizontal: "s" as const, height: 32 },
-  sm: { paddingHorizontal: "s" as const, height: 36 },
-  md: { paddingHorizontal: "m" as const, height: 40 },
-  lg: { paddingHorizontal: "m" as const, height: 44 },
-  xl: { paddingHorizontal: "l" as const, height: 48 },
-} as const;
-
-const BUTTON_COLORS = {
-  primary: "primary" as keyof Theme["colors"],
-  secondary: "secondary" as keyof Theme["colors"],
-  positive: "success" as keyof Theme["colors"],
-  negative: "destructive" as keyof Theme["colors"],
-  default: "primary" as keyof Theme["colors"],
-} as const;
-
-const VARIANT_STYLES = {
-  solid: {
-    backgroundColor: "primary" as keyof Theme["colors"],
-  },
-  outline: {
-    backgroundColor: "transparent" as keyof Theme["colors"],
-    borderWidth: 1,
-    borderColor: "border" as keyof Theme["colors"],
-  },
-  link: {
-    backgroundColor: "transparent" as keyof Theme["colors"],
-  },
-} as const;
+import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
 
 interface ButtonProps extends PressableProps {
+  children: React.ReactNode;
+  size?: number; // altura do botão
+  loading?: boolean;
   variant?: "solid" | "outline" | "link";
-  size?: "xs" | "sm" | "md" | "lg" | "xl";
-  action?: "primary" | "secondary" | "positive" | "negative" | "default";
+  action?: "primary" | "secondary" | "positive" | "negative";
   disabled?: boolean;
-  children?: React.ReactNode;
 }
 
 const Button: React.FC<ButtonProps> = ({
+  children,
+  size = 48,
+  loading = false,
   variant = "solid",
-  size = "md",
   action = "primary",
   disabled = false,
-  children,
   style,
   ...props
 }) => {
-  const sizeStyles = BUTTON_SIZES[size] || BUTTON_SIZES.md;
-  const baseVariantStyles = VARIANT_STYLES[variant] || VARIANT_STYLES.solid;
+  const bgColors: Record<string, keyof Theme["colors"]> = {
+    primary: "primary",
+    secondary: "secondary",
+    positive: "success",
+    negative: "destructive",
+  };
 
-  // Para variante solid, aplicar cor baseada na action
-  const variantStyles =
-    variant === "solid"
-      ? {
-          ...baseVariantStyles,
-          backgroundColor: BUTTON_COLORS[action] || BUTTON_COLORS.primary,
-        }
-      : baseVariantStyles;
+  const backgroundColor =
+    variant === "solid" ? bgColors[action] || "primary" : "none";
+
+  const textColor =
+    variant === "solid" ? "white" : bgColors[action] || "primary";
 
   return (
-    <Pressable disabled={disabled} style={style} {...props}>
+    <Pressable disabled={disabled || loading} style={style} {...props}>
       <Box
+        height={size}
+        px="m"
+        borderRadius={8}
+        backgroundColor={backgroundColor}
         flexDirection="row"
         alignItems="center"
         justifyContent="center"
-        borderRadius={8}
-        opacity={disabled ? 0.4 : 1}
-        gap="xs"
-        {...sizeStyles}
-        {...variantStyles}
+        borderWidth={variant === "outline" ? 1 : 0}
+        borderColor={variant === "outline" ? "border" : "none"}
+        opacity={disabled ? 0.5 : 1}
       >
-        {children}
+        {loading ? (
+          <ActivityIndicator color={textColor} size="small" />
+        ) : typeof children === "string" ? (
+          <Text color={textColor} fontWeight="600" fontSize={16}>
+            {children}
+          </Text>
+        ) : (
+          children
+        )}
       </Box>
     </Pressable>
   );
 };
 
-interface ButtonTextProps {
-  children: React.ReactNode;
-  color?: keyof Theme["colors"];
-  style?: any;
-}
-
-const ButtonText: React.FC<ButtonTextProps> = ({ children, color, style }) => {
-  return (
-    <Text
-      color={color || "white"}
-      fontWeight="600"
-      textAlign="center"
-      style={style}
-    >
-      {children}
-    </Text>
-  );
-};
-
-interface ButtonSpinnerProps {
-  color?: string;
-}
-
-const ButtonSpinner: React.FC<ButtonSpinnerProps> = ({ color = "white" }) => {
-  return <ActivityIndicator color={color} size="small" />;
-};
-
-export { Button, ButtonText, ButtonSpinner };
+export default Button;
