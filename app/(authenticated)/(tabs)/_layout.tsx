@@ -6,10 +6,29 @@ import {
   Settings,
   Tickets,
 } from "lucide-react-native";
+import { BlurView } from "expo-blur";
+import { Platform, StyleSheet } from "react-native";
 
 export default function TabLayout() {
   return (
-    <Tabs screenOptions={{ headerShown: false }}>
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: {
+          backgroundColor: Platform.OS === "ios" ? "transparent" : "#fff",
+          borderTopWidth: 0,
+          elevation: 0,
+          position: "absolute",
+        },
+        tabBarBackground: () => (
+          <BlurView
+            tint="light" // ou "dark"
+            intensity={50}
+            style={StyleSheet.absoluteFill}
+          />
+        ),
+      }}
+    >
       <Tabs.Screen
         name="ticketList/index"
         options={{
