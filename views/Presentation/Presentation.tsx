@@ -6,7 +6,12 @@ import Button from "@/components/Button/Button";
 
 export default function Presentation() {
   return (
-    <Box flex={1} marginHorizontal="l" justifyContent="center" gap="xl">
+    <Box
+      flex={1}
+      marginHorizontal="l"
+      justifyContent="center"
+      style={{ gap: 250 }}
+    >
       <ScreenTitle title="Bem-vindo" description="Vamos começar" />
 
       <Box gap="m">
