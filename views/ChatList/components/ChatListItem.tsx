@@ -1,15 +1,11 @@
 import { TouchableOpacity } from "react-native";
 import React from "react";
 import { router } from "expo-router";
-import {
-  Avatar,
-  AvatarBadge,
-  AvatarFallbackText,
-  AvatarImage,
-} from "@/components/ui/avatar";
+
 import { ConversationTypes } from "@/@types/ConversationTypes";
 import { getUser } from "@/storage/getUser";
 import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
+import Avatar from "@/components/ui/avatar";
 
 export default function ChatListItem({
   item,
@@ -38,13 +34,11 @@ export default function ChatListItem({
       }
     >
       <Box flexDirection="row" height={80} gap="s" alignItems="center">
-        <Avatar size="lg">
-          <AvatarFallbackText>
-            {item.isGroup ? item.name : user?.name}
-          </AvatarFallbackText>
-          <AvatarImage />
-          <AvatarBadge />
-        </Avatar>
+        <Avatar
+          fallbackText={item.isGroup ? item.name : user?.name}
+          size={55}
+        />
+
         <Box flex={1} height="100%" justifyContent="space-between">
           <Box>
             {item.isGroup ? (

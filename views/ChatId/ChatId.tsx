@@ -8,12 +8,7 @@ import {
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { ChevronLeft, Phone, SendHorizontal, Video } from "lucide-react-native";
-import {
-  Avatar,
-  AvatarBadge,
-  AvatarFallbackText,
-  AvatarImage,
-} from "@/components/ui/avatar";
+
 import { Input, InputField } from "@/components/ui/input";
 import { WebSocketContext } from "@/context/webSocketContext";
 import fetcher from "@/services/fetcher";
@@ -25,6 +20,7 @@ import {
 } from "@/@types/ConversationUserTypes";
 import ErrorGeneric from "@/components/ErrorGeneric/ErrorGeneric";
 import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
+import Avatar from "@/components/ui/avatar";
 
 export default function ChatId() {
   const { id, name, isGroup } = useLocalSearchParams();
@@ -154,13 +150,12 @@ export default function ChatId() {
             onPress={() => router.back()}
             color="#0273FD"
           />
-          <Avatar size="md">
-            <AvatarFallbackText>
-              {isGroup === "true" ? data?.name : name}
-            </AvatarFallbackText>
-            <AvatarImage source={{ uri: avatar }} />
-            <AvatarBadge />
-          </Avatar>
+          <Avatar
+            uri={avatar}
+            size={55}
+            fallbackText={isGroup === "true" ? data?.name : name}
+          />
+
           <TouchableOpacity onPress={() => router.push("/chat/details")}>
             <Text variant="header">
               {isGroup === "true" ? data?.name : name}

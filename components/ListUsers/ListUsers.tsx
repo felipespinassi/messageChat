@@ -4,12 +4,7 @@ import { Users } from "lucide-react-native";
 import { FlatList, TouchableOpacity } from "react-native";
 import useSWR from "swr";
 import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
-import {
-  Avatar,
-  AvatarBadge,
-  AvatarFallbackText,
-  AvatarImage,
-} from "../ui/avatar";
+import Avatar from "../ui/avatar";
 
 export default function ListUsers({
   showCreateGroup,
@@ -52,17 +47,16 @@ export default function ListUsers({
               }}
             >
               <Box flexDirection="row" gap="m" alignItems="center" padding="s">
-                <Avatar size="md">
-                  <AvatarFallbackText>{item.name}</AvatarFallbackText>
-                  <AvatarImage
-                    source={{
-                      uri: item.imageAvailable
-                        ? item.image?.uri
-                        : "https://cdn-icons-png.flaticon.com/512/6858/6858504.png",
-                    }}
-                  />
-                  <AvatarBadge />
-                </Avatar>
+                <Avatar
+                  size={50}
+                  fallbackText={item.name}
+                  uri={
+                    item.imageAvailable
+                      ? item.image?.uri
+                      : "https://cdn-icons-png.flaticon.com/512/6858/6858504.png"
+                  }
+                />
+
                 <Text>{item.name}</Text>
               </Box>
             </TouchableOpacity>
