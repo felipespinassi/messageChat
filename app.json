@@ -13,6 +13,7 @@
       "bundleIdentifier": "com.spinassi.messageChat"
     },
     "android": {
+        "softwareKeyboardLayoutMode": "resize",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"

@@ -2,8 +2,8 @@ import {
   KeyboardAvoidingView,
   Platform,
   TouchableOpacity,
-  ActivityIndicator,
   FlatList,
+  Keyboard,
 } from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -44,7 +44,7 @@ export default function ChatId() {
       ? `${process.env.EXPO_PUBLIC_BASE_URL}conversation/${conversation?.id}`
       : `${process.env.EXPO_PUBLIC_BASE_URL}conversation/user/${id}`;
 
-  const { data, error, mutate, isLoading } = useSWR<any>(url, fetcher);
+  const { data, isLoading } = useSWR<any>(url, fetcher);
 
   async function getMessages() {
     const user = await getUser();
@@ -127,8 +127,27 @@ export default function ChatId() {
     }
   }
 
+  // Controle da altura do teclado
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  useEffect(() => {
+    const showSub = Keyboard.addListener("keyboardDidShow", (e) => {
+      setKeyboardHeight(e.endCoordinates.height);
+    });
+    const hideSub = Keyboard.addListener("keyboardDidHide", () => {
+      setKeyboardHeight(0);
+    });
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
+
+  const headerHeight = 70;
+  const inputHeight = 70;
+
+  // Scroll para o fim
   const scrollToBottom = () => {
-    chatRef.current?.scrollToOffset({ animated: true, offset: 0 });
+    chatRef.current?.scrollToEnd({ animated: true });
   };
 
   useEffect(() => {
@@ -137,11 +156,16 @@ export default function ChatId() {
 
   return (
     <Box flex={1} backgroundColor="white">
+      {/* HEADER FIXO */}
       <Box
         flexDirection="row"
         justifyContent="space-between"
         paddingHorizontal="xs"
         paddingBottom="xs"
+        height={headerHeight}
+        alignItems="center"
+        backgroundColor="white"
+        zIndex={10}
       >
         <Box flexDirection="row" alignItems="center" gap="s">
           <ChevronLeft
@@ -154,7 +178,6 @@ export default function ChatId() {
             size={55}
             fallbackText={isGroup === "true" ? data?.name : name}
           />
-
           <TouchableOpacity onPress={() => router.push("/chat/details")}>
             <Text variant="header">
               {isGroup === "true" ? data?.name : name}
@@ -169,65 +192,82 @@ export default function ChatId() {
         </Box>
       </Box>
 
-      {isLoading ? (
-        <Box flex={1} alignItems="center" justifyContent="center">
-          <ActivityIndicator size="large" />
-        </Box>
-      ) : (
-        <FlatList
-          ref={chatRef}
-          style={{ backgroundColor: "#f4f4f5", paddingTop: 8 }}
-          data={[...messages].slice().reverse()}
-          keyExtractor={(item, index) => index.toString()}
-          inverted
-          contentContainerStyle={{ flexGrow: 1, justifyContent: "flex-end" }}
-          renderItem={({ item }) => {
-            const isOwnMessage = Number(item.userId) === userRef.current.id;
+      {/* LISTA DE MENSAGENS */}
+      <FlatList
+        ref={chatRef}
+        style={{ flex: 1, backgroundColor: "#f4f4f5", paddingTop: 8 }}
+        data={messages}
+        keyExtractor={(item, index) => index.toString()}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
+        contentContainerStyle={{
+          paddingBottom:
+            Platform.OS === "android"
+              ? inputHeight + keyboardHeight
+              : inputHeight,
+        }}
+        renderItem={({ item }) => {
+          const isOwnMessage = Number(item.userId) === userRef.current.id;
 
-            return (
+          return (
+            <Box
+              marginHorizontal="s"
+              marginBottom="xs"
+              alignItems={isOwnMessage ? "flex-end" : "flex-start"}
+            >
+              {isGroup === "true" && <Text>{item.userName}</Text>}
               <Box
-                marginHorizontal="s"
-                marginBottom="xs"
-                alignItems={isOwnMessage ? "flex-end" : "flex-start"}
+                padding="s"
+                borderRadius={8}
+                maxWidth="70%"
+                backgroundColor={isOwnMessage ? "primary" : "white"}
               >
-                {isGroup === "true" && <Text>{item.userName}</Text>}
-                <Box
-                  padding="s"
-                  borderRadius={8}
-                  maxWidth="70%"
-                  backgroundColor={isOwnMessage ? "primary" : "white"}
+                <Text
+                  color={isOwnMessage ? "white" : "black"}
+                  fontWeight="bold"
                 >
-                  <Text
-                    color={isOwnMessage ? "white" : "black"}
-                    fontWeight="bold"
-                  >
-                    {item.content}
-                  </Text>
-                </Box>
+                  {item.content}
+                </Text>
               </Box>
-            );
-          }}
-        />
-      )}
+            </Box>
+          );
+        }}
+      />
 
+      {/* INPUT + KeyboardAvoidingView */}
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{ backgroundColor: "white", width: "100%" }}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 50 : 0}
+        enabled={Platform.OS === "ios"}
       >
         <Box
           flexDirection="row"
           justifyContent="space-around"
           alignItems="center"
-          paddingBottom="m"
+          paddingHorizontal="s"
+          height={inputHeight}
           backgroundColor="white"
+          borderTopColor="gray"
+          style={{
+            marginBottom: Platform.OS === "android" ? keyboardHeight + 15 : 15,
+          }}
         >
           <Box width="85%">
             <Input
               variant="rounded"
               size={40}
               placeholder="Digite sua mensagem"
-              defaultValue={value}
-              onChangeText={(e) => setValue(e)}
+              value={value}
+              onChangeText={setValue}
+              onFocus={() => {
+                setTimeout(
+                  () =>
+                    chatRef.current?.scrollToEnd({
+                      animated: true,
+                    }),
+                  100
+                );
+              }}
             />
           </Box>
           <TouchableOpacity onPress={onSubmit}>
