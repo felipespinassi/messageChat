@@ -1,7 +1,7 @@
 import React from "react";
 import { Box } from "@/components/RestyleComponents/RestyleComponents";
-import Button from "@/components/ui/button";
-import Input from "@/components/ui/input";
+import Button from "@/components/Button/Button";
+import Input from "@/components/Input/Input";
 
 export default function confirm() {
   return (

@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
 import { router } from "expo-router";
-import Button from "../ui/button";
+import Button from "../Button/Button";
 
 export default function ErrorGeneric() {
   return (

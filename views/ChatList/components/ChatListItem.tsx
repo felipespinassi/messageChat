@@ -5,7 +5,7 @@ import { router } from "expo-router";
 import { ConversationTypes } from "@/@types/ConversationTypes";
 import { getUser } from "@/storage/getUser";
 import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
-import Avatar from "@/components/ui/avatar";
+import Avatar from "@/components/Avatar/Avatar";
 
 export default function ChatListItem({
   item,

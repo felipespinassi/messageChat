@@ -19,8 +19,8 @@ import {
 } from "@/@types/ConversationUserTypes";
 import ErrorGeneric from "@/components/ErrorGeneric/ErrorGeneric";
 import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
-import Avatar from "@/components/ui/avatar";
-import Input from "@/components/ui/input";
+import Avatar from "@/components/Avatar/Avatar";
+import Input from "@/components/Input/Input";
 
 export default function ChatId() {
   const { id, name, isGroup } = useLocalSearchParams();
@@ -224,7 +224,7 @@ export default function ChatId() {
         >
           <Box width="85%">
             <Input
-              variant="underlined"
+              variant="rounded"
               size={40}
               placeholder="Digite sua mensagem"
               defaultValue={value}

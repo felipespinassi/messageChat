@@ -4,7 +4,7 @@ import { Users } from "lucide-react-native";
 import { FlatList, TouchableOpacity } from "react-native";
 import useSWR from "swr";
 import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
-import Avatar from "../ui/avatar";
+import Avatar from "../Avatar/Avatar";
 
 export default function ListUsers({
   showCreateGroup,

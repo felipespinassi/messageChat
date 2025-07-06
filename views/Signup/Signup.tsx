@@ -5,8 +5,8 @@ import ArrowBack from "@/components/ArrowBack/ArrowBack";
 import { useForm, Controller } from "react-hook-form";
 import useSWRMutation from "swr/mutation";
 import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
-import Button from "@/components/ui/button";
-import Input from "@/components/ui/input";
+import Button from "@/components/Button/Button";
+import Input from "@/components/Input/Input";
 
 export default function Signup() {
   const {

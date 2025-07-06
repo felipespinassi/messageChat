@@ -1,7 +1,7 @@
 import { SafeAreaView } from "react-native";
 import React from "react";
 import { Box } from "@/components/RestyleComponents/RestyleComponents";
-import Avatar from "@/components/ui/avatar";
+import Avatar from "@/components/Avatar/Avatar";
 
 export default function ChatDetails() {
   const avatar = "https://cdn-icons-png.flaticon.com/512/6858/6858504.png";

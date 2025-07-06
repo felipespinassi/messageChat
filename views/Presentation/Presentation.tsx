@@ -2,7 +2,7 @@ import ScreenTitle from "@/components/ScreenTitle/ScreenTitle";
 import { Link, router } from "expo-router";
 import { Image } from "react-native";
 import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
-import Button from "@/components/ui/button";
+import Button from "@/components/Button/Button";
 
 export default function Presentation() {
   return (

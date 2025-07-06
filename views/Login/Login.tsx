@@ -14,8 +14,8 @@ import useSWRMutation from "swr/mutation";
 import { createAccess_token } from "@/storage/createAccess_Token";
 import { createUser } from "@/storage/createUser";
 import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
-import Button from "@/components/ui/button";
-import Input from "@/components/ui/input";
+import Button from "@/components/Button/Button";
+import Input from "@/components/Input/Input";
 
 export default function Login() {
   const {
