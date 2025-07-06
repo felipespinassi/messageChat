@@ -105,7 +105,7 @@ export default function ChatList() {
             onPress={() => router.push("/modal/newConversation")}
           >
             <Box backgroundColor="primary" padding="s" borderRadius={20}>
-              <Plus color={theme.colors.foreground} />
+              <Plus color={theme.colors.white} />
             </Box>
           </TouchableOpacity>
           <TouchableOpacity
@@ -128,6 +128,7 @@ export default function ChatList() {
         <FlatList
           showsVerticalScrollIndicator={false}
           style={{ paddingVertical: 16, height: "100%" }}
+          contentContainerStyle={{ paddingBottom: 100 }}
           data={messages?.sort(compare)}
           renderItem={({ item }) => {
             return <ChatListItem item={item} userRef={userRef} />;

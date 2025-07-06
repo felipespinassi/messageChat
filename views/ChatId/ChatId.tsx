@@ -151,7 +151,7 @@ export default function ChatId() {
 
   // Scroll para o fim
   const scrollToBottom = () => {
-    chatRef.current?.scrollToEnd({ animated: true });
+    chatRef.current?.scrollToOffset({ animated: true, offset: 0 });
   };
 
   useEffect(() => {
@@ -199,8 +199,9 @@ export default function ChatId() {
       {/* LISTA DE MENSAGENS */}
       <FlatList
         ref={chatRef}
-        style={{ flex: 1, backgroundColor: theme.colors.muted, paddingTop: 8 }}
-        data={messages}
+        style={{ flex: 1, backgroundColor: theme.colors.background }}
+        data={[...messages].reverse()}
+        inverted
         keyExtractor={(item, index) => index.toString()}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
@@ -219,16 +220,20 @@ export default function ChatId() {
               marginBottom="xs"
               alignItems={isOwnMessage ? "flex-end" : "flex-start"}
             >
-              {isGroup === "true" && <Text>{item.userName}</Text>}
               <Box
                 padding="s"
                 borderRadius={8}
                 maxWidth="70%"
-                backgroundColor={isOwnMessage ? "primary" : "white"}
+                backgroundColor={isOwnMessage ? "primary" : "muted"}
+                borderBottomRightRadius={isOwnMessage ? 2 : 8}
+                borderBottomLeftRadius={isOwnMessage ? 8 : 2}
               >
+                {isGroup === "true" && isOwnMessage === false && (
+                  <Text color={"secondary"}>{item.userName}</Text>
+                )}
                 <Text
-                  color={isOwnMessage ? "white" : "black"}
-                  fontWeight="bold"
+                  color={isOwnMessage ? "white" : "foreground"}
+                  fontWeight="condensed"
                 >
                   {item.content}
                 </Text>
@@ -263,15 +268,6 @@ export default function ChatId() {
               placeholder="Digite sua mensagem"
               value={value}
               onChangeText={setValue}
-              onFocus={() => {
-                setTimeout(
-                  () =>
-                    chatRef.current?.scrollToEnd({
-                      animated: true,
-                    }),
-                  100
-                );
-              }}
             />
           </Box>
           <TouchableOpacity onPress={onSubmit}>
