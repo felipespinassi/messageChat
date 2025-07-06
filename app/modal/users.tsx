@@ -2,14 +2,19 @@ import { TouchableOpacity } from "react-native";
 import React from "react";
 import { router } from "expo-router";
 import ListUsers from "@/components/ListUsers/ListUsers";
+import { Text } from "@/components/RestyleComponents/RestyleComponents";
+import Button from "@/components/Button/Button";
 
 export default function users() {
   return (
     <>
-      <TouchableOpacity
+      <Button
         style={{ padding: 16 }}
+        size={40}
         onPress={() => router.push("/modal/confirm")}
-      ></TouchableOpacity>
+      >
+        Confirmar
+      </Button>
       <ListUsers />
     </>
   );
