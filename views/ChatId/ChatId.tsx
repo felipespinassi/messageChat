@@ -17,7 +17,6 @@ import {
   ConversationUserTypes,
   Messages,
 } from "@/@types/ConversationUserTypes";
-import ErrorGeneric from "@/components/ErrorGeneric/ErrorGeneric";
 import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
 import Avatar from "@/components/Avatar/Avatar";
 import Input from "@/components/Input/Input";

@@ -57,7 +57,7 @@ const Input: React.FC<InputProps> = ({
           {
             flex: 1,
             fontSize: size * 0.375, // proporcional à altura
-            color: theme.colors.foreground,
+            color: "black",
           },
           style,
         ]}
