@@ -7,22 +7,33 @@ import {
   Tickets,
 } from "lucide-react-native";
 import { BlurView } from "expo-blur";
-import { Platform, StyleSheet } from "react-native";
+import { Platform, StyleSheet, useColorScheme } from "react-native";
+import { useTheme } from "@shopify/restyle";
+import { Theme } from "@/theme/theme";
 
 export default function TabLayout() {
+  const theme = useTheme<Theme>();
+  const colorScheme = useColorScheme();
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: Platform.OS === "ios" ? "transparent" : "#fff",
+          backgroundColor:
+            Platform.OS === "ios" ? "transparent" : theme.colors.background,
           borderTopWidth: 0,
           elevation: 0,
           position: "absolute",
         },
         tabBarBackground: () => (
           <BlurView
-            tint="light" // ou "dark"
+            tint={
+              colorScheme === "dark"
+                ? "dark"
+                : colorScheme === "light"
+                ? "light"
+                : "default"
+            } // ou "dark"
             intensity={50}
             style={StyleSheet.absoluteFill}
           />
@@ -34,6 +45,7 @@ export default function TabLayout() {
         options={{
           tabBarIcon: ({ color }) => <Tickets color={color} size={28} />,
           tabBarLabel: "Chamados",
+          tabBarActiveTintColor: theme.colors.primary,
         }}
       />
       <Tabs.Screen
@@ -42,7 +54,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <MessageCircleMore color={color} size={28} />
           ),
-
+          tabBarActiveTintColor: theme.colors.primary,
           tabBarLabel: "Chats",
         }}
       />
@@ -50,7 +62,7 @@ export default function TabLayout() {
         name="forumList/index"
         options={{
           tabBarIcon: ({ color }) => <MessagesSquare color={color} size={28} />,
-
+          tabBarActiveTintColor: theme.colors.primary,
           tabBarLabel: "Fórum",
         }}
       />
@@ -58,6 +70,7 @@ export default function TabLayout() {
         name="settings/index"
         options={{
           tabBarIcon: ({ color }) => <Settings color={color} size={28} />,
+          tabBarActiveTintColor: theme.colors.primary,
 
           tabBarLabel: "Configurações",
         }}

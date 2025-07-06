@@ -74,7 +74,7 @@ export default function Login() {
   }
 
   return (
-    <Box flex={1} margin="m" gap="xl">
+    <Box flex={1} padding="m" gap="xl" bg="background">
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1 }}
@@ -97,7 +97,7 @@ export default function Login() {
 
             <Box gap="l">
               <Box gap="xs">
-                <Text>Email</Text>
+                <Text color="foreground">Email</Text>
                 <Controller
                   control={control}
                   rules={{
@@ -120,7 +120,7 @@ export default function Login() {
               </Box>
 
               <Box gap="xs">
-                <Text>Senha</Text>
+                <Text color="foreground">Senha</Text>
                 <Controller
                   control={control}
                   rules={{

@@ -20,6 +20,8 @@ import {
 import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
 import Avatar from "@/components/Avatar/Avatar";
 import Input from "@/components/Input/Input";
+import { useTheme } from "@shopify/restyle";
+import { Theme } from "@/theme/theme";
 
 export default function ChatId() {
   const { id, name, isGroup } = useLocalSearchParams();
@@ -32,6 +34,8 @@ export default function ChatId() {
   const avatar = "https://cdn-icons-png.flaticon.com/512/6858/6858504.png";
   const [value, setValue] = useState("");
   const [messages, setMessages] = useState<Messages[]>([]);
+
+  const theme = useTheme<Theme>();
 
   const roomRef = useRef(`room-${conversation?.id || id}` as string);
   const chatRef = useRef(null as any);
@@ -155,7 +159,7 @@ export default function ChatId() {
   }, [messages]);
 
   return (
-    <Box flex={1} backgroundColor="white">
+    <Box flex={1} backgroundColor="background">
       {/* HEADER FIXO */}
       <Box
         flexDirection="row"
@@ -164,14 +168,14 @@ export default function ChatId() {
         paddingBottom="xs"
         height={headerHeight}
         alignItems="center"
-        backgroundColor="white"
+        backgroundColor="background"
         zIndex={10}
       >
         <Box flexDirection="row" alignItems="center" gap="s">
           <ChevronLeft
             size={32}
             onPress={() => router.back()}
-            color="#0273FD"
+            color={theme.colors.primary}
           />
           <Avatar
             uri={avatar}
@@ -179,23 +183,23 @@ export default function ChatId() {
             fallbackText={isGroup === "true" ? data?.name : name}
           />
           <TouchableOpacity onPress={() => router.push("/chat/details")}>
-            <Text variant="header">
+            <Text color="foreground" variant="header">
               {isGroup === "true" ? data?.name : name}
             </Text>
-            <Text>Online</Text>
+            <Text color="success">Online</Text>
           </TouchableOpacity>
         </Box>
 
         <Box flexDirection="row" gap="m">
-          <Video />
-          <Phone />
+          <Video color={theme.colors.primary} />
+          <Phone color={theme.colors.primary} />
         </Box>
       </Box>
 
       {/* LISTA DE MENSAGENS */}
       <FlatList
         ref={chatRef}
-        style={{ flex: 1, backgroundColor: "#f4f4f5", paddingTop: 8 }}
+        style={{ flex: 1, backgroundColor: theme.colors.muted, paddingTop: 8 }}
         data={messages}
         keyExtractor={(item, index) => index.toString()}
         keyboardShouldPersistTaps="handled"
@@ -246,7 +250,7 @@ export default function ChatId() {
           alignItems="center"
           paddingHorizontal="s"
           height={inputHeight}
-          backgroundColor="white"
+          backgroundColor="background"
           borderTopColor="gray"
           style={{
             marginBottom: Platform.OS === "android" ? keyboardHeight + 15 : 15,
@@ -279,7 +283,7 @@ export default function ChatId() {
               justifyContent="center"
               alignItems="center"
             >
-              <SendHorizontal size={22} color="white" />
+              <SendHorizontal size={22} color={theme.colors.white} />
             </Box>
           </TouchableOpacity>
         </Box>

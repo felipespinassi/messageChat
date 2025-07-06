@@ -5,10 +5,8 @@ import Input from "@/components/Input/Input";
 
 export default function confirm() {
   return (
-    <Box margin="s" gap="m">
-      <Box backgroundColor="white" padding="m" borderRadius={8}>
-        <Input placeholder="Nome do grupo" />
-      </Box>
+    <Box padding="s" gap="m" bg="background" flex={1}>
+      <Input placeholder="Nome do grupo" />
 
       <Button>Criar grupo</Button>
     </Box>

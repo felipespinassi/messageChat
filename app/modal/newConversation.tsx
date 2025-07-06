@@ -4,9 +4,11 @@ import ListUsers from "@/components/ListUsers/ListUsers";
 
 export default function ModalUsers() {
   return (
-    <Box>
+    <Box bg="background">
       <Box flexDirection="row" justifyContent="space-between" padding="m">
-        <Text fontSize={24}>Nova conversa</Text>
+        <Text color="foreground" fontSize={24}>
+          Nova conversa
+        </Text>
       </Box>
       <ListUsers showCreateGroup />
     </Box>

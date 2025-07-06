@@ -13,7 +13,7 @@ export default function ScreenTitle({
       <Text fontSize={48} color="primary" fontWeight="600" lineHeight={56}>
         {title}
       </Text>
-      <Text fontWeight="600" fontSize={20} lineHeight={24}>
+      <Text color="foreground" fontWeight="600" fontSize={20} lineHeight={24}>
         {description}
       </Text>
     </Box>

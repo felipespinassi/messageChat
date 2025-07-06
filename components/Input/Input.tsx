@@ -43,7 +43,7 @@ const Input: React.FC<InputProps> = ({
   return (
     <Box
       height={size}
-      backgroundColor="white"
+      backgroundColor="muted"
       borderColor={borderColor}
       opacity={isDisabled ? 0.4 : 1}
       flexDirection="row"
@@ -57,7 +57,7 @@ const Input: React.FC<InputProps> = ({
           {
             flex: 1,
             fontSize: size * 0.375, // proporcional à altura
-            color: "black",
+            color: theme.colors.foreground,
           },
           style,
         ]}

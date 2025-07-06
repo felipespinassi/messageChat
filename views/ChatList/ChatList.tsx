@@ -12,6 +12,8 @@ import ChatListItem from "./components/ChatListItem";
 import ErrorGeneric from "@/components/ErrorGeneric/ErrorGeneric";
 import { getUser } from "@/storage/getUser";
 import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
+import { useTheme } from "@shopify/restyle";
+import { Theme } from "@/theme/theme";
 
 export default function ChatList() {
   // const [contacts, setContacts] = useState<Contacts.Contact[]>([]);
@@ -79,15 +81,22 @@ export default function ChatList() {
     return 0;
   }
 
+  const theme = useTheme<Theme>();
+
   return (
-    <Box flex={1} marginHorizontal="s" marginTop="s">
+    <Box flex={1} paddingHorizontal="s" paddingTop="s" bg="background">
       <Box flexDirection="row" justifyContent="space-between">
-        <Text variant="header" fontSize={24} fontWeight="600">
+        <Text
+          color="foreground"
+          variant="header"
+          fontSize={24}
+          fontWeight="600"
+        >
           Conversas
         </Text>
         <Box flexDirection="row" gap="m">
           <TouchableOpacity>
-            <Box backgroundColor="white" padding="s" borderRadius={20}>
+            <Box backgroundColor="muted" padding="s" borderRadius={20}>
               <Search color={"gray"} />
             </Box>
           </TouchableOpacity>
@@ -96,7 +105,7 @@ export default function ChatList() {
             onPress={() => router.push("/modal/newConversation")}
           >
             <Box backgroundColor="primary" padding="s" borderRadius={20}>
-              <Plus color={"white"} />
+              <Plus color={theme.colors.foreground} />
             </Box>
           </TouchableOpacity>
           <TouchableOpacity
@@ -104,8 +113,8 @@ export default function ChatList() {
               AsyncStorage.removeItem(ACCESS_TOKEN), router.replace("/");
             }}
           >
-            <Box backgroundColor="white" padding="s" borderRadius={20}>
-              <LogOut color={"#0273FD"} />
+            <Box backgroundColor="muted" padding="s" borderRadius={20}>
+              <LogOut color={theme.colors.foreground} />
             </Box>
           </TouchableOpacity>
         </Box>

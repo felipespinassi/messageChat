@@ -5,6 +5,8 @@ import { FlatList, TouchableOpacity } from "react-native";
 import useSWR from "swr";
 import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
 import Avatar from "../Avatar/Avatar";
+import { useTheme } from "@shopify/restyle";
+import { Theme } from "@/theme/theme";
 
 export default function ListUsers({
   showCreateGroup,
@@ -16,6 +18,8 @@ export default function ListUsers({
     fetcher
   );
 
+  const theme = useTheme<Theme>();
+
   return (
     <FlatList
       ListHeaderComponent={
@@ -23,13 +27,18 @@ export default function ListUsers({
           <TouchableOpacity onPress={() => router.push("/modal/users")}>
             <Box flexDirection="row" gap="s" alignItems="center">
               <Users color={"blue"} />
-              <Text>Criar novo grupo</Text>
+              <Text color="foreground">Criar novo grupo</Text>
             </Box>
           </TouchableOpacity>
         </Box>
       }
       showsVerticalScrollIndicator={false}
-      style={{ marginHorizontal: 16, padding: 8, borderRadius: 8 }}
+      style={{
+        paddingHorizontal: 16,
+        padding: 8,
+        borderRadius: 8,
+        backgroundColor: theme.colors.background,
+      }}
       keyExtractor={(item, index) => index.toString()}
       data={data}
       renderItem={({ item }) => {
@@ -57,7 +66,7 @@ export default function ListUsers({
                   }
                 />
 
-                <Text>{item.name}</Text>
+                <Text color="foreground">{item.name}</Text>
               </Box>
             </TouchableOpacity>
           </Box>

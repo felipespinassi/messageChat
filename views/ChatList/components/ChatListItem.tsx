@@ -1,18 +1,19 @@
 import { TouchableOpacity } from "react-native";
-import React from "react";
+import React, { RefObject } from "react";
 import { router } from "expo-router";
 
 import { ConversationTypes } from "@/@types/ConversationTypes";
 import { getUser } from "@/storage/getUser";
 import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
 import Avatar from "@/components/Avatar/Avatar";
+import { Theme } from "@/theme/theme";
 
 export default function ChatListItem({
   item,
   userRef,
 }: {
   item: ConversationTypes;
-  userRef: React.MutableRefObject<any>;
+  userRef: RefObject<any>;
 }) {
   const lastMessage = item?.message?.content?.slice(0, 60) || "Sem mensagens";
 
@@ -42,9 +43,13 @@ export default function ChatListItem({
         <Box flex={1} height="100%" justifyContent="space-between">
           <Box>
             {item.isGroup ? (
-              <Text fontWeight="bold">{item?.name}</Text>
+              <Text color="foreground" fontWeight="bold">
+                {item?.name}
+              </Text>
             ) : (
-              <Text fontWeight="bold">{user?.name}</Text>
+              <Text color="foreground" fontWeight="bold">
+                {user?.name}
+              </Text>
             )}
             <Text color="gray">{lastMessage}</Text>
           </Box>

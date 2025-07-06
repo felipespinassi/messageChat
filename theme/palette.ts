@@ -1,8 +1,8 @@
 export const palette = {
   // Light
-  background: "#f1f1f1",
+  background: "#fff",
   foreground: "#1e1e1e",
-  muted: "#fff",
+  muted: "#f1f1f1",
   border: "#d1d5db",
   selectedItem: "#D6E8FF",
 

@@ -15,7 +15,7 @@ export default function RootLayout() {
       <SafeAreaView
         style={{
           flex: 1,
-          backgroundColor: "white",
+          backgroundColor: theme.colors.background,
         }}
         edges={["top", "left", "right"]}
       >
