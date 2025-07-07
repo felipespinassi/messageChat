@@ -4,7 +4,7 @@ import ListUsers from "@/components/ListUsers/ListUsers";
 
 export default function ModalUsers() {
   return (
-    <Box bg="background">
+    <Box bg="background" flex={1}>
       <Box flexDirection="row" justifyContent="space-between" padding="m">
         <Text color="foreground" fontSize={24}>
           Nova conversa
