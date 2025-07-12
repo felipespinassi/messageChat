@@ -11,7 +11,7 @@ export const palette = {
   darkForeground: "#e6f7ff",
   darkMuted: "#333",
   darkBorder: "#6b7280",
-  darkSelectedItem: "#444",
+  darkSelectedItem: "#333",
 
   // Cores fixas
   primary: "#1677ff",

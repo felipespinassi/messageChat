@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   FlatList,
   Keyboard,
+  ActivityIndicator,
 } from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -197,51 +198,58 @@ export default function ChatId() {
       </Box>
 
       {/* LISTA DE MENSAGENS */}
-      <FlatList
-        ref={chatRef}
-        style={{ flex: 1, backgroundColor: theme.colors.background }}
-        data={[...messages].reverse()}
-        inverted
-        keyExtractor={(item, index) => index.toString()}
-        keyboardShouldPersistTaps="handled"
-        keyboardDismissMode="on-drag"
-        contentContainerStyle={{
-          paddingBottom:
-            Platform.OS === "android"
-              ? inputHeight + keyboardHeight
-              : inputHeight,
-        }}
-        renderItem={({ item }) => {
-          const isOwnMessage = Number(item.userId) === userRef.current.id;
 
-          return (
-            <Box
-              marginHorizontal="s"
-              marginBottom="xs"
-              alignItems={isOwnMessage ? "flex-end" : "flex-start"}
-            >
+      {isLoading ? (
+        <Box flex={1} justifyContent="center">
+          <ActivityIndicator size={"large"} />
+        </Box>
+      ) : (
+        <FlatList
+          ref={chatRef}
+          style={{ flex: 1, backgroundColor: theme.colors.background }}
+          data={[...messages].reverse()}
+          inverted
+          keyExtractor={(item, index) => index.toString()}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+          contentContainerStyle={{
+            paddingBottom:
+              Platform.OS === "android"
+                ? inputHeight + keyboardHeight
+                : inputHeight,
+          }}
+          renderItem={({ item }) => {
+            const isOwnMessage = Number(item.userId) === userRef.current.id;
+
+            return (
               <Box
-                padding="s"
-                borderRadius={8}
-                maxWidth="70%"
-                backgroundColor={isOwnMessage ? "primary" : "muted"}
-                borderBottomRightRadius={isOwnMessage ? 2 : 8}
-                borderBottomLeftRadius={isOwnMessage ? 8 : 2}
+                marginHorizontal="s"
+                marginBottom="xs"
+                alignItems={isOwnMessage ? "flex-end" : "flex-start"}
               >
-                {isGroup === "true" && isOwnMessage === false && (
-                  <Text color={"secondary"}>{item.userName}</Text>
-                )}
-                <Text
-                  color={isOwnMessage ? "white" : "foreground"}
-                  fontWeight="condensed"
+                <Box
+                  padding="s"
+                  borderRadius={8}
+                  maxWidth="70%"
+                  backgroundColor={isOwnMessage ? "primary" : "muted"}
+                  borderBottomRightRadius={isOwnMessage ? 2 : 8}
+                  borderBottomLeftRadius={isOwnMessage ? 8 : 2}
                 >
-                  {item.content}
-                </Text>
+                  {isGroup === "true" && isOwnMessage === false && (
+                    <Text color={"secondary"}>{item.userName}</Text>
+                  )}
+                  <Text
+                    color={isOwnMessage ? "white" : "foreground"}
+                    fontWeight="condensed"
+                  >
+                    {item.content}
+                  </Text>
+                </Box>
               </Box>
-            </Box>
-          );
-        }}
-      />
+            );
+          }}
+        />
+      )}
 
       {/* INPUT + KeyboardAvoidingView */}
       <KeyboardAvoidingView

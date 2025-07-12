@@ -5,7 +5,6 @@ export default function ModalLayout() {
     <Stack>
       <Stack.Screen name="newConversation" options={{ headerShown: false }} />
       <Stack.Screen name="users" options={{ headerShown: false }} />
-      <Stack.Screen name="confirm" options={{ headerShown: false }} />
     </Stack>
   );
 }

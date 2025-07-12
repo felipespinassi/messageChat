@@ -8,13 +8,6 @@ import Button from "@/components/Button/Button";
 export default function users() {
   return (
     <Box flex={1} bg="background">
-      <Button
-        style={{ padding: 16 }}
-        size={40}
-        onPress={() => router.push("/modal/confirm")}
-      >
-        Confirmar
-      </Button>
       <ListUsers />
     </Box>
   );
