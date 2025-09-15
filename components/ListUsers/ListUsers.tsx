@@ -45,7 +45,7 @@ export default function ListUsers({
     createGroup,
     {
       onSuccess: () => {
-        router.push({ pathname: "/chatList" });
+        router.replace({ pathname: "/chatList" });
       },
     }
   );
