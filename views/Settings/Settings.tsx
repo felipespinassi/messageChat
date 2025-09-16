@@ -31,7 +31,7 @@ export default function Settings() {
         <ActivityIndicator size="large" color="#0000ff" />
       ) : (
         <Box alignItems="center" gap="s">
-          <Avatar fallbackText={user.name} size={100} />
+          <Avatar fallbackText={user.name} size={80} />
           <Text color="foreground" fontSize={20}>
             {user?.name || "Usuário sem nome"}
           </Text>

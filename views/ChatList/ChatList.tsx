@@ -14,9 +14,9 @@ import { getUser } from "@/storage/getUser";
 import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
 import { useTheme } from "@shopify/restyle";
 import { Theme } from "@/theme/theme";
+import { compare } from "./utils/sortMessages";
 
 export default function ChatList() {
-  // const [contacts, setContacts] = useState<Contacts.Contact[]>([]);
   const router = useRouter();
   const userRef = useRef({});
 
@@ -44,41 +44,8 @@ export default function ChatList() {
     getUserFomStorage();
   }, []);
 
-  //pegar contatos
-  // useEffect(() => {
-  //   (async () => {
-  //     const { status } = await Contacts.requestPermissionsAsync();
-  //     if (status === "granted") {
-  //       const { data } = await Contacts.getContactsAsync({
-  //         fields: [Contacts.Fields.Emails],
-  //       });
-
-  //       if (data.length > 0) {
-  //         setContacts(data);
-  //       }
-  //     }
-
-  //     if (status === "denied") {
-  //       Alert.alert(
-  //         "Permissão negada",
-  //         "Você precisa permitir o acesso aos contatos"
-  //       );
-  //     }
-  //   })();
-  // }, []);
-
   if (errorMessage) {
     return <ErrorGeneric />;
-  }
-
-  function compare(a: ConversationTypes, b: ConversationTypes) {
-    if (a.message.createdAt < b.message.createdAt) {
-      return 1;
-    }
-    if (a.message.createdAt > b.message.createdAt) {
-      return -1;
-    }
-    return 0;
   }
 
   const theme = useTheme<Theme>();

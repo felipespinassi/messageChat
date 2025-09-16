@@ -41,14 +41,6 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="ticketList/index"
-        options={{
-          tabBarIcon: ({ color }) => <Tickets color={color} size={28} />,
-          tabBarLabel: "Chamados",
-          tabBarActiveTintColor: theme.colors.primary,
-        }}
-      />
-      <Tabs.Screen
         name="chatList/index"
         options={{
           tabBarIcon: ({ color }) => (
@@ -58,14 +50,7 @@ export default function TabLayout() {
           tabBarLabel: "Chats",
         }}
       />
-      <Tabs.Screen
-        name="forumList/index"
-        options={{
-          tabBarIcon: ({ color }) => <MessagesSquare color={color} size={28} />,
-          tabBarActiveTintColor: theme.colors.primary,
-          tabBarLabel: "Fórum",
-        }}
-      />
+
       <Tabs.Screen
         name="settings/index"
         options={{

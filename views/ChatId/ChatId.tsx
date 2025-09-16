@@ -23,6 +23,8 @@ import Avatar from "@/components/Avatar/Avatar";
 import Input from "@/components/Input/Input";
 import { useTheme } from "@shopify/restyle";
 import { Theme } from "@/theme/theme";
+import { CreateConversation } from "./utils/createConversation";
+import { User } from "@/@types/UserTypes";
 
 export default function ChatId() {
   const { id, name, isGroup } = useLocalSearchParams();
@@ -32,15 +34,15 @@ export default function ChatId() {
     JSON?.parse(useLocalSearchParams()?.conversation as string);
 
   const router = useRouter();
-  const avatar = "https://cdn-icons-png.flaticon.com/512/6858/6858504.png";
   const [value, setValue] = useState("");
   const [messages, setMessages] = useState<Messages[]>([]);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const theme = useTheme<Theme>();
 
   const roomRef = useRef(`room-${conversation?.id || id}` as string);
-  const chatRef = useRef(null as any);
-  const userRef = useRef({} as any);
+  const chatRef = useRef(null as FlatList | null);
+  const userRef = useRef({} as User);
   const responseRef = useRef({} as ConversationUserTypes);
   const socket = useContext(WebSocketContext);
 
@@ -52,8 +54,7 @@ export default function ChatId() {
   const { data, isLoading } = useSWR<any>(url, fetcher);
 
   async function getMessages() {
-    const user = await getUser();
-
+    const user: User = await getUser();
     userRef.current = user;
 
     setMessages(data?.messages || []);
@@ -93,21 +94,6 @@ export default function ChatId() {
     };
   }, [roomRef.current]);
 
-  async function CreateConversation() {
-    const response = await fetcher(
-      `${process.env.EXPO_PUBLIC_BASE_URL}conversation`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          isGroup: false,
-          users: [userRef.current.id, Number(id)],
-        }),
-      }
-    );
-
-    responseRef.current = response;
-  }
-
   function sendMessageToWebSocket() {
     socket.emit("newMessage", {
       room: roomRef.current,
@@ -123,7 +109,7 @@ export default function ChatId() {
 
   async function onSubmit() {
     if (!responseRef.current.id) {
-      await CreateConversation();
+      await CreateConversation(userRef, id as string, responseRef);
       sendMessageToWebSocket();
       setValue("");
     } else {
@@ -132,8 +118,6 @@ export default function ChatId() {
     }
   }
 
-  // Controle da altura do teclado
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
   useEffect(() => {
     const showSub = Keyboard.addListener("keyboardDidShow", (e) => {
       setKeyboardHeight(e.endCoordinates.height);
@@ -150,7 +134,6 @@ export default function ChatId() {
   const headerHeight = 70;
   const inputHeight = 70;
 
-  // Scroll para o fim
   const scrollToBottom = () => {
     chatRef.current?.scrollToOffset({ animated: true, offset: 0 });
   };
@@ -161,7 +144,6 @@ export default function ChatId() {
 
   return (
     <Box flex={1} backgroundColor="background">
-      {/* HEADER FIXO */}
       <Box
         flexDirection="row"
         justifyContent="space-between"
@@ -179,7 +161,6 @@ export default function ChatId() {
             color={theme.colors.primary}
           />
           <Avatar
-            uri={avatar}
             size={55}
             fallbackText={isGroup === "true" ? data?.name : name}
           />
@@ -196,8 +177,6 @@ export default function ChatId() {
           <Phone color={theme.colors.primary} />
         </Box>
       </Box>
-
-      {/* LISTA DE MENSAGENS */}
 
       {isLoading ? (
         <Box flex={1} justifyContent="center">
@@ -251,7 +230,6 @@ export default function ChatId() {
         />
       )}
 
-      {/* INPUT + KeyboardAvoidingView */}
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         keyboardVerticalOffset={Platform.OS === "ios" ? 50 : 0}

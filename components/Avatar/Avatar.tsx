@@ -46,7 +46,7 @@ const Avatar: React.FC<AvatarProps> = ({
         <Text
           color="white"
           fontWeight="600"
-          fontSize={size * 0.375}
+          fontSize={size * 0.3}
           textAlign="center"
         >
           {initials}
