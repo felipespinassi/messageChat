@@ -11,9 +11,6 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { ChevronLeft, Phone, SendHorizontal, Video } from "lucide-react-native";
 
 import { WebSocketContext } from "@/context/webSocketContext";
-import fetcher from "@/services/fetcher";
-import { getUser } from "@/storage/getUser";
-import useSWR from "swr";
 import {
   ConversationUserTypes,
   Messages,
@@ -25,15 +22,20 @@ import { useTheme } from "@shopify/restyle";
 import { Theme } from "@/theme/theme";
 import { CreateConversation } from "./utils/createConversation";
 import { User } from "@/@types/UserTypes";
+import { useGetConversation } from "@/hooks/conversation/UseGetConversation";
+import { getUserFromLocalStorage } from "./utils/getUserFromLocalStorage";
+import { getMessages } from "./utils/getMessages";
 
 export default function ChatId() {
-  const { id, name, isGroup } = useLocalSearchParams();
+  const router = useRouter();
 
   const conversation =
     useLocalSearchParams().conversation &&
     JSON?.parse(useLocalSearchParams()?.conversation as string);
 
-  const router = useRouter();
+  const { id, name, isGroup } = useLocalSearchParams();
+  const { data, isLoading } = useGetConversation(conversation, isGroup, id);
+
   const [value, setValue] = useState("");
   const [messages, setMessages] = useState<Messages[]>([]);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
@@ -46,26 +48,9 @@ export default function ChatId() {
   const responseRef = useRef({} as ConversationUserTypes);
   const socket = useContext(WebSocketContext);
 
-  const url =
-    isGroup === "true"
-      ? `${process.env.EXPO_PUBLIC_BASE_URL}conversation/${conversation?.id}`
-      : `${process.env.EXPO_PUBLIC_BASE_URL}conversation/user/${id}`;
-
-  const { data, isLoading } = useSWR<any>(url, fetcher);
-
-  async function getMessages() {
-    const user: User = await getUser();
-    userRef.current = user;
-
-    setMessages(data?.messages || []);
-    if (data) {
-      responseRef.current = data;
-    }
-  }
-
   useEffect(() => {
-    getMessages();
-
+    getMessages(data, setMessages, responseRef);
+    getUserFromLocalStorage(userRef);
     return () => {
       setMessages([]);
     };
