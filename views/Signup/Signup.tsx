@@ -7,8 +7,10 @@ import useSWRMutation from "swr/mutation";
 import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
 import Button from "@/components/Button/Button";
 import Input from "@/components/Input/Input";
+import { useRouter } from "expo-router";
 
 export default function Signup() {
+  const router = useRouter();
   const {
     control,
     handleSubmit,
@@ -17,16 +19,19 @@ export default function Signup() {
     defaultValues: {
       name: "",
       email: "",
+      document: "",
       password: "",
     },
   });
 
   const errorMessage = "Campo obrigatório";
   const { trigger } = useSWRMutation(
-    `${process.env.EXPO_PUBLIC_BASE_URL}users`,
+    `${process.env.EXPO_PUBLIC_BASE_URL}company`,
     createUser,
     {
-      onSuccess: () => alert("Usuário criado com sucesso"),
+      onSuccess: () => {
+        alert("Usuário criado com sucesso"), router.push("/login");
+      },
       onError: () => alert("Erro ao criar usuário"),
     }
   );
@@ -112,6 +117,28 @@ export default function Signup() {
                       />
                     )}
                     name="email"
+                  />
+                  {errors.email && (
+                    <Text color="destructive">{errorMessage}</Text>
+                  )}
+                </Box>
+              </Box>
+              <Box gap="xs">
+                <Box gap="xs">
+                  <Text color="foreground">CNPJ</Text>
+                  <Controller
+                    control={control}
+                    rules={{
+                      required: true,
+                    }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <Input
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                      />
+                    )}
+                    name="document"
                   />
                   {errors.email && (
                     <Text color="destructive">{errorMessage}</Text>
