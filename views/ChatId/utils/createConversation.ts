@@ -1,7 +1,8 @@
+import { User } from "@/@types/UserTypes";
 import fetcher from "@/services/fetcher";
 
 export async function CreateConversation(
-  userRef: any,
+  user: User,
   id: string,
   responseRef: any
 ) {
@@ -11,7 +12,7 @@ export async function CreateConversation(
       method: "POST",
       body: JSON.stringify({
         isGroup: false,
-        users: [userRef.current.id, Number(id)],
+        users: [user.id, Number(id)],
       }),
     }
   );

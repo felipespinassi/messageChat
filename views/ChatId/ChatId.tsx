@@ -21,14 +21,13 @@ import Input from "@/components/Input/Input";
 import { useTheme } from "@shopify/restyle";
 import { Theme } from "@/theme/theme";
 import { CreateConversation } from "./utils/createConversation";
-import { User } from "@/@types/UserTypes";
 import { useGetConversation } from "@/hooks/conversation/UseGetConversation";
-import { getUserFromLocalStorage } from "./utils/getUserFromLocalStorage";
 import { getMessages } from "./utils/getMessages";
+import { UserContext } from "@/context/userContext";
 
 export default function ChatId() {
+  const { user } = useContext(UserContext);
   const router = useRouter();
-
   const conversation =
     useLocalSearchParams().conversation &&
     JSON?.parse(useLocalSearchParams()?.conversation as string);
@@ -44,13 +43,11 @@ export default function ChatId() {
 
   const roomRef = useRef(`room-${conversation?.id || id}` as string);
   const chatRef = useRef(null as FlatList | null);
-  const userRef = useRef({} as User);
   const responseRef = useRef({} as ConversationUserTypes);
   const socket = useContext(WebSocketContext);
 
   useEffect(() => {
     getMessages(data, setMessages, responseRef);
-    getUserFromLocalStorage(userRef);
     return () => {
       setMessages([]);
     };
@@ -84,8 +81,8 @@ export default function ChatId() {
       room: roomRef.current,
       content: value,
       conversationId: responseRef.current.id,
-      userId: userRef.current.id,
-      userName: userRef.current.name,
+      userId: user.id,
+      userName: user.name,
       type: "text",
     });
 
@@ -94,7 +91,7 @@ export default function ChatId() {
 
   async function onSubmit() {
     if (!responseRef.current.id) {
-      await CreateConversation(userRef, id as string, responseRef);
+      await CreateConversation(user, id as string, responseRef);
       sendMessageToWebSocket();
       setValue("");
     } else {
@@ -183,7 +180,7 @@ export default function ChatId() {
                 : inputHeight,
           }}
           renderItem={({ item }) => {
-            const isOwnMessage = Number(item.userId) === userRef.current.id;
+            const isOwnMessage = Number(item.userId) === user.id;
 
             return (
               <Box
