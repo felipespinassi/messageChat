@@ -8,7 +8,13 @@ import {
 } from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { ChevronLeft, Phone, SendHorizontal, Video } from "lucide-react-native";
+import {
+  Camera,
+  ChevronLeft,
+  Phone,
+  SendHorizontal,
+  Video,
+} from "lucide-react-native";
 
 import { WebSocketContext } from "@/context/webSocketContext";
 import {
@@ -24,6 +30,7 @@ import { CreateConversation } from "./utils/createConversation";
 import { useGetConversation } from "@/hooks/conversation/UseGetConversation";
 import { getMessages } from "./utils/getMessages";
 import { UserContext } from "@/context/userContext";
+import Audio from "@/components/Audio/Audio";
 
 export default function ChatId() {
   const { user } = useContext(UserContext);
@@ -238,18 +245,26 @@ export default function ChatId() {
               onChangeText={setValue}
             />
           </Box>
-          <TouchableOpacity onPress={onSubmit}>
-            <Box
-              backgroundColor="primary"
-              height={40}
-              width={40}
-              borderRadius={20}
-              justifyContent="center"
-              alignItems="center"
-            >
-              <SendHorizontal size={22} color={theme.colors.white} />
+
+          {value.length > 0 ? (
+            <TouchableOpacity onPress={onSubmit}>
+              <Box
+                backgroundColor="primary"
+                height={40}
+                width={40}
+                borderRadius={20}
+                justifyContent="center"
+                alignItems="center"
+              >
+                <SendHorizontal size={22} color={theme.colors.white} />
+              </Box>
+            </TouchableOpacity>
+          ) : (
+            <Box flexDirection="row" gap="s" alignItems="center">
+              <Camera color={theme.colors.primary} />
+              <Audio />
             </Box>
-          </TouchableOpacity>
+          )}
         </Box>
       </KeyboardAvoidingView>
     </Box>

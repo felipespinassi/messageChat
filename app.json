@@ -13,7 +13,7 @@
       "bundleIdentifier": "com.spinassi.messageChat"
     },
     "android": {
-        "softwareKeyboardLayoutMode": "resize",
+      "softwareKeyboardLayoutMode": "resize",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -35,6 +35,12 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",
           "contactsPermission": "Allow $(PRODUCT_NAME) to access your contacts."
+        }
+      ],
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
         }
       ],
       [
