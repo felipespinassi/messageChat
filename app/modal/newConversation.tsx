@@ -1,24 +1,16 @@
-import { View, Text, Modal, TouchableOpacity, FlatList } from "react-native";
 import React from "react";
-import {
-  Avatar,
-  AvatarBadge,
-  AvatarFallbackText,
-  AvatarImage,
-} from "@/components/ui/avatar";
-import { router } from "expo-router";
-import useSWR from "swr";
-import fetcher from "@/services/fetcher";
-import { Users, X } from "lucide-react-native";
+import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
 import ListUsers from "@/components/ListUsers/ListUsers";
 
 export default function ModalUsers() {
   return (
-    <View>
-      <View className="flex-row justify-between p-4">
-        <Text className="text-2xl">Nova conversa</Text>
-      </View>
+    <Box bg="background" flex={1}>
+      <Box flexDirection="row" justifyContent="space-between" padding="m">
+        <Text color="foreground" fontSize={24}>
+          Nova conversa
+        </Text>
+      </Box>
       <ListUsers showCreateGroup />
-    </View>
+    </Box>
   );
 }

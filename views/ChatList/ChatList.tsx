@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  SafeAreaView,
-  TouchableOpacity,
-  FlatList,
-  ActivityIndicator,
-} from "react-native";
+import { TouchableOpacity, FlatList, ActivityIndicator } from "react-native";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { LogOut, Plus, Search, X } from "lucide-react-native";
 
@@ -16,12 +9,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ACCESS_TOKEN } from "@/storage/storageConfig";
 import { ConversationTypes } from "@/@types/ConversationTypes";
 import ChatListItem from "./components/ChatListItem";
-import { Button, ButtonText } from "@/components/ui/button";
 import ErrorGeneric from "@/components/ErrorGeneric/ErrorGeneric";
 import { getUser } from "@/storage/getUser";
+import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
+import { useTheme } from "@shopify/restyle";
+import { Theme } from "@/theme/theme";
+import { compare } from "./utils/sortMessages";
 
 export default function ChatList() {
-  // const [contacts, setContacts] = useState<Contacts.Contact[]>([]);
   const router = useRouter();
   const userRef = useRef({});
 
@@ -49,95 +44,69 @@ export default function ChatList() {
     getUserFomStorage();
   }, []);
 
-  //pegar contatos
-  // useEffect(() => {
-  //   (async () => {
-  //     const { status } = await Contacts.requestPermissionsAsync();
-  //     if (status === "granted") {
-  //       const { data } = await Contacts.getContactsAsync({
-  //         fields: [Contacts.Fields.Emails],
-  //       });
-
-  //       if (data.length > 0) {
-  //         setContacts(data);
-  //       }
-  //     }
-
-  //     if (status === "denied") {
-  //       Alert.alert(
-  //         "Permissão negada",
-  //         "Você precisa permitir o acesso aos contatos"
-  //       );
-  //     }
-  //   })();
-  // }, []);
-
   if (errorMessage) {
     return <ErrorGeneric />;
   }
 
-  function compare(a: ConversationTypes, b: ConversationTypes) {
-    if (a.message.createdAt < b.message.createdAt) {
-      return 1;
-    }
-    if (a.message.createdAt > b.message.createdAt) {
-      return -1;
-    }
-    return 0;
-  }
+  const theme = useTheme<Theme>();
 
   return (
-    <SafeAreaView
-      className="mx-2 mt-2 flex-1
-      "
-    >
-      <View className="flex-row justify-between ">
-        <Text className="text-3xl font-semibold">Conversas</Text>
-        <View className="flex-row gap-6">
+    <Box flex={1} paddingHorizontal="s" paddingTop="s" bg="background">
+      <Box flexDirection="row" justifyContent="space-between">
+        <Text
+          color="foreground"
+          variant="header"
+          fontSize={24}
+          fontWeight="600"
+        >
+          Conversas
+        </Text>
+        <Box flexDirection="row" gap="m">
           <TouchableOpacity>
-            <View className="bg-white p-2 rounded-full">
+            <Box backgroundColor="muted" padding="s" borderRadius={20}>
               <Search color={"gray"} />
-            </View>
+            </Box>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => router.push("/modal/newConversation")}
           >
-            <View className="bg-primary-500 p-2 rounded-full">
-              <Plus color={"white"} />
-            </View>
+            <Box backgroundColor="primary" padding="s" borderRadius={20}>
+              <Plus color={theme.colors.white} />
+            </Box>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               AsyncStorage.removeItem(ACCESS_TOKEN), router.replace("/");
             }}
           >
-            <View className="bg-white p-2 rounded-full">
-              <LogOut color={"#0273FD"} />
-            </View>
+            <Box backgroundColor="muted" padding="s" borderRadius={20}>
+              <LogOut color={theme.colors.foreground} />
+            </Box>
           </TouchableOpacity>
-        </View>
-      </View>
+        </Box>
+      </Box>
 
       {isLoadingMessage ? (
-        <View className=" mt-8 items-center justify-center">
+        <Box marginTop="l" alignItems="center" justifyContent="center">
           <ActivityIndicator size="large" />
-        </View>
+        </Box>
       ) : (
         <FlatList
           showsVerticalScrollIndicator={false}
-          className="py-4 h-full"
+          style={{ paddingVertical: 16, height: "100%" }}
+          contentContainerStyle={{ paddingBottom: 100 }}
           data={messages?.sort(compare)}
           renderItem={({ item }) => {
             return <ChatListItem item={item} userRef={userRef} />;
           }}
           ListEmptyComponent={
-            <View className="flex-1 justify-center items-center">
-              <Text className="text-gray-500">Nenhuma conversa </Text>
-            </View>
+            <Box flex={1} justifyContent="center" alignItems="center">
+              <Text color="gray">Nenhuma conversa </Text>
+            </Box>
           }
         />
       )}
-    </SafeAreaView>
+    </Box>
   );
 }

@@ -1,5 +1,5 @@
-import { View, Text } from "react-native";
 import React from "react";
+import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
 
 export default function ScreenTitle({
   title,
@@ -9,9 +9,13 @@ export default function ScreenTitle({
   description: string;
 }) {
   return (
-    <View className="gap-1 p-2">
-      <Text className="text-5xl text-primary-500 font-semibold">{title}</Text>
-      <Text className="font-semibold text-xl">{description}</Text>
-    </View>
+    <Box gap="xs" paddingTop="l" paddingHorizontal="s" paddingBottom="s">
+      <Text fontSize={48} color="primary" fontWeight="600" lineHeight={56}>
+        {title}
+      </Text>
+      <Text color="foreground" fontWeight="600" fontSize={20} lineHeight={24}>
+        {description}
+      </Text>
+    </Box>
   );
 }

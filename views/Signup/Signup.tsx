@@ -1,20 +1,16 @@
 import React from "react";
-import {
-  View,
-  Text,
-  SafeAreaView,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-} from "react-native";
-import { Button, ButtonText } from "@/components/ui/button";
-import { Input, InputField } from "@/components/ui/input";
+import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import ScreenTitle from "@/components/ScreenTitle/ScreenTitle";
 import ArrowBack from "@/components/ArrowBack/ArrowBack";
 import { useForm, Controller } from "react-hook-form";
 import useSWRMutation from "swr/mutation";
+import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
+import Button from "@/components/Button/Button";
+import Input from "@/components/Input/Input";
+import { useRouter } from "expo-router";
 
 export default function Signup() {
+  const router = useRouter();
   const {
     control,
     handleSubmit,
@@ -23,16 +19,19 @@ export default function Signup() {
     defaultValues: {
       name: "",
       email: "",
+      document: "",
       password: "",
     },
   });
 
   const errorMessage = "Campo obrigatório";
   const { trigger } = useSWRMutation(
-    `${process.env.EXPO_PUBLIC_BASE_URL}users`,
+    `${process.env.EXPO_PUBLIC_BASE_URL}company`,
     createUser,
     {
-      onSuccess: () => alert("Usuário criado com sucesso"),
+      onSuccess: () => {
+        alert("Usuário criado com sucesso"), router.push("/login");
+      },
       onError: () => alert("Erro ao criar usuário"),
     }
   );
@@ -67,93 +66,107 @@ export default function Signup() {
     }
   }
   return (
-    <SafeAreaView className="flex-1 mx-4 ">
+    <Box flex={1} paddingHorizontal="m" bg="background">
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        className="flex-1"
-        keyboardVerticalOffset={Platform.OS === "ios" ? 10 : 0} // Ajuste conforme necessário
+        style={{ flex: 1 }}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 10 : 0}
       >
         <ArrowBack />
 
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View className="gap-10 mt-5">
+          <Box gap="l" marginTop="m">
             <ScreenTitle
               title="Cadastro"
               description="Finalize o cadastro para criar uma nova conta"
             />
 
-            <View className="gap-10">
-              <View className="gap-1">
-                <Text>Nome</Text>
+            <Box gap="l">
+              <Box gap="xs">
+                <Text color="foreground">Nome</Text>
                 <Controller
                   control={control}
                   rules={{
                     required: true,
                   }}
                   render={({ field: { onChange, onBlur, value } }) => (
-                    <Input className="h-14 rounded-lg ">
-                      <InputField
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                      />
-                    </Input>
+                    <Input
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                    />
                   )}
                   name="name"
                 />
-                {errors.name && (
-                  <Text className="text-red-500">{errorMessage}</Text>
-                )}
-              </View>
+                {errors.name && <Text color="destructive">{errorMessage}</Text>}
+              </Box>
 
-              <View className="gap-1">
-                <View className="gap-1">
-                  <Text>Email</Text>
+              <Box gap="xs">
+                <Box gap="xs">
+                  <Text color="foreground">Email</Text>
                   <Controller
                     control={control}
                     rules={{
                       required: true,
                     }}
                     render={({ field: { onChange, onBlur, value } }) => (
-                      <Input className="h-14 rounded-lg ">
-                        <InputField
-                          onBlur={onBlur}
-                          onChangeText={onChange}
-                          value={value}
-                        />
-                      </Input>
+                      <Input
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                      />
                     )}
                     name="email"
                   />
                   {errors.email && (
-                    <Text className="text-red-500">{errorMessage}</Text>
+                    <Text color="destructive">{errorMessage}</Text>
                   )}
-                </View>
-              </View>
+                </Box>
+              </Box>
+              <Box gap="xs">
+                <Box gap="xs">
+                  <Text color="foreground">CNPJ</Text>
+                  <Controller
+                    control={control}
+                    rules={{
+                      required: true,
+                    }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <Input
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                      />
+                    )}
+                    name="document"
+                  />
+                  {errors.email && (
+                    <Text color="destructive">{errorMessage}</Text>
+                  )}
+                </Box>
+              </Box>
 
-              <View className="gap-1">
-                <Text>Senha</Text>
+              <Box gap="xs">
+                <Text color="foreground">Senha</Text>
                 <Controller
                   control={control}
                   rules={{
                     required: true,
                   }}
                   render={({ field: { onChange, onBlur, value } }) => (
-                    <Input className="h-14 rounded-lg ">
-                      <InputField
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                      />
-                    </Input>
+                    <Input
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                    />
                   )}
                   name="password"
                 />
                 {errors.password && (
-                  <Text className="text-red-500">{errorMessage}</Text>
+                  <Text color="destructive">{errorMessage}</Text>
                 )}
-              </View>
-              {/* <View className="gap-1">
+              </Box>
+              {/* <Box gap="xs">
                 <Text>Telefone</Text>
                 <Controller
                   control={control}
@@ -161,7 +174,7 @@ export default function Signup() {
                     required: true,
                   }}
                   render={({ field: { onChange, onBlur, value } }) => (
-                    <Input className="h-14 rounded-lg ">
+                    <Input style={{ height: 56, borderRadius: 8 }}>
                       <InputField
                         onBlur={onBlur}
                         onChangeText={onChange}
@@ -172,22 +185,17 @@ export default function Signup() {
                   name="telefone"
                 />
                 {errors.name && <Text>This is required.</Text>}
-              </View> */}
-            </View>
+              </Box> */}
+            </Box>
 
-            <View className="mt-5">
-              <Button
-                size="xl"
-                variant="solid"
-                className="bg-primary-500 rounded-lg"
-                onPress={handleSubmit(onSubmit)}
-              >
-                <ButtonText>Finalizar cadastro</ButtonText>
+            <Box marginTop="m">
+              <Button variant="solid" onPress={handleSubmit(onSubmit)}>
+                Finalizar cadastro
               </Button>
-            </View>
-          </View>
+            </Box>
+          </Box>
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </Box>
   );
 }

@@ -1,34 +1,50 @@
 import ScreenTitle from "@/components/ScreenTitle/ScreenTitle";
-import { Button, ButtonText } from "@/components/ui/button";
 import { Link, router } from "expo-router";
-import { Image, SafeAreaView, Text, View } from "react-native";
+import { Image } from "react-native";
+import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
+import Button from "@/components/Button/Button";
+import { useTheme } from "@shopify/restyle";
+import { Theme } from "@/theme/theme";
 
 export default function Presentation() {
+  const theme = useTheme<Theme>();
   return (
-    <SafeAreaView className="flex flex-1 m-4 justify-center gap-64  ">
+    <Box
+      flex={1}
+      paddingHorizontal="l"
+      justifyContent="center"
+      style={{ gap: 250 }}
+      bg="background"
+    >
       <ScreenTitle title="Bem-vindo" description="Vamos começar" />
 
-      <View className="gap-5">
-        <View className="gap-2">
-          <Text className="font-semibold text-xl">Entrar/Criar conta</Text>
+      <Box gap="m">
+        <Box gap="xs">
+          <Text color="foreground" fontWeight="600" fontSize={20}>
+            Entrar/Criar conta
+          </Text>
           <Button
             onPress={() => router.replace("/login")}
-            className=" w-full bg-primary-500 h-14 rounded-xl "
-            size="md"
+            size={40}
             variant="solid"
-            action="default"
+            action="primary"
           >
-            <ButtonText className="text-xl">Entrar</ButtonText>
+            Entrar
           </Button>
-        </View>
+        </Box>
 
-        <View className="flex-row gap-1 items-center">
-          <Text className=" font-semibold text-xl">Novo usuario?</Text>
-          <Link href="/signup" className="text-primary-500 text-xl">
+        <Box flexDirection="row" gap="xs" alignItems="center">
+          <Text color="foreground" fontWeight="600" fontSize={20}>
+            Novo usuario?
+          </Text>
+          <Link
+            href="/signup"
+            style={{ color: theme.colors.primary, fontSize: 20 }}
+          >
             Criar conta
           </Link>
-        </View>
-      </View>
-    </SafeAreaView>
+        </Box>
+      </Box>
+    </Box>
   );
 }

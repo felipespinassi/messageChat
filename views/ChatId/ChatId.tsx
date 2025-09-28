@@ -1,73 +1,60 @@
 import {
-  View,
-  Text,
-  SafeAreaView,
   KeyboardAvoidingView,
   Platform,
   TouchableOpacity,
-  ScrollView,
-  ActivityIndicator,
   FlatList,
+  Keyboard,
+  ActivityIndicator,
 } from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { ChevronLeft, Phone, SendHorizontal, Video } from "lucide-react-native";
 import {
-  Avatar,
-  AvatarBadge,
-  AvatarFallbackText,
-  AvatarImage,
-} from "@/components/ui/avatar";
-import { Input, InputField } from "@/components/ui/input";
+  Camera,
+  ChevronLeft,
+  Phone,
+  SendHorizontal,
+  Video,
+} from "lucide-react-native";
+
 import { WebSocketContext } from "@/context/webSocketContext";
-import fetcher from "@/services/fetcher";
-import { getUser } from "@/storage/getUser";
-import useSWR from "swr";
 import {
   ConversationUserTypes,
   Messages,
 } from "@/@types/ConversationUserTypes";
-import ErrorGeneric from "@/components/ErrorGeneric/ErrorGeneric";
+import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
+import Avatar from "@/components/Avatar/Avatar";
+import Input from "@/components/Input/Input";
+import { useTheme } from "@shopify/restyle";
+import { Theme } from "@/theme/theme";
+import { CreateConversation } from "./utils/createConversation";
+import { useGetConversation } from "@/hooks/conversation/UseGetConversation";
+import { getMessages } from "./utils/getMessages";
+import { UserContext } from "@/context/userContext";
+import Audio from "@/components/Audio/Audio";
 
 export default function ChatId() {
-  const { id, name, isGroup } = useLocalSearchParams();
-
+  const { user } = useContext(UserContext);
+  const router = useRouter();
   const conversation =
     useLocalSearchParams().conversation &&
     JSON?.parse(useLocalSearchParams()?.conversation as string);
 
-  const router = useRouter();
-  const avatar = "https://cdn-icons-png.flaticon.com/512/6858/6858504.png";
+  const { id, name, isGroup } = useLocalSearchParams();
+  const { data, isLoading } = useGetConversation(conversation, isGroup, id);
+
   const [value, setValue] = useState("");
   const [messages, setMessages] = useState<Messages[]>([]);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  const theme = useTheme<Theme>();
 
   const roomRef = useRef(`room-${conversation?.id || id}` as string);
-  const chatRef = useRef(null as any);
-  const userRef = useRef({} as any);
+  const chatRef = useRef(null as FlatList | null);
   const responseRef = useRef({} as ConversationUserTypes);
   const socket = useContext(WebSocketContext);
 
-  const url =
-    isGroup === "true"
-      ? `${process.env.EXPO_PUBLIC_BASE_URL}conversation/${conversation?.id}`
-      : `${process.env.EXPO_PUBLIC_BASE_URL}conversation/user/${id}`;
-
-  const { data, error, mutate, isLoading } = useSWR<any>(url, fetcher);
-
-  async function getMessages() {
-    const user = await getUser();
-
-    userRef.current = user;
-
-    setMessages(data?.messages || []);
-    if (data) {
-      responseRef.current = data;
-    }
-  }
-
   useEffect(() => {
-    getMessages();
-
+    getMessages(data, setMessages, responseRef);
     return () => {
       setMessages([]);
     };
@@ -96,28 +83,13 @@ export default function ChatId() {
     };
   }, [roomRef.current]);
 
-  async function CreateConversation() {
-    const response = await fetcher(
-      `${process.env.EXPO_PUBLIC_BASE_URL}conversation`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          isGroup: false,
-          users: [userRef.current.id, Number(id)],
-        }),
-      }
-    );
-
-    responseRef.current = response;
-  }
-
   function sendMessageToWebSocket() {
     socket.emit("newMessage", {
       room: roomRef.current,
       content: value,
       conversationId: responseRef.current.id,
-      userId: userRef.current.id,
-      userName: userRef.current.name,
+      userId: user.id,
+      userName: user.name,
       type: "text",
     });
 
@@ -126,15 +98,30 @@ export default function ChatId() {
 
   async function onSubmit() {
     if (!responseRef.current.id) {
-      await CreateConversation();
+      await CreateConversation(user, id as string, responseRef);
       sendMessageToWebSocket();
-
       setValue("");
     } else {
       sendMessageToWebSocket();
       setValue("");
     }
   }
+
+  useEffect(() => {
+    const showSub = Keyboard.addListener("keyboardDidShow", (e) => {
+      setKeyboardHeight(e.endCoordinates.height);
+    });
+    const hideSub = Keyboard.addListener("keyboardDidHide", () => {
+      setKeyboardHeight(0);
+    });
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
+
+  const headerHeight = 70;
+  const inputHeight = 70;
 
   const scrollToBottom = () => {
     chatRef.current?.scrollToOffset({ animated: true, offset: 0 });
@@ -145,96 +132,141 @@ export default function ChatId() {
   }, [messages]);
 
   return (
-    <SafeAreaView className=" gap-2 flex-1 bg-white">
-      <View className="flex-row justify-between  px-4 pb-4   ">
-        <View className="flex-row gap-4 ">
+    <Box flex={1} backgroundColor="background">
+      <Box
+        flexDirection="row"
+        justifyContent="space-between"
+        paddingHorizontal="xs"
+        paddingBottom="xs"
+        height={headerHeight}
+        alignItems="center"
+        backgroundColor="background"
+        zIndex={10}
+      >
+        <Box flexDirection="row" alignItems="center" gap="s">
           <ChevronLeft
             size={32}
             onPress={() => router.back()}
-            color={"#0273FD"}
+            color={theme.colors.primary}
           />
-          <Avatar size="md">
-            <AvatarFallbackText>
-              {isGroup === "true" ? data?.name : name}
-            </AvatarFallbackText>
-            <AvatarImage
-              source={{
-                uri: avatar,
-              }}
-            />
-            <AvatarBadge />
-          </Avatar>
+          <Avatar
+            size={55}
+            fallbackText={isGroup === "true" ? data?.name : name}
+          />
           <TouchableOpacity onPress={() => router.push("/chat/details")}>
-            <Text className="text-xl font-semibold">
+            <Text color="foreground" variant="header">
               {isGroup === "true" ? data?.name : name}
             </Text>
-            <Text>Online</Text>
+            <Text color="success">Online</Text>
           </TouchableOpacity>
-        </View>
+        </Box>
 
-        <View className="flex-row gap-6">
-          <Video />
-          <Phone />
-        </View>
-      </View>
+        <Box flexDirection="row" gap="m">
+          <Video color={theme.colors.primary} />
+          <Phone color={theme.colors.primary} />
+        </Box>
+      </Box>
 
       {isLoading ? (
-        <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" />
-        </View>
+        <Box flex={1} justifyContent="center">
+          <ActivityIndicator size={"large"} />
+        </Box>
       ) : (
         <FlatList
           ref={chatRef}
-          className="bg-zinc-100 pt-2"
-          data={[...messages].slice().reverse()} // ← inverte os dados
-          keyExtractor={(item, index) => index.toString()}
+          style={{ flex: 1, backgroundColor: theme.colors.background }}
+          data={[...messages].reverse()}
           inverted
-          contentContainerStyle={{ flexGrow: 1, justifyContent: "flex-end" }}
+          keyExtractor={(item, index) => index.toString()}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+          contentContainerStyle={{
+            paddingBottom:
+              Platform.OS === "android"
+                ? inputHeight + keyboardHeight
+                : inputHeight,
+          }}
           renderItem={({ item }) => {
-            const isOwnMessage = Number(item.userId) === userRef.current.id;
+            const isOwnMessage = Number(item.userId) === user.id;
 
             return (
-              <View
-                className={`mx-2 mb-1 ${
-                  isOwnMessage ? "items-end" : "items-start"
-                }`}
+              <Box
+                marginHorizontal="s"
+                marginBottom="xs"
+                alignItems={isOwnMessage ? "flex-end" : "flex-start"}
               >
-                {isGroup === "true" && (
-                  <Text className="text-xs">{item.userName}</Text>
-                )}
-                <Text
-                  className={`p-2 rounded-md max-w-[70%] font-semibold ${
-                    isOwnMessage ? "bg-primary-500 color-white" : "bg-white"
-                  }`}
+                <Box
+                  padding="s"
+                  borderRadius={8}
+                  maxWidth="70%"
+                  backgroundColor={isOwnMessage ? "primary" : "muted"}
+                  borderBottomRightRadius={isOwnMessage ? 2 : 8}
+                  borderBottomLeftRadius={isOwnMessage ? 8 : 2}
                 >
-                  {item.content}
-                </Text>
-              </View>
+                  {isGroup === "true" && isOwnMessage === false && (
+                    <Text color={"secondary"}>{item.userName}</Text>
+                  )}
+                  <Text
+                    color={isOwnMessage ? "white" : "foreground"}
+                    fontWeight="condensed"
+                  >
+                    {item.content}
+                  </Text>
+                </Box>
+              </Box>
             );
           }}
         />
       )}
 
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        className=" bg-white w-full "
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 50 : 0}
+        enabled={Platform.OS === "ios"}
       >
-        <View className="pb-6 bg-white flex-row justify-around items-center">
-          <Input className="rounded-full h-12 w-[85%]">
-            <InputField
-              defaultValue={value}
-              onChangeText={(e) => setValue(e)}
+        <Box
+          flexDirection="row"
+          justifyContent="space-around"
+          alignItems="center"
+          paddingHorizontal="s"
+          height={inputHeight}
+          backgroundColor="background"
+          borderTopColor="gray"
+          style={{
+            marginBottom: Platform.OS === "android" ? keyboardHeight + 15 : 15,
+          }}
+        >
+          <Box width="85%">
+            <Input
+              variant="rounded"
+              size={40}
               placeholder="Digite sua mensagem"
+              value={value}
+              onChangeText={setValue}
             />
-          </Input>
-          <TouchableOpacity
-            onPress={onSubmit}
-            className="bg-primary-500 h-10 w-10 rounded-full justify-center items-center"
-          >
-            <SendHorizontal size={22} color={"white"} />
-          </TouchableOpacity>
-        </View>
+          </Box>
+
+          {value.length > 0 ? (
+            <TouchableOpacity onPress={onSubmit}>
+              <Box
+                backgroundColor="primary"
+                height={40}
+                width={40}
+                borderRadius={20}
+                justifyContent="center"
+                alignItems="center"
+              >
+                <SendHorizontal size={22} color={theme.colors.white} />
+              </Box>
+            </TouchableOpacity>
+          ) : (
+            <Box flexDirection="row" gap="s" alignItems="center">
+              <Camera color={theme.colors.primary} />
+              <Audio />
+            </Box>
+          )}
+        </Box>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </Box>
   );
 }

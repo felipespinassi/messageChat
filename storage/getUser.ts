@@ -1,7 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { USER } from "./storageConfig";
+import { User } from "@/@types/UserTypes";
 
-export async function getUser() {
+export async function getUser(): Promise<User> {
   try {
     const storage = await AsyncStorage.getItem(USER);
 

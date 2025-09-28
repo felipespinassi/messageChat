@@ -1,7 +1,4 @@
 import {
-  View,
-  Text,
-  SafeAreaView,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
@@ -11,13 +8,14 @@ import {
 import React, { useState } from "react";
 import ArrowBack from "@/components/ArrowBack/ArrowBack";
 import ScreenTitle from "@/components/ScreenTitle/ScreenTitle";
-import { Input, InputField } from "@/components/ui/input";
-import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import { Link, router } from "expo-router";
 import { Controller, useForm } from "react-hook-form";
 import useSWRMutation from "swr/mutation";
 import { createAccess_token } from "@/storage/createAccess_Token";
 import { createUser } from "@/storage/createUser";
+import { Box, Text } from "@/components/RestyleComponents/RestyleComponents";
+import Button from "@/components/Button/Button";
+import Input from "@/components/Input/Input";
 
 export default function Login() {
   const {
@@ -39,7 +37,7 @@ export default function Login() {
     auth
   );
 
-  async function auth(url: string, { arg }: { arg: LoginDto }) {
+  async function auth(url: string, { arg }: { arg: any }) {
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -71,24 +69,24 @@ export default function Login() {
     }
   }
 
-  function onSubmit(data: LoginDto) {
+  function onSubmit(data: any) {
     trigger(data);
   }
 
   return (
-    <SafeAreaView className="m-4 gap-10 flex-1">
+    <Box flex={1} padding="m" gap="xl" bg="background">
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        className="flex-1 "
+        style={{ flex: 1 }}
         keyboardVerticalOffset={Platform.OS === "ios" ? 20 : 0}
       >
         <ScrollView
           showsVerticalScrollIndicator={false}
           scrollEnabled={scrollEnable}
         >
-          <View className="gap-16 mt-28 ">
+          <Box gap="xl" marginTop="xl">
             {/* <Image
-              className=" w-full h-28"
+              style={{ width: '100%', height: 112 }}
               resizeMode="contain"
               source={require("assets/logos/pingPrimary.png")}
             /> */}
@@ -97,76 +95,76 @@ export default function Login() {
               description="Por favor, entre com Email e senha"
             />
 
-            <View className="gap-10">
-              <View className="gap-1 ">
-                <Text>Email</Text>
+            <Box gap="l">
+              <Box gap="xs">
+                <Text color="foreground">Email</Text>
                 <Controller
                   control={control}
                   rules={{
                     required: true,
                   }}
                   render={({ field: { onChange, onBlur, value } }) => (
-                    <Input className="h-14 rounded-lg ">
-                      <InputField
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                        onEndEditing={() => setScrollEnable(false)}
-                        onFocus={() => setScrollEnable(true)}
-                      />
-                    </Input>
+                    <Input
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      onEndEditing={() => setScrollEnable(false)}
+                      onFocus={() => setScrollEnable(true)}
+                    />
                   )}
                   name="email"
                 />
                 {errors.email && (
-                  <Text className="text-red-500">{errorMessage}</Text>
+                  <Text color="destructive">{errorMessage}</Text>
                 )}
-              </View>
+              </Box>
 
-              <View className="gap-1">
-                <Text>Senha</Text>
+              <Box gap="xs">
+                <Text color="foreground">Senha</Text>
                 <Controller
                   control={control}
                   rules={{
                     required: true,
                   }}
                   render={({ field: { onChange, onBlur, value } }) => (
-                    <Input className="h-14 rounded-lg ">
-                      <InputField
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                        onEndEditing={() => setScrollEnable(false)}
-                        onFocus={() => setScrollEnable(true)}
-                      />
-                    </Input>
+                    <Input
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      onEndEditing={() => setScrollEnable(false)}
+                      onFocus={() => setScrollEnable(true)}
+                    />
                   )}
                   name="password"
                 />
                 {errors.password && (
-                  <Text className="text-red-500">{errorMessage}</Text>
+                  <Text color="destructive">{errorMessage}</Text>
                 )}
-                <View className="justify-end  flex-row pt-2">
-                  <Text className="text-orange-400">Esqueceu a senha?</Text>
-                </View>
-              </View>
-            </View>
+                <Box
+                  justifyContent="flex-end"
+                  flexDirection="row"
+                  paddingTop="xs"
+                >
+                  <Text color="secondary">Esqueceu a senha?</Text>
+                </Box>
+              </Box>
+            </Box>
 
-            <View className="mt-5">
+            <Box marginTop="m">
               <Button
+                loading={isMutating}
                 action="primary"
                 disabled={isMutating}
-                size="xl"
+                size={40}
                 variant="solid"
                 onPress={handleSubmit(onSubmit)}
               >
-                <ButtonText>Entrar</ButtonText>
-                {isMutating && <ButtonSpinner />}
+                Entrar
               </Button>
-            </View>
-          </View>
+            </Box>
+          </Box>
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </Box>
   );
 }
