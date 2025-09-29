@@ -14,7 +14,7 @@ export const palette = {
   darkSelectedItem: "#333",
 
   // Cores fixas
-  primary: "#1677ff",
+  primary: "#f43f5e",
   secondary: "#EA582C",
   tertiary: "#002851",
   destructive: "#ff4d4d",

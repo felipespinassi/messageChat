@@ -30,7 +30,7 @@ import { CreateConversation } from "./utils/createConversation";
 import { useGetConversation } from "@/hooks/conversation/UseGetConversation";
 import { getMessages } from "./utils/getMessages";
 import { UserContext } from "@/context/userContext";
-import Audio from "@/components/Audio/Audio";
+import ChatIdBottom from "./components/ChatIdBottom/ChatIdBottom";
 
 export default function ChatId() {
   const { user } = useContext(UserContext);
@@ -219,54 +219,13 @@ export default function ChatId() {
         />
       )}
 
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 50 : 0}
-        enabled={Platform.OS === "ios"}
-      >
-        <Box
-          flexDirection="row"
-          justifyContent="space-around"
-          alignItems="center"
-          paddingHorizontal="s"
-          height={inputHeight}
-          backgroundColor="background"
-          borderTopColor="gray"
-          style={{
-            marginBottom: Platform.OS === "android" ? keyboardHeight + 15 : 15,
-          }}
-        >
-          <Box width="85%">
-            <Input
-              variant="rounded"
-              size={40}
-              placeholder="Digite sua mensagem"
-              value={value}
-              onChangeText={setValue}
-            />
-          </Box>
-
-          {value.length > 0 ? (
-            <TouchableOpacity onPress={onSubmit}>
-              <Box
-                backgroundColor="primary"
-                height={40}
-                width={40}
-                borderRadius={20}
-                justifyContent="center"
-                alignItems="center"
-              >
-                <SendHorizontal size={22} color={theme.colors.white} />
-              </Box>
-            </TouchableOpacity>
-          ) : (
-            <Box flexDirection="row" gap="s" alignItems="center">
-              <Camera color={theme.colors.primary} />
-              <Audio />
-            </Box>
-          )}
-        </Box>
-      </KeyboardAvoidingView>
+      <ChatIdBottom
+        inputHeight={inputHeight}
+        keyboardHeight={keyboardHeight}
+        value={value}
+        setValue={setValue}
+        onSubmit={onSubmit}
+      />
     </Box>
   );
 }
