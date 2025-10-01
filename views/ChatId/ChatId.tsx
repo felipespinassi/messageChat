@@ -12,6 +12,7 @@ import {
   Camera,
   ChevronLeft,
   Phone,
+  Play,
   SendHorizontal,
   Video,
 } from "lucide-react-native";
@@ -31,6 +32,7 @@ import { useGetConversation } from "@/hooks/conversation/UseGetConversation";
 import { getMessages } from "./utils/getMessages";
 import { UserContext } from "@/context/userContext";
 import ChatIdBottom from "./components/ChatIdBottom/ChatIdBottom";
+import { TouchableOpacityBox } from "@/components/RestyleComponents/TouchableOpacity";
 
 export default function ChatId() {
   const { user } = useContext(UserContext);
@@ -206,12 +208,31 @@ export default function ChatId() {
                   {isGroup === "true" && isOwnMessage === false && (
                     <Text color={"secondary"}>{item.userName}</Text>
                   )}
-                  <Text
-                    color={isOwnMessage ? "white" : "foreground"}
-                    fontWeight="condensed"
-                  >
-                    {item.content}
-                  </Text>
+
+                  {item.type === "audio" ? (
+                    <Box
+                      flexDirection="row"
+                      alignItems="center"
+                      justifyContent="space-between"
+                      width={200}
+                    >
+                      <TouchableOpacityBox>
+                        <Play color={"white"} />
+                      </TouchableOpacityBox>
+                      <Avatar
+                        uri="https://avatars.githubusercontent.com/u/77703754?v=4"
+                        size={40}
+                        fallbackText={isGroup === "true" ? data?.name : name}
+                      />
+                    </Box>
+                  ) : (
+                    <Text
+                      color={isOwnMessage ? "white" : "foreground"}
+                      fontWeight="condensed"
+                    >
+                      {item.content}
+                    </Text>
+                  )}
                 </Box>
               </Box>
             );

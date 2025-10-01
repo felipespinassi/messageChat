@@ -15,7 +15,7 @@ import Audio from "@/views/ChatId/components/Audio/Audio";
 
 export default function ChatIdBottom({
   inputHeight,
-  keyboardHeight,
+  // keyboardHeight,
   value,
   setValue,
   onSubmit,
@@ -43,9 +43,9 @@ export default function ChatIdBottom({
         height={inputHeight}
         backgroundColor="background"
         borderTopColor="gray"
-        style={{
-          marginBottom: Platform.OS === "android" ? keyboardHeight + 15 : 15,
-        }}
+        // style={{
+        //   marginBottom: Platform.OS === "android" ? keyboardHeight + 15 : 15,
+        // }}
       >
         <Box width="80%">
           {isRecording ? (
