@@ -27,13 +27,13 @@ export default function ChatList() {
     mutate: mutateMessage,
   } = useSWR<ConversationTypes[]>(
     `${process.env.EXPO_PUBLIC_BASE_URL}conversation`,
-    fetcher
+    fetcher,
   );
 
   useFocusEffect(
     useCallback(() => {
       mutateMessage();
-    }, [mutateMessage])
+    }, [mutateMessage]),
   );
 
   async function getUserFomStorage() {
@@ -44,9 +44,9 @@ export default function ChatList() {
     getUserFomStorage();
   }, []);
 
-  if (errorMessage) {
-    return <ErrorGeneric />;
-  }
+  // if (errorMessage) {
+  //   return <ErrorGeneric />;
+  // }
 
   const theme = useTheme<Theme>();
 
@@ -77,7 +77,7 @@ export default function ChatList() {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              AsyncStorage.removeItem(ACCESS_TOKEN), router.replace("/");
+              (AsyncStorage.removeItem(ACCESS_TOKEN), router.replace("/"));
             }}
           >
             <Box backgroundColor="muted" padding="s" borderRadius={20}>
