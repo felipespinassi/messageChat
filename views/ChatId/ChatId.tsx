@@ -100,7 +100,7 @@ export default function ChatId() {
 
   async function onSubmit() {
     if (!responseRef.current.id) {
-      await CreateConversation(user, id as string, responseRef);
+      await CreateConversation(id as string, responseRef);
       sendMessageToWebSocket();
       setValue("");
     } else {
